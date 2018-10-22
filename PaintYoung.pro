@@ -34,13 +34,15 @@ SOURCES += \
         mainwindow.cpp \
     Canvas_GL.cpp \
     Figure.cpp \
-    Line.cpp
+    Line.cpp \
+    ColorPanel.cpp
 
 HEADERS += \
         mainwindow.h \
     Canvas_GL.h \
     Figure.h \
-    Line.h
+    Line.h \
+    ColorPanel.h
 
 FORMS += \
         mainwindow.ui

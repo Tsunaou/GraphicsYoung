@@ -7,5 +7,7 @@
         <file>icon/new.png</file>
         <file>icon/open.png</file>
         <file>icon/save.png</file>
+        <file>icon/clear.png</file>
+        <file>icon/recall.png</file>
     </qresource>
 </RCC>

@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //        ui->mainToolBar->insertWidget(ui->actionCurve,widgetAppearance);
 //        //在“关于”按钮之前插入分隔符
 //        ui->mainToolBar->insertSeparator(ui->actionCurve);
+
+
     colorBtn =new QToolButton;                  //创建颜色选择控件
     QPixmap pixmap(20,20);
     pixmap.fill(Qt::black);
@@ -41,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mainToolBar->addWidget(colorBtn);
 
+    cur_canvasNum = -1;
+
+    ColorPanel *p = new ColorPanel(this);
+    ui->toolColorBar->addWidget(p);
 }
 
 MainWindow::~MainWindow()
@@ -48,13 +54,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+int MainWindow::getCurCanvasNum()//返回当前画布序号
+{
+    int i = this->WindMap.find(this->ui->mdiArea->activeSubWindow()).value();
+    qDebug()<<"This index is"<<i<<endl;
+    return i;
+}
+
 void MainWindow::on_actionNew_triggered()
 {
     Canvas_GL *cv = new Canvas_GL(this);
     canvases.push_back(cv);
+    this->cur_canvasNum++;//表示新增画布的序号
     QMdiSubWindow *w = ui->mdiArea->addSubWindow(cv);
+    this->WindMap.insert(w,cur_canvasNum);
+
     ui->mdiArea->setActiveSubWindow(w);
-    w->setWindowTitle(tr("画布%1").arg(ui->mdiArea->subWindowList().size()));
+    w->setWindowTitle(tr("NewCanvas%1").arg(ui->mdiArea->subWindowList().size()));
     w->show();
 }
 
@@ -64,8 +80,10 @@ void MainWindow::ShowColor()
     //使用标准颜色对话框QColorDialog获得一个颜色值
     if(color.isValid())
     {
-       //将新选择的颜色传给绘制区，用于改变画笔的颜色值
-        canvases[0]->setColor(color);
+       //将新选择的颜色传给绘制区，用于改变画笔的颜色值        
+        for(int i=0;i<canvases.size();i++){
+            canvases[i]->setColor(color);
+        }
         QPixmap p(20,20);
         p.fill(color);
         colorBtn->setIcon(QIcon(p));		//更新颜色选择按钮上的颜色显示
@@ -74,16 +92,18 @@ void MainWindow::ShowColor()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString file_path = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                   "/SaveTest",
-                                   tr("Images (*.png *.xpm *.jpg)"));
-        if(!file_path.isEmpty())
-        {
-            //如果没有写后缀就自动加上
-            if(QFileInfo(file_path).suffix().isEmpty())
-                file_path.append(".png");
-            this->canvases[0]->getPix()->save(file_path);
-        }
-        else
-            QMessageBox::warning(this,tr("Path"),QString::fromLocal8Bit("未选择保存文件名"));
+    int index = this->getCurCanvasNum();
+    this->canvases[index]->saveImage();
+}
+
+void MainWindow::on_actionClear_triggered()
+{
+    int index = this->getCurCanvasNum();
+    this->canvases[index]->clearImage();
+}
+
+void MainWindow::on_actionRecall_triggered()
+{
+    int index = this->getCurCanvasNum();
+    this->canvases[index]->recallImage();
 }

@@ -6,7 +6,6 @@
 #include <QOpenGLFunctions>
 #include <QtDebug>
 
-//From CH603
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -14,6 +13,9 @@
 #include <QPoint>
 #include <QPainter>
 #include <QPalette>
+
+#include <QFileDialog>
+#include <QMessageBox>
 
 
 
@@ -28,7 +30,10 @@ public:
     void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
-    QPixmap *getPix();
+    void saveImage(); //保存当前画布内容（pix内容）
+    void clearImage(); //清空当前画布内容
+    void recallImage();//撤销上一步操作
+    QPixmap *getPixCopy();
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
@@ -42,11 +47,15 @@ public slots:
 
 private:
     QPixmap *pix;
+    QPen pen;
+
     QPoint startPos;
     QPoint endPos;
     int style;
     int weight;
     QColor color;
+
+    QVector<QPixmap*> reVec;
 };
 
 #endif // CANVAS_GL_H

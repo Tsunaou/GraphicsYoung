@@ -7,12 +7,19 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
 
     pix =new QPixmap(size());           //此QPixmap对象用来准备随时接收绘制的内容
     pix->fill(Qt::white);               //填充背景色为白色
-    setMaximumSize(1200,900);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
-    setMinimumSize(1200,900);            //设置绘制区窗体的最小尺寸
+    setMaximumSize(1366,768);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
+    setMinimumSize(1366,768);            //设置绘制区窗体的最小尺寸
 
     style = static_cast<int>(Qt::SolidLine);//设置QPainter的属性
     weight = 3;
     color = Qt::black;
+
+    pen.setStyle((Qt::PenStyle)style);		//(a)
+    pen.setWidth(weight);					//设置画笔的线宽值
+    pen.setColor(color);					//设置画笔的颜色
+
+    QPixmap* tmp = pix;
+    reVec.push_back(tmp);
 
 //    setAttribute(Qt::WA_StaticContents);
 }
@@ -88,10 +95,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     qDebug()<<"mouseMoveEvent"<<endl;
 
     QPainter *painter = new QPainter;		//新建一个QPainter对象
-    QPen pen;								//新建一个QPen对象
-    pen.setStyle((Qt::PenStyle)style);		//(a)
-    pen.setWidth(weight);					//设置画笔的线宽值
-    pen.setColor(color);					//设置画笔的颜色
+
     painter->begin(pix);					//(b)
     painter->setPen(pen);					//将QPen对象应用到绘制对象中
     //绘制从startPos到鼠标当前位置的直线
@@ -109,10 +113,7 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
     qDebug()<<"mouseReleaseEvent"<<endl;
     qDebug()<<"Pixmap size:"<<pix->height()<<","<<pix->width()<<endl;
     QPainter *painter = new QPainter;		//新建一个QPainter对象
-    QPen pen;								//新建一个QPen对象
-    pen.setStyle((Qt::PenStyle)style);		//(a)
-    pen.setWidth(weight);					//设置画笔的线宽值
-    pen.setColor(color);					//设置画笔的颜色
+
     painter->begin(pix);					//(b)
     painter->setPen(pen);					//将QPen对象应用到绘制对象中
     //绘制从startPos到鼠标当前位置的直线
@@ -126,10 +127,15 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
     startPos =e->pos();				//更新鼠标的当前位置，为下次绘制做准备
     update();						//重绘绘制区窗体
 
+    QPixmap* tmp = this->getPixCopy();
+    reVec.push_back(tmp);
+    qDebug()<<"push_back"<<&tmp<<endl;
+
 }
 
 void Canvas_GL::paintEvent(QPaintEvent *)
 {
+    qDebug()<<"paintEvent"<<endl;
     QPainter painter(this);
     painter.drawPixmap(QPoint(0,0),*pix);
 }
@@ -151,11 +157,60 @@ void Canvas_GL::resizeEvent(QResizeEvent *event)
     //    this->resizeGL(width(),height());
 }
 
-QPixmap *Canvas_GL::getPix()
+void Canvas_GL::saveImage()
 {
-    return this->pix;
+    QString file_path = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                   "/SaveTest",
+                                   tr("Images (*.png *.xpm *.jpg)"));
+        if(!file_path.isEmpty())
+        {
+            //如果没有写后缀就自动加上
+            if(QFileInfo(file_path).suffix().isEmpty())
+                file_path.append(".png");
+            this->pix->save(file_path);
+        }
+        else
+            QMessageBox::warning(this,tr("Path"),QString::fromLocal8Bit("未选择保存文件名"));
 }
 
+void Canvas_GL::clearImage()
+{
+    QPixmap *clearPix =new QPixmap(size());
+    clearPix->fill(Qt::white);
+    this->pix = clearPix;
+    while(!reVec.empty()){
+        reVec.pop_back();
+    }
+    reVec.push_back(clearPix);
+    update();
+}
+
+void Canvas_GL::recallImage()
+{
+    qDebug()<<"Recall"<<endl;
+    if(reVec.size()<=1){
+        qDebug()<<"It the initial state of the image."<<endl;
+        QPixmap *clearPix =new QPixmap(size());
+        clearPix->fill(Qt::white);
+        reVec[0]=clearPix;
+        pix = clearPix;
+        update();
+    }else{
+        pix = reVec[reVec.size()-1];
+        reVec.pop_back();
+        update();
+    }
+}
+
+QPixmap *Canvas_GL::getPixCopy()
+{
+    QPixmap *newPix = new QPixmap(size());	//创建一个新的QPixmap对象
+    newPix->fill(Qt::white);                //填充新QPixmap对象newPix的颜色为白色背景色
+    QPainter p(newPix);
+    p.drawPixmap(QPoint(0,0),*pix);         //在newPix中绘制原pix中的内容
+    qDebug()<<"Pix Copy at"<<&newPix<<endl;
+    return newPix;
+}
 
 
 void Canvas_GL::initializeGL(){
@@ -183,6 +238,7 @@ void Canvas_GL::resizeGL(int width, int height){
 void Canvas_GL::setColor(QColor c)
 {
     color = c;
+    pen.setColor(color);
 }
 
 void Canvas_GL::paintGL(){
