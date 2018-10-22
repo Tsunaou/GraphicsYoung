@@ -13,119 +13,16 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <property name="toolButtonStyle">
-   <enum>Qt::ToolButtonIconOnly</enum>
-  </property>
-  <property name="tabShape">
-   <enum>QTabWidget::Rounded</enum>
-  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QMdiArea" name="mdiArea">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>781</width>
-      <height>501</height>
+      <width>941</width>
+      <height>491</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>810</x>
-      <y>10</y>
-      <width>91</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_3">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_4">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>50</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_5">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>90</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_6">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>10</y>
-       <width>31</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -143,7 +40,6 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
-    <addaction name="actionSave"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -156,7 +52,6 @@
    </attribute>
    <addaction name="actionLine"/>
    <addaction name="actionCurve"/>
-   <addaction name="actionTestWidget"/>
    <addaction name="actionCycle"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -205,8 +100,8 @@
   </action>
   <action name="actionCycle">
    <property name="icon">
-    <iconset resource="image.qrc">
-     <normaloff>:/icon/icon/cycle.png</normaloff>:/icon/icon/cycle.png</iconset>
+    <iconset>
+     <normaloff>icon/cycle.png</normaloff>icon/cycle.png</iconset>
    </property>
    <property name="text">
     <string>Cycle</string>
@@ -234,11 +129,6 @@
    </property>
    <property name="text">
     <string>TestWidget</string>
-   </property>
-  </action>
-  <action name="actionSave">
-   <property name="text">
-    <string>保存(&amp;S)</string>
    </property>
   </action>
  </widget>

@@ -1,2 +1,8 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/icon">
+        <file>icon/2dshape-line.png</file>
+        <file>icon/Curve.png</file>
+        <file>icon/cycle.png</file>
+        <file>icon/line.png</file>
+    </qresource>
+</RCC>
