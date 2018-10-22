@@ -32,11 +32,15 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    Canvas_GL.cpp
+    Canvas_GL.cpp \
+    Figure.cpp \
+    Line.cpp
 
 HEADERS += \
         mainwindow.h \
-    Canvas_GL.h
+    Canvas_GL.h \
+    Figure.h \
+    Line.h
 
 FORMS += \
         mainwindow.ui

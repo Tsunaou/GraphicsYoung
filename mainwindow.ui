@@ -170,9 +170,15 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionTestWidget"/>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
   </widget>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/new.png</normaloff>:/icon/icon/new.png</iconset>
+   </property>
    <property name="text">
     <string>新建(&amp;N)</string>
    </property>
@@ -184,6 +190,10 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/open.png</normaloff>:/icon/icon/open.png</iconset>
+   </property>
    <property name="text">
     <string>打开(&amp;O)</string>
    </property>
@@ -237,6 +247,10 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/save.png</normaloff>:/icon/icon/save.png</iconset>
+   </property>
    <property name="text">
     <string>保存(&amp;S)</string>
    </property>
