@@ -21,6 +21,12 @@ private:
     QPushButton *Btn2;
     QPushButton *Btn3;
     QPushButton *Btn4;
+    QPushButton *Btn5;
+    QPushButton *Btn6;
+    QPushButton *Btn7;
+    QPushButton *Btn8;
+    QPushButton *Btn9;
+
     QGridLayout *mainLayout;
 };
 

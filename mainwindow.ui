@@ -72,8 +72,8 @@
    </attribute>
    <addaction name="actionLine"/>
    <addaction name="actionCurve"/>
-   <addaction name="actionTestWidget"/>
    <addaction name="actionCycle"/>
+   <addaction name="actionEllipse"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -91,11 +91,13 @@
    <addaction name="actionSave"/>
    <addaction name="actionClear"/>
    <addaction name="actionRecall"/>
-   <addaction name="actionTestWidget"/>
   </widget>
   <widget class="QToolBar" name="toolColorBar">
    <property name="windowTitle">
     <string>toolBar_2</string>
+   </property>
+   <property name="movable">
+    <bool>true</bool>
    </property>
    <attribute name="toolBarArea">
     <enum>RightToolBarArea</enum>
@@ -179,13 +181,19 @@
     <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="actionTestWidget">
+  <action name="actionEllipse">
    <property name="icon">
     <iconset resource="image.qrc">
-     <normaloff>:/icon/icon/2dshape-line.png</normaloff>:/icon/icon/2dshape-line.png</iconset>
+     <normaloff>:/icon/icon/ellipse.png</normaloff>:/icon/icon/ellipse.png</iconset>
    </property>
    <property name="text">
-    <string>TestWidget</string>
+    <string>Ellipse</string>
+   </property>
+   <property name="toolTip">
+    <string>椭圆</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
   <action name="actionSave">

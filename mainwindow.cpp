@@ -10,43 +10,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(tr("YoungPaint"));//设置软件标题为YoungPaint
 
-    setCentralWidget(ui->mdiArea);
-    ui->mdiArea->setViewMode(QMdiArea::TabbedView); //设置视口模式：tabBar模式
-    ui->mdiArea->setTabPosition(QTabWidget::North); //设置tabBar的位置
-    ui->mdiArea->setTabShape(QTabWidget::Rounded); //设置tab形状
-    ui->mdiArea->setTabsClosable(true); //tab可关闭
-    ui->mdiArea->setTabsMovable(true); //tab可在tabBar拖动
-
-
-
-//    QWidget *widgetAppearance=new QWidget();
-//        widgetAppearance->setFixedSize(QSize(60,60));
-//        QCheckBox *checkBoxWeiWu=new QCheckBox(widgetAppearance);
-//        checkBoxWeiWu->setGeometry(QRect(5,12,60,15));
-//        checkBoxWeiWu->setText("欧阳鸿荣");
-
-//        QCheckBox *checkBoxXiongZhuang=new QCheckBox(widgetAppearance);
-//        checkBoxXiongZhuang->setGeometry(QRect(5,32,60,15));
-//        checkBoxXiongZhuang->setText("荣鸿阳欧");
-
-//        //在“关于”按钮之前插入widget
-//        ui->mainToolBar->insertWidget(ui->actionCurve,widgetAppearance);
-//        //在“关于”按钮之前插入分隔符
-//        ui->mainToolBar->insertSeparator(ui->actionCurve);
-
-
-    colorBtn =new QToolButton;                  //创建颜色选择控件
-    QPixmap pixmap(20,20);
-    pixmap.fill(Qt::black);
-    colorBtn->setIcon(QIcon(pixmap));
-    connect(colorBtn,SIGNAL(clicked()),this,SLOT(ShowColor()));
-
-    ui->mainToolBar->addWidget(colorBtn);
-
     cur_canvasNum = -1;
-
-    ColorPanel *p = new ColorPanel(this);
-    ui->toolColorBar->addWidget(p);
+    figureMode = LINE;
+    initMdiArea();
+    initColorSelection();
 }
 
 MainWindow::~MainWindow()
@@ -59,6 +26,40 @@ int MainWindow::getCurCanvasNum()//返回当前画布序号
     int i = this->WindMap.find(this->ui->mdiArea->activeSubWindow()).value();
     qDebug()<<"This index is"<<i<<endl;
     return i;
+}
+
+void MainWindow::initMdiArea()
+{
+    setCentralWidget(ui->mdiArea);
+    ui->mdiArea->setViewMode(QMdiArea::TabbedView); //设置视口模式：tabBar模式
+    ui->mdiArea->setTabPosition(QTabWidget::North); //设置tabBar的位置
+    ui->mdiArea->setTabShape(QTabWidget::Rounded); //设置tab形状
+    ui->mdiArea->setTabsClosable(true); //tab可关闭
+    ui->mdiArea->setTabsMovable(true); //tab可在tabBar拖动
+}
+
+void MainWindow::initColorSelection()
+{
+    colorBtn =new QToolButton;                  //创建颜色选择控件
+    QPixmap pixmap(20,20);
+    pixmap.fill(Qt::black);
+    colorBtn->setIcon(QIcon(pixmap));
+    connect(colorBtn,SIGNAL(clicked()),this,SLOT(ShowColor()));
+
+    ui->mainToolBar->addWidget(colorBtn);
+
+
+    colorSel = new ColorPanel(this);
+    ui->toolColorBar->addWidget(colorSel);
+
+}
+
+void MainWindow::setFigureMode(FIGURE_TYPE type)
+{
+    this->figureMode = type;
+    for(int i=0;i<canvases.size();i++){
+        canvases[i]->setMode(type);
+    }
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -106,4 +107,24 @@ void MainWindow::on_actionRecall_triggered()
 {
     int index = this->getCurCanvasNum();
     this->canvases[index]->recallImage();
+}
+
+void MainWindow::on_actionLine_triggered()
+{
+    this->setFigureMode(LINE);
+}
+
+void MainWindow::on_actionCycle_triggered()
+{
+    this->setFigureMode(CYCLE);
+}
+
+void MainWindow::on_actionCurve_triggered()
+{
+    this->setFigureMode(LINE); //TODO
+}
+
+void MainWindow::on_actionEllipse_triggered()
+{
+    this->setFigureMode(ELLIPSE);
 }

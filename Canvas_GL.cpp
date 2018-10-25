@@ -90,6 +90,51 @@ void MyDrawLineBresenham(QPainter* painter,QPoint &start,QPoint &end){
 
 }
 
+double getLength(QPoint &start,QPoint &end){
+    int x0 = start.x();
+    int y0 = start.y();
+    int x1 = end.x();
+    int y1 = end.y();
+    return sqrt((x0-x1)*(x0-x1)+(y0-y1)*(y0-y1));
+}
+
+void MyDrawCycle(QPainter* painter,QPoint &start,QPoint &end){
+    //首先先在这里实现我的直线算法
+    qDebug()<<"MyDrawCycle "<<endl;
+    int x0 = start.x();
+    int y0 = start.y();
+    double R = getLength(start,end);
+    int x,y,p;
+    x=0;  y=R;
+    p=3-2*R;
+    for(;x<=y;x++)
+    {
+        QPoint temPt1(x0+x,y0+y);
+        QPoint temPt2(x0+y,y0+x);
+        QPoint temPt3(x0+x,y0-y);
+        QPoint temPt4(x0+y,y0-x);
+        QPoint temPt5(x0-x,y0-y);
+        QPoint temPt6(x0-y,y0-x);
+        QPoint temPt7(x0-x,y0+y);
+        QPoint temPt8(x0-y,y0+x);
+
+        painter->drawPoint(temPt1);
+        painter->drawPoint(temPt2);
+        painter->drawPoint(temPt3);
+        painter->drawPoint(temPt4);
+        painter->drawPoint(temPt5);
+        painter->drawPoint(temPt6);
+        painter->drawPoint(temPt7);
+        painter->drawPoint(temPt8);
+        if(p>=0){
+           p+=4*(x-y)+10;
+           y--;
+        }else{
+            p+=4*x+6;
+        }
+    }
+}
+
 void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 {
     qDebug()<<"mouseMoveEvent"<<endl;
@@ -116,13 +161,22 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 
     painter->begin(pix);					//(b)
     painter->setPen(pen);					//将QPen对象应用到绘制对象中
-    //绘制从startPos到鼠标当前位置的直线
-//    painter->drawLine(startPos,e->pos());
+
     QPoint endPos = e->pos();
 
-    MyDrawLineDDA(painter,startPos,endPos);
-//    double radius = sqrt((startPos.x()-e->pos().x())*(startPos.x()-e->pos().x())+(startPos.y()-e->pos().y())*(startPos.y()-e->pos().y()));
-//    painter->drawEllipse(startPos.x()-radius,startPos.y()-radius,2*radius,2*radius);
+    switch(this->figureMode){
+        case LINE:  MyDrawLineDDA(painter,startPos,endPos); break;
+        case CYCLE: MyDrawCycle(painter,startPos,endPos); break;
+        case ELLIPSE:{
+            double radius = sqrt((startPos.x()-e->pos().x())*(startPos.x()-e->pos().x())+(startPos.y()-e->pos().y())*(startPos.y()-e->pos().y()));
+            painter->drawEllipse(startPos.x()-radius,startPos.y()-radius,2*radius,2*radius);
+        }break;
+
+        default:
+            qDebug()<<"Select Error Mode of Figure"<<endl;
+    }
+
+
     painter->end();
     startPos =e->pos();				//更新鼠标的当前位置，为下次绘制做准备
     update();						//重绘绘制区窗体
@@ -200,6 +254,11 @@ void Canvas_GL::recallImage()
         reVec.pop_back();
         update();
     }
+}
+
+void Canvas_GL::setMode(FIGURE_TYPE type)
+{
+    this->figureMode = type;
 }
 
 QPixmap *Canvas_GL::getPixCopy()

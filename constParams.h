@@ -1,0 +1,6 @@
+﻿#ifndef CONSTPARAMS_H
+#define CONSTPARAMS_H
+
+enum FIGURE_TYPE{LINE,CYCLE,ELLIPSE};
+
+#endif // CONSTPARAMS_H

@@ -1,6 +1,8 @@
 ﻿#ifndef CANVAS_GL_H
 #define CANVAS_GL_H
 
+#include "constParams.h"
+
 #include <QWidget>
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -33,6 +35,7 @@ public:
     void saveImage(); //保存当前画布内容（pix内容）
     void clearImage(); //清空当前画布内容
     void recallImage();//撤销上一步操作
+    void setMode(FIGURE_TYPE type); //设置图形
     QPixmap *getPixCopy();
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
@@ -56,6 +59,8 @@ private:
     QColor color;
 
     QVector<QPixmap*> reVec;
+    FIGURE_TYPE figureMode;
+
 };
 
 #endif // CANVAS_GL_H

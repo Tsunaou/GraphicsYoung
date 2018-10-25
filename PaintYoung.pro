@@ -42,7 +42,8 @@ HEADERS += \
     Canvas_GL.h \
     Figure.h \
     Line.h \
-    ColorPanel.h
+    ColorPanel.h \
+    constParams.h
 
 FORMS += \
         mainwindow.ui
