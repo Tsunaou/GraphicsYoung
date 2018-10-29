@@ -37,6 +37,7 @@ public:
     void recallImage();//撤销上一步操作
     void setMode(FIGURE_TYPE type); //设置图形
     QPixmap *getPixCopy();
+    QPixmap *getPixCopy(QPixmap* pic);
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
@@ -50,10 +51,12 @@ public slots:
 
 private:
     QPixmap *pix;
+    QPixmap *pixToMove;
     QPen pen;
 
     QPoint startPos;
     QPoint endPos;
+    QPoint regPos;
     int style;
     int weight;
     QColor color;
