@@ -295,9 +295,11 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     QPainter *painter = new QPainter;		//新建一个QPainter对象
     QPoint endPos = e->pos();
 
-    QPixmap *regTemp =pix;
+    QPixmap *regTemp =pix;                  //实现图形随着鼠标动态加载
     pix= getPixCopy(pixToMove);
     delete regTemp;
+
+//    *pix = *pixToMove; //
 
     painter->begin(pix);					//(b)
     painter->setPen(pen);					//将QPen对象应用到绘制对象中
