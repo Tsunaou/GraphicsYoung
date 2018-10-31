@@ -27,7 +27,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     int getCurCanvasNum();
-    void initMdiArea();
+    void initMdiArea();         //初始化子窗口
     void initColorSelection();  //初始化toolbar上的颜色选择框
     void setFigureMode(FIGURE_TYPE type);   //设置你要绘画的图形
 
@@ -46,12 +46,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QToolButton *colorBtn;
-    ColorPanel *colorSel;
-    QVector<Canvas_GL*> canvases;
-    QMap<QMdiSubWindow*,int> WindMap;//绑定画布的序号
-    int cur_canvasNum; //画布的数目 注意到点击叉号并不会减少，因此用map进行了一个映射
-    FIGURE_TYPE figureMode;
+    QToolButton *colorBtn;      //颜色选择按钮
+    ColorPanel *colorSel;       //多功能选择区域
+    QVector<Canvas_GL*> canvases;       //多画布存储区域
+    QMap<QMdiSubWindow*,int> WindMap;   //绑定画布的序号
+    int cur_canvasNum;          //画布的数目 注意到点击叉号并不会减少，因此用map进行了一个映射
+    FIGURE_TYPE figureMode;     //当前绘画模式
 };
 
 #endif // MAINWINDOW_H

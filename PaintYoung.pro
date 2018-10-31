@@ -35,7 +35,13 @@ SOURCES += \
     Canvas_GL.cpp \
     Figure.cpp \
     Line.cpp \
-    ColorPanel.cpp
+    ColorPanel.cpp \
+    CycleController.cpp \
+    EllipseController.cpp \
+    FigureController.cpp \
+    LineController.cpp \
+    Cycle.cpp \
+    Ellipse.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +49,13 @@ HEADERS += \
     Figure.h \
     Line.h \
     ColorPanel.h \
-    constParams.h
+    constParams.h \
+    CycleController.h \
+    EllipseController.h \
+    FigureController.h \
+    LineController.h \
+    Cycle.h \
+    Ellipse.h
 
 FORMS += \
         mainwindow.ui
