@@ -51,7 +51,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 
     switch(this->figureMode){
         case LINE:  lineController.MyDrawLineDDA(painter,startPos,endPos); break;
-        case CYCLE: cycleController.MyDrawCycle(painter,startPos,endPos); break;
+        case CYCLE: cycleController.MyDrawCycleMidpoint(painter,startPos,endPos); break;
         case ELLIPSE:ellipseController.MyDrawEllipse(painter,startPos,endPos); break;
 
         default:
@@ -76,10 +76,18 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
     QPoint endPos = e->pos();
 
     switch(this->figureMode){
-        case LINE:  lineController.MyDrawLineDDA(painter,startPos,endPos); break;
-        case CYCLE: cycleController.MyDrawCycle(painter,startPos,endPos); break;
-        case ELLIPSE:ellipseController.MyDrawEllipse(painter,startPos,endPos); break;
-
+        case LINE:  {
+            lineController.MyDrawLineDDA(painter,startPos,endPos);
+            figureVec.push_back(new Line(&startPos,&endPos,LINE));
+        } break;
+        case CYCLE: {
+            cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);
+            figureVec.push_back(new Cycle(&startPos,&endPos,CYCLE));
+        } break;
+        case ELLIPSE: {
+            ellipseController.MyDrawEllipse(painter,startPos,endPos);
+            figureVec.push_back(new class Ellipse(&startPos,&endPos));
+        } break;
         default:
             qDebug()<<"Select Error Mode of Figure"<<endl;
     }
@@ -91,6 +99,7 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 
     QPixmap* tmp = this->getPixCopy();
     reVec.push_back(tmp);
+
 //    qDebug()<<"push_back"<<&tmp<<endl;
 
 }
@@ -160,6 +169,7 @@ void Canvas_GL::recallImage()
     }else{
         pix = reVec[reVec.size()-1];
         reVec.pop_back();
+        figureVec.pop_back();//这里可能会有bug
         update();
     }
 }

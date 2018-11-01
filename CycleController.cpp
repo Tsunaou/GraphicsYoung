@@ -20,9 +20,9 @@ void CycleController::mouseReleaseEvent(QPainter *painter, QPoint *start, QPoint
 
 }
 
-void CycleController::MyDrawCycle(QPainter *painter, QPoint &start, QPoint &end)
+void CycleController::MyDrawCycleBresenham(QPainter *painter, QPoint &start, QPoint &end)//
 {
-    //首先先在这里实现我的直线算法
+    //首先先在这里实现我的画圆算法
     qDebug()<<"MyDrawCycle "<<endl;
     int x0 = start.x();
     int y0 = start.y();
@@ -42,6 +42,43 @@ void CycleController::MyDrawCycle(QPainter *painter, QPoint &start, QPoint &end)
         }
     }
 }
+
+void CycleController::MyDrawCycleMidpoint(QPainter *painter, QPoint &start, QPoint &end)
+{
+    //首先先在这里实现我的画圆算法
+    qDebug()<<"MyDrawCycle "<<endl;
+
+    int x0 = start.x();
+    int y0 = start.y();
+    double R = this->getLength(start,end);
+    int x,y;
+    double d;
+    x = 0;
+    y = R;
+    d = 1-R;
+    int deltaX = 3;
+    int deltaY = 5-2*R;
+    this->drawEighthCycle(painter,x0,y0,x,y);
+
+    while(x<y){
+        if(d<0){
+            d+=deltaX;
+            deltaX+=2;
+            deltaY+=2;
+            x++;
+        }
+        else
+        {
+            d+=deltaY;
+            deltaX+=2;
+            deltaY+=4;
+            x++;
+            y--;
+        }
+        this->drawEighthCycle(painter,x0,y0,x,y);
+    }
+}
+
 
 void CycleController::drawEighthCycle(QPainter *painter, int x0, int y0, int x, int y)
 {
