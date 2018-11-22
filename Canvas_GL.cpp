@@ -11,7 +11,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     setMinimumSize(1366,768);            //设置绘制区窗体的最小尺寸
 
     style = static_cast<int>(Qt::SolidLine);//设置QPainter的属性
-    weight = 1;
+    weight = 3;
     color = Qt::black;
 
     pen.setStyle((Qt::PenStyle)style);		//(a)
