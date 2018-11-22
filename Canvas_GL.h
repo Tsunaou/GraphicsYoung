@@ -8,6 +8,7 @@
 #include "LineController.h"
 #include "CycleController.h"
 #include "EllipseController.h"
+#include "Point.h"
 
 #include <QWidget>
 #include <QOpenGLWidget>
@@ -67,6 +68,7 @@ private:
     int weight;         //画笔粗细
     QColor color;       //画笔颜色
 
+    QPainter *painter;
     QVector<QPixmap*> reVec;    //存储画布内容，用于实现撤销操作
     QVector<Figure*> figureVec; //存储当前画布的图形
     LineController lineController;      //控制直线的行为
@@ -74,7 +76,7 @@ private:
     EllipseController ellipseController;//控制椭圆的行为
 
     FIGURE_TYPE figureMode;     //当前画图系统模式
-
+    DRAW_STATE drawState;       //当前画图状态
 
 
 };

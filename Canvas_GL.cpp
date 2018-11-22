@@ -10,16 +10,21 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     setMaximumSize(1366,768);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
     setMinimumSize(1366,768);            //设置绘制区窗体的最小尺寸
 
+    painter = new QPainter;
     style = static_cast<int>(Qt::SolidLine);//设置QPainter的属性
     weight = 3;
     color = Qt::black;
-
     pen.setStyle((Qt::PenStyle)style);		//(a)
     pen.setWidth(weight);					//设置画笔的线宽值
     pen.setColor(color);					//设置画笔的颜色
+    painter->setPen(pen);					//将QPen对象应用到绘制对象中
 
     QPixmap* tmp = pix;
     reVec.push_back(tmp);
+
+    //状态设置
+    //this->figureMode = LINE; 笔比较OK感觉
+    this->drawState = UNDO;
 
 //    setAttribute(Qt::WA_StaticContents);
 }
@@ -29,7 +34,6 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     qDebug()<<"mousePressEvent"<<endl;
     pixToMove = getPixCopy();
     startPos = e->pos();
-    regPos= e->pos();
 }
 
 
@@ -37,17 +41,11 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 {
 //    qDebug()<<"mouseMoveEvent"<<endl;
 
-    QPainter *painter = new QPainter;		//新建一个QPainter对象
     QPoint endPos = e->pos();
 
-    QPixmap *regTemp =pix;                  //实现图形随着鼠标动态加载
-    pix= getPixCopy(pixToMove);
-    delete regTemp;
-
-//    *pix = *pixToMove; //
-
+    *pix = *pixToMove; //实现图形随着鼠标动态加载,双缓冲
     painter->begin(pix);					//(b)
-    painter->setPen(pen);					//将QPen对象应用到绘制对象中
+    painter->setPen(pen);
 
     switch(this->figureMode){
         case LINE:  lineController.MyDrawLineDDA(painter,startPos,endPos); break;
@@ -57,10 +55,12 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
         default:
             qDebug()<<"Select Error Mode of Figure"<<endl;
     }
-    regPos = e->pos();//记录下次消除的位置
+    Point pStart(startPos.x(),startPos.y());
+    Point pEnd(endPos.x(),endPos.y());
+    pStart.DrawCyclePoint(painter,pen);
+    pEnd.DrawCyclePoint(painter,pen);
 
     painter->end();
-//    startPos =e->pos();				//更新鼠标的当前位置，为下次绘制做准备
     update();						//重绘绘制区窗体
 }
 
@@ -68,8 +68,8 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 {
 //    qDebug()<<"mouseReleaseEvent"<<endl;
 //    qDebug()<<"Pixmap size:"<<pix->height()<<","<<pix->width()<<endl;
-    QPainter *painter = new QPainter;		//新建一个QPainter对象
 
+    *pix = *pixToMove;
     painter->begin(pix);					//(b)
     painter->setPen(pen);					//将QPen对象应用到绘制对象中
 

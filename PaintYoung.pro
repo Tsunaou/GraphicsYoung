@@ -41,7 +41,8 @@ SOURCES += \
     FigureController.cpp \
     LineController.cpp \
     Cycle.cpp \
-    Ellipse.cpp
+    Ellipse.cpp \
+    Point.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -55,7 +56,8 @@ HEADERS += \
     FigureController.h \
     LineController.h \
     Cycle.h \
-    Ellipse.h
+    Ellipse.h \
+    Point.h
 
 FORMS += \
         mainwindow.ui
