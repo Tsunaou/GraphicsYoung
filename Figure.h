@@ -2,7 +2,9 @@
 #define FIGURE_H
 
 #include "constParams.h"
+#include "Point.h"
 #include <QPoint>
+
 class Figure
 {
 public:

@@ -2,7 +2,7 @@
 
 FigureController::FigureController()
 {
-
+    painter = NULL;
 }
 
 double FigureController::getLength(QPoint &start, QPoint &end)

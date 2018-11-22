@@ -10,14 +10,14 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     setMaximumSize(1366,768);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
     setMinimumSize(1366,768);            //设置绘制区窗体的最小尺寸
 
-    painter = new QPainter;
+    //painter = new QPainter;
     style = static_cast<int>(Qt::SolidLine);//设置QPainter的属性
     weight = 3;
     color = Qt::black;
     pen.setStyle((Qt::PenStyle)style);		//(a)
     pen.setWidth(weight);					//设置画笔的线宽值
     pen.setColor(color);					//设置画笔的颜色
-    painter->setPen(pen);					//将QPen对象应用到绘制对象中
+    //painter->setPen(pen);					//将QPen对象应用到绘制对象中
 
     QPixmap* tmp = pix;
     reVec.push_back(tmp);
@@ -32,7 +32,30 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
 void Canvas_GL::mousePressEvent(QMouseEvent *e)
 {
     qDebug()<<"mousePressEvent"<<endl;
-    pixToMove = getPixCopy();
+    if(this->drawState == UNDO){
+        pixToMove = getPixCopy();
+        this->drawState = DRAWING;
+    }else{
+
+    }
+    QPainter *painter = new QPainter();
+    //Refactor---------------------------------------------------------------------------------------------------------------------------------------
+    painter->begin(pix);					//(b)
+    painter->setPen(pen);
+    if(this->figureMode == LINE){
+        qDebug()<<"1"<<endl;
+        lineController.mousePressEvent(painter,e,pen);
+        qDebug()<<"5"<<endl;
+        painter->end();
+        delete painter;
+        qDebug()<<"6"<<endl;
+        update();
+        return;
+    }
+    painter->end();
+    delete painter;
+    //Refactor---------------------------------------------------------------------------------------------------------------------------------------
+
     startPos = e->pos();
 }
 
@@ -40,12 +63,22 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
 void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 {
 //    qDebug()<<"mouseMoveEvent"<<endl;
-
     QPoint endPos = e->pos();
 
     *pix = *pixToMove; //实现图形随着鼠标动态加载,双缓冲
+    QPainter *painter = new QPainter();
     painter->begin(pix);					//(b)
     painter->setPen(pen);
+
+//Refactor---------------------------------------------------------------------------------------------------------------------------------------
+    if(this->figureMode == LINE){
+        lineController.mouseMoveEvent(painter,e,pen);
+        painter->end();
+        delete painter;
+        update();
+        return;
+    }
+//Refactor---------------------------------------------------------------------------------------------------------------------------------------
 
     switch(this->figureMode){
         case LINE:  lineController.MyDrawLineDDA(painter,startPos,endPos); break;
@@ -61,6 +94,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     pEnd.DrawCyclePoint(painter,pen);
 
     painter->end();
+    delete painter;
     update();						//重绘绘制区窗体
 }
 
@@ -70,10 +104,20 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 //    qDebug()<<"Pixmap size:"<<pix->height()<<","<<pix->width()<<endl;
 
     *pix = *pixToMove;
+    QPainter *painter = new QPainter();
     painter->begin(pix);					//(b)
     painter->setPen(pen);					//将QPen对象应用到绘制对象中
 
     QPoint endPos = e->pos();
+    //Refactor---------------------------------------------------------------------------------------------------------------------------------------
+    if(this->figureMode == LINE){
+        lineController.mouseReleaseEvent(painter,e,pen);
+        painter->end();
+        delete painter;
+        update();
+        return;
+    }
+    //Refactor---------------------------------------------------------------------------------------------------------------------------------------
 
     switch(this->figureMode){
         case LINE:  {
@@ -94,6 +138,7 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 
 
     painter->end();
+    delete painter;
     startPos =e->pos();				//更新鼠标的当前位置，为下次绘制做准备
     update();						//重绘绘制区窗体
 

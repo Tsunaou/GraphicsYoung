@@ -45,3 +45,8 @@ double Point::distanceToPoint(int x, int y)
                 (this->y-y)*
                 (this->y-y));
 }
+
+double Point::distanceToPoint(QPoint p)
+{
+    return distanceToPoint(p.x(),p.y());
+}

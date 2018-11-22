@@ -68,7 +68,7 @@ private:
     int weight;         //画笔粗细
     QColor color;       //画笔颜色
 
-    QPainter *painter;
+    //QPainter *painter;
     QVector<QPixmap*> reVec;    //存储画布内容，用于实现撤销操作
     QVector<Figure*> figureVec; //存储当前画布的图形
     LineController lineController;      //控制直线的行为

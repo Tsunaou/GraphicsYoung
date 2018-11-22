@@ -13,7 +13,8 @@ public:
     void setPoint(int x,int y);
     void DrawCyclePoint(QPainter *painter,QPen &pen);
     double distanceToPoint(int x,int y);
-private:
+    double distanceToPoint(QPoint p);
+//private:
     int x;  //横坐标
     int y;  //纵坐标
     int ridus;  //辅助实心点半径
