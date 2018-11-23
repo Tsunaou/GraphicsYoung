@@ -3,6 +3,7 @@
 #include "FigureController.h"
 #include "Line.h"
 #include "constParams.h"
+#include <QtMath>
 #include <QMouseEvent>
 #include <QPen>
 #include <QVector>
@@ -19,7 +20,11 @@ public:
     void setStartPoint(Point point);
     void setEndPoint(Point point);
     void moveToPoint(Point point);
+    void rotateToPoint(Point point);
     void setState(DRAW_STATE *state);
+    void drawHandle(QPainter* painter, QPen pen);
+    double getRotaryAngle(Point center,Point a,Point b);
+    bool clockWise(Point center,Point a,Point b);
 private:
     enum SetLP{SETBEGIN, SETEND, SETCENTER, SETHANDLE, SETNULL} setLP; //目前更改的是直线的起点和终点
     Line *curLine; //当前聚焦的直线

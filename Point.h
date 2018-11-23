@@ -20,6 +20,9 @@ public:
     int getY(){
         return y;
     }
+    QPoint getQPoint(){
+        return point;
+    }
 //private:
     int x;  //横坐标
     int y;  //纵坐标

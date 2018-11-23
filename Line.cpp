@@ -21,7 +21,12 @@ void Line::setStartPoint(Point p)
     int newCy = (startPoint.y+endPoint.y)/2;
     Point cp(newCx,newCy);
     this->centerPoint = cp;
-    //this->centerPoint.setPoint(newCx,newCy);
+    //接下来处理旋转点
+    int newPx = (newCx+endPoint.x)/2;
+    int newPy = (newCy+endPoint.y)/2;
+    Point rp(newPx,newPy);
+    this->rotatePoint =rp;
+
 }
 
 void Line::setEndPoint(Point p)
@@ -31,5 +36,9 @@ void Line::setEndPoint(Point p)
     int newCy = (startPoint.y+endPoint.y)/2;
     Point cp(newCx,newCy);
     this->centerPoint = cp;
-    //this->centerPoint.setPoint(newCx,newCy);
+    //接下来处理旋转点
+    int newPx = (newCx+endPoint.x)/2;
+    int newPy = (newCy+endPoint.y)/2;
+    Point rp(newPx,newPy);
+    this->rotatePoint =rp;
 }
