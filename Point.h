@@ -14,6 +14,12 @@ public:
     void DrawCyclePoint(QPainter *painter,QPen &pen);
     double distanceToPoint(int x,int y);
     double distanceToPoint(QPoint p);
+    int getX(){
+        return x;
+    }
+    int getY(){
+        return y;
+    }
 //private:
     int x;  //横坐标
     int y;  //纵坐标

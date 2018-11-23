@@ -18,6 +18,12 @@ Point::Point(int x, int y)
     point.setY(y);
 }
 
+void Point::setPoint(int x, int y)
+{
+    this->point.setX(x);
+    this->point.setY(y);
+}
+
 void Point::DrawCyclePoint(QPainter *painter,QPen &pen)
 {
     QPen debugPen;

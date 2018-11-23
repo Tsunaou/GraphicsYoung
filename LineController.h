@@ -18,6 +18,7 @@ public:
     void MyDrawLineDDA(QPainter* painter,QPoint &start,QPoint &end);
     void setStartPoint(Point point);
     void setEndPoint(Point point);
+    void moveToPoint(Point point);
     void setState(DRAW_STATE *state);
 private:
     enum SetLP{SETBEGIN, SETEND, SETCENTER, SETHANDLE, SETNULL} setLP; //目前更改的是直线的起点和终点
