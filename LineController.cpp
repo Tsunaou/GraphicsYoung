@@ -4,6 +4,37 @@ LineController::LineController()
 {
     this->curLine = NULL;
     this->painter = NULL;
+    this->setLP =SETNULL;
+}
+
+bool LineController::isOperationing(QMouseEvent *e)
+{
+    if(curLine->startPoint.distanceToPoint(e->pos())<=5)
+    {
+        qDebug()<<"SETBEGIN"<<endl;
+        setLP = SETBEGIN;
+        return true;
+    }
+    else if(curLine->endPoint.distanceToPoint(e->pos())<=5)
+    {
+        qDebug()<<"SETEND"<<endl;
+        setLP = SETEND;
+        return true;
+    }
+    else if(curLine->centerPoint.distanceToPoint(e->pos())<=5)
+    {
+        setLP = SETCENTER;
+        return true;
+    }
+    else if(curLine->rotatePoint.distanceToPoint(e->pos())<=5)
+    {
+        setLP = SETHANDLE;
+        return true;
+    }
+    setLP=SETNULL;
+    *state = UNDO;
+    curLine = NULL;
+    return false;
 }
 
 void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
@@ -17,7 +48,7 @@ void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen
     }
     if(e->button()==Qt::LeftButton)
     {
-        if(curLine!=NULL)
+        if(curLine!=NULL/* && setLP == SETNULL*/)
         {
             if(curLine->startPoint.distanceToPoint(e->pos())<=5)
             {
@@ -41,7 +72,9 @@ void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen
                 setLP = SETHANDLE;
                 return;
             }
-            //setLP = SETNULL;
+            setLP = SETNULL;
+            *state = UNDO;
+            curLine = NULL;
             return;
 //            else if(curLine->isOn(curPoint))
 //            {
@@ -54,6 +87,7 @@ void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen
         curLine->endPoint = curPoint;
         qDebug()<<"3"<<endl;
         setLP = SETEND;
+        *state = DRAWING;
     }
     qDebug()<<"4"<<endl;
 }
@@ -77,6 +111,16 @@ void LineController::mouseMoveEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 
 void LineController::mouseReleaseEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
+    qDebug()<<"LineController::mouseReleaseEvent"<<endl;
+    qDebug()<<"state is";
+    switch (*state) {
+        case UNDO:
+            qDebug()<<"UNDO"<<endl;
+            break;
+        case DRAWING :
+            qDebug()<<"DRAWING"<<endl;
+            break;
+    }
     this->painter = painter;
     qDebug()<<"LineController::mouseReleaseEvent"<<endl;
     MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
@@ -166,4 +210,9 @@ void LineController::setEndPoint(Point point)
     qDebug() << "StartPoint(" <<curLine->startPoint.point.x()<<","<<curLine->startPoint.point.y()<<")"<<endl;
     qDebug() << "EndPoint(" <<curLine->endPoint.point.x()<<","<<curLine->endPoint.point.y()<<")"<<endl;
     MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+}
+
+void LineController::setState(DRAW_STATE *state)
+{
+    this->state = state;
 }

@@ -25,6 +25,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     //状态设置
     //this->figureMode = LINE; 笔比较OK感觉
     this->drawState = UNDO;
+    this->lineController.setState(&this->drawState);
 
 //    setAttribute(Qt::WA_StaticContents);
 }
@@ -32,11 +33,24 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
 void Canvas_GL::mousePressEvent(QMouseEvent *e)
 {
     qDebug()<<"mousePressEvent"<<endl;
-    if(this->drawState == UNDO){
+    qDebug()<<"state is";
+    switch (drawState) {
+        case UNDO:
+            qDebug()<<"UNDO"<<endl;
+            break;
+        case DRAWING :
+            qDebug()<<"DRAWING"<<endl;
+            break;
+    }
+    if(this->drawState == UNDO){ //上次绘画状态结束，pixToMove更新到最新状态
         pixToMove = getPixCopy();
-        this->drawState = DRAWING;
     }else{
-
+        //pixToMove = getPixCopy();
+        if(lineController.isOperationing(e)){ //绘画状态中，双缓冲准备
+            *pix = *pixToMove;
+        }else{
+            pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
+        }
     }
     QPainter *painter = new QPainter();
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
@@ -49,6 +63,11 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
         painter->end();
         delete painter;
         qDebug()<<"6"<<endl;
+        if(this->drawState == UNDO){
+            pixToMove = getPixCopy();
+        }else{
+            *pix = *pixToMove;
+        }
         update();
         return;
     }
