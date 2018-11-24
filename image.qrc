@@ -10,5 +10,7 @@
         <file>icon/clear.png</file>
         <file>icon/recall.png</file>
         <file>icon/ellipse.png</file>
+        <file>icon/pen.png</file>
+        <file>icon/brush.png</file>
     </qresource>
 </RCC>

@@ -43,6 +43,9 @@ private slots:
     void on_actionCycle_triggered();
     void on_actionCurve_triggered();
     void on_actionEllipse_triggered();
+    void on_actionPen_triggered();
+
+    void on_actionBrush_triggered();
 
 private:
     Ui::MainWindow *ui;

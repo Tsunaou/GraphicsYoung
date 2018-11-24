@@ -128,3 +128,13 @@ void MainWindow::on_actionEllipse_triggered()
 {
     this->setFigureMode(ELLIPSE);
 }
+
+void MainWindow::on_actionPen_triggered()
+{
+    this->setFigureMode(PEN);
+}
+
+void MainWindow::on_actionBrush_triggered()
+{
+    this->setFigureMode(BRUSH);
+}

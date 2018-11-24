@@ -48,6 +48,9 @@ public:
     //一些辅助调试的函数
     void showDrawingStates();   //输出状态信息
     void drawBeforeNewState();  //进入另一个状态前绘图
+    void printDebugMessage(QString msg){
+        qDebug()<<msg<<endl;
+    }
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;

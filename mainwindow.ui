@@ -57,6 +57,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionPen"/>
+   <addaction name="actionBrush"/>
+   <addaction name="separator"/>
    <addaction name="actionLine"/>
    <addaction name="actionCurve"/>
    <addaction name="actionCycle"/>
@@ -223,6 +226,33 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Backspace</string>
+   </property>
+  </action>
+  <action name="actionPen">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/pen.png</normaloff>:/icon/icon/pen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pen</string>
+   </property>
+   <property name="toolTip">
+    <string>画笔</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionBrush">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/brush.png</normaloff>:/icon/icon/brush.png</iconset>
+   </property>
+   <property name="text">
+    <string>Brush</string>
+   </property>
+   <property name="toolTip">
+    <string>刷子</string>
    </property>
   </action>
  </widget>

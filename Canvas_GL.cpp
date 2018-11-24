@@ -12,7 +12,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
 
     //painter = new QPainter;
     style = static_cast<int>(Qt::SolidLine);//设置QPainter的属性
-    weight = 1;                             //画笔宽度
+    weight = PEN_WIDTH;                     //画笔宽度
     color = Qt::black;                      //默认颜色
     pen.setStyle((Qt::PenStyle)style);		//(a)
     pen.setWidth(weight);					//设置画笔的线宽值
@@ -23,7 +23,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     reVec.push_back(tmp);
 
     //状态设置
-    this->figureMode = FIGURE; //笔比较OK感觉
+    this->figureMode = PEN; //笔比较OK感觉
     this->drawState = UNDO;
     this->lineController.setState(&this->drawState);
     this->cycleController.setState(&this->drawState);
@@ -72,6 +72,8 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     delete painter;
     //Refactor End---------------------------------------------------------------------------------------------------------------------------------------
 
+    //Pen的话能到这里
+    printDebugMessage("Pen here press");
     startPos = e->pos();
 }
 
@@ -81,7 +83,9 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     qDebug()<<"mouseMoveEvent"<<endl;
     QPoint endPos = e->pos();
 
-    *pix = *pixToMove; //实现图形随着鼠标动态加载,双缓冲
+    if(this->figureMode!=PEN && this->figureMode !=BRUSH){
+        *pix = *pixToMove; //实现图形随着鼠标动态加载,双缓冲
+    }
     QPainter *painter = new QPainter();
     painter->begin(pix);
     painter->setPen(pen);
@@ -97,11 +101,15 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
 
     //不是LINE,CYCLE,ELLIPSE才会执行下列语句
-    Point pStart(startPos.x(),startPos.y());
-    Point pEnd(endPos.x(),endPos.y());
-    pStart.DrawCyclePoint(painter,pen);
-    pEnd.DrawCyclePoint(painter,pen);
+//    Point pStart(startPos.x(),startPos.y());
+//    Point pEnd(endPos.x(),endPos.y());
+//    pStart.DrawCyclePoint(painter,pen);
+//    pEnd.DrawCyclePoint(painter,pen);
 
+    //Pen的话能到这里
+    printDebugMessage("Pen here move");
+    lineController.MyDrawLineDDA(painter,startPos,endPos);
+    startPos = e->pos();
     painter->end();
     delete painter;
     update();						//重绘绘制区窗体
@@ -111,7 +119,9 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 {
     qDebug()<<"mouseReleaseEvent"<<endl;
 
-    *pix = *pixToMove;
+    if(this->figureMode!=PEN && this->figureMode !=BRUSH){
+        *pix = *pixToMove;
+    }
     QPainter *painter = new QPainter();
     painter->begin(pix);
     painter->setPen(pen);
@@ -129,6 +139,8 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
 
     //不是LINE,CYCLE,ELLIPSE才会执行下列语句
+    printDebugMessage("Pen here release");
+    lineController.MyDrawLineDDA(painter,startPos,endPos);
     painter->end();
     delete painter;
     startPos =e->pos();				//更新鼠标的当前位置，为下次绘制做准备
@@ -219,8 +231,12 @@ void Canvas_GL::recallImage()
 
 void Canvas_GL::setMode(FIGURE_TYPE type)
 {
-    if(figureMode == FIGURE){//初始化
+    if(figureMode == FIGURE || figureMode == PEN || figureMode == BRUSH){//初始化
         this->figureMode = type;
+        this->drawState = UNDO;
+        this->lineController.clearState();
+        this->cycleController.clearState();
+        this->ellipseController.clearState();
     }
     else{
         //只坐到上面，图像上会留下辅助点，因为还是得处理下QAQ
@@ -233,6 +249,12 @@ void Canvas_GL::setMode(FIGURE_TYPE type)
         this->ellipseController.clearState();
         //
         this->figureMode = type;
+    }
+
+    if(figureMode == BRUSH){
+        pen.setWidth(BRUSH_WIDTH);
+    }else{
+        pen.setWidth(this->weight);
     }
 }
 
@@ -271,6 +293,9 @@ void Canvas_GL::showDrawingStates()
 
 void Canvas_GL::drawBeforeNewState()
 {
+    if(this->figureMode == PEN || this->figureMode == BRUSH){
+        return;
+    }
     *pix = *pixToMove;
     QPainter *painter = new QPainter();
     painter->begin(pix);
@@ -317,6 +342,7 @@ void Canvas_GL::resizeGL(int width, int height){
 void Canvas_GL::setColor(QColor c)
 {
     //drawBeforeNewState();
+    setMode(this->figureMode);
     color = c;
     pen.setColor(color);
 }
