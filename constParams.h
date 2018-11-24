@@ -11,5 +11,7 @@ enum SETELLIPSE{ELLIPSE_CENTER,ELLIPSE_OUT,ELLIPSE_HANDLE,ELLIPSE_NULL};    //å¯
 
 const int BRUSH_WIDTH = 10;
 const int PEN_WIDTH = 1;
+const double ZOOM_IN = 2;
+const double ZOOM_OUT = 1/ZOOM_IN;
 
 #endif // CONSTPARAMS_H

@@ -56,7 +56,7 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     QPainter *painter = new QPainter();
     painter->begin(pix);
     painter->setPen(pen);
-    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+    if(isDrawingFigure()){
         figureController[figureMode]->mousePressEvent(painter,e,pen);
         painter->end();
         delete painter;
@@ -90,7 +90,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     painter->begin(pix);
     painter->setPen(pen);
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
-    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+    if(isDrawingFigure()){
         //lineController.mouseMoveEvent(painter,e,pen);
         figureController[figureMode]->mouseMoveEvent(painter,e,pen);
         painter->end();
@@ -129,7 +129,7 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
     QPoint endPos = e->pos();
 
     //Refactor--------------------------------------------------------------------------------------------------------------------------------------
-    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+    if(isDrawingFigure()){
         figureController[figureMode]->mouseReleaseEvent(painter,e,pen);
         painter->end();
         delete painter;
@@ -265,7 +265,7 @@ void Canvas_GL::setBigger()
         return;
     }
     else{
-        if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+        if(isDrawingFigure()){
             *pix = *pixToMove;
             QPainter *painter = new QPainter();
             painter->begin(pix);
@@ -285,7 +285,7 @@ void Canvas_GL::setSmaller()
         return;
     }
     else{
-        if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+        if(isDrawingFigure()){
             *pix = *pixToMove;
             QPainter *painter = new QPainter();
             painter->begin(pix);
@@ -354,6 +354,15 @@ void Canvas_GL::drawBeforeNewState()
     reVec.push_back(tmp);
     update();
     pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
+}
+
+bool Canvas_GL::isDrawingFigure()
+{
+    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 

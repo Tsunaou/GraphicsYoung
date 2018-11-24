@@ -53,6 +53,7 @@ public:
     void printDebugMessage(QString msg){
         qDebug()<<msg<<endl;
     }
+    bool isDrawingFigure();
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;

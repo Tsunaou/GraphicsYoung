@@ -23,8 +23,8 @@ void CycleController::getStartAndEnd(QPoint &start, QPoint &end)
 void CycleController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
 {
     qDebug()<<"Before Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
-    this->cycle->setStartPoint(this->cycle->startPoint*2);
-    this->cycle->setEndPoint(this->cycle->endPoint*2);
+    this->cycle->setStartPoint(this->cycle->startPoint*ZOOM_IN);
+    this->cycle->setEndPoint(this->cycle->endPoint*ZOOM_IN);
     qDebug()<<"Line bigger"<<endl;
     qDebug()<<"After Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
     MyDrawCycleMidpoint(painter,cycle->startPoint.point,cycle->endPoint.point);
@@ -34,8 +34,8 @@ void CycleController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
 void CycleController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 {
     qDebug()<<"Before Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
-    this->cycle->setStartPoint(this->cycle->startPoint*0.5);
-    this->cycle->setEndPoint(this->cycle->endPoint*0.5);
+    this->cycle->setStartPoint(this->cycle->startPoint*ZOOM_OUT);
+    this->cycle->setEndPoint(this->cycle->endPoint*ZOOM_OUT);
     qDebug()<<"Line bigger"<<endl;
     qDebug()<<"After Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
     MyDrawCycleMidpoint(painter,cycle->startPoint.point,cycle->endPoint.point);
