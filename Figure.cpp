@@ -13,3 +13,7 @@ Figure::Figure(QPoint *start, QPoint *end)
     this->end = end;
     this->type = FIGURE;
 }
+
+
+
+

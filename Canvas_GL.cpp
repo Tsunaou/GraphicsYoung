@@ -26,8 +26,14 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     //this->figureMode = LINE; 笔比较OK感觉
     this->drawState = UNDO;
     this->lineController.setState(&this->drawState);
+    this->cycleController.setState(&this->drawState);
+    this->ellipseController.setState(&this->drawState);
+    //用统一的接口来约束行为（测试中）
+    figureController.push_back(&lineController);
+    figureController.push_back(&lineController);
+    figureController.push_back(&cycleController);
+    figureController.push_back(&ellipseController);
 
-//    setAttribute(Qt::WA_StaticContents);
 }
 
 void Canvas_GL::mousePressEvent(QMouseEvent *e)
@@ -44,9 +50,9 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     }
     if(this->drawState == UNDO){ //上次绘画状态结束，pixToMove更新到最新状态
         pixToMove = getPixCopy();
-    }else{
+    }
+    else{
 
-        //pixToMove = getPixCopy();
         if(lineController.isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
             *pix = *pixToMove;
         }else{
@@ -71,12 +77,9 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     painter->begin(pix);
     painter->setPen(pen);
     if(this->figureMode == LINE){
-        qDebug()<<"1"<<endl;
         lineController.mousePressEvent(painter,e,pen);
-        qDebug()<<"5"<<endl;
         painter->end();
         delete painter;
-        qDebug()<<"6"<<endl;
         if(this->drawState == UNDO){
             pixToMove = getPixCopy();
         }else{
@@ -105,7 +108,8 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
     if(this->figureMode == LINE){
-        lineController.mouseMoveEvent(painter,e,pen);
+        //lineController.mouseMoveEvent(painter,e,pen);
+        figureController[figureMode]->mouseMoveEvent(painter,e,pen);
         painter->end();
         delete painter;
         update();
@@ -133,13 +137,13 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 
 void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 {
-//    qDebug()<<"mouseReleaseEvent"<<endl;
+    qDebug()<<"mouseReleaseEvent"<<endl;
 //    qDebug()<<"Pixmap size:"<<pix->height()<<","<<pix->width()<<endl;
 
     *pix = *pixToMove;
     QPainter *painter = new QPainter();
-    painter->begin(pix);					//(b)
-    painter->setPen(pen);					//将QPen对象应用到绘制对象中
+    painter->begin(pix);
+    painter->setPen(pen);
 
     QPoint endPos = e->pos();
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------

@@ -49,7 +49,6 @@ bool LineController::isOperationing(QMouseEvent *e,QPoint &start,QPoint &end)
 void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
     qDebug()<<"LineController::mousePressEvent"<<endl;
-    qDebug()<<"2"<<endl;
     if(curLine!=NULL){
         qDebug()<<"curLine!=NULL"<<endl;
     }else{
@@ -57,7 +56,7 @@ void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen
     }
     if(e->button()==Qt::LeftButton)
     {
-        if(curLine!=NULL/* && setLP == SETNULL*/)
+        if(curLine!=NULL)
         {
             if(curLine->startPoint.distanceToPoint(e->pos())<=5)
             {
@@ -90,11 +89,9 @@ void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen
         curLine = new Line();
         curLine->setStartPoint(curPoint);
         curLine->setEndPoint(curPoint);
-        qDebug()<<"3"<<endl;
         setLP = SETEND;
         *state = DRAWING;
     }
-    qDebug()<<"4"<<endl;
 }
 
 void LineController::mouseMoveEvent(QPainter *painter, QMouseEvent *e, QPen pen)
@@ -240,9 +237,6 @@ void LineController::rotateToPoint(Point point)
 
     if(wiseFlag){//顺时针转
         RotaryAngle *= -1;
-//        drawHandle(painter,pen);
-//        MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
-//        return;
     }
     int x = curLine->startPoint.getX();
     int y = curLine->startPoint.getY();

@@ -14,6 +14,7 @@ Line::Line(QPoint *start, QPoint *end, FIGURE_TYPE type)
     this->type = LINE;
 }
 
+
 void Line::setStartPoint(Point p)
 {
     this->startPoint = p;
@@ -26,7 +27,6 @@ void Line::setStartPoint(Point p)
     int newPy = (newCy+endPoint.y)/2;
     Point rp(newPx,newPy);
     this->rotatePoint =rp;
-
 }
 
 void Line::setEndPoint(Point p)
