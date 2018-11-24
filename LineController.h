@@ -3,11 +3,8 @@
 #include "FigureController.h"
 #include "Line.h"
 #include "constParams.h"
-#include <QtMath>
-#include <QMouseEvent>
-#include <QPen>
-#include <QVector>
-class LineController/* : public FigureController*/
+
+class LineController : public FigureController
 {
 public:
     LineController();
@@ -29,8 +26,8 @@ public:
 private:
     enum SetLP{SETBEGIN, SETEND, SETCENTER, SETHANDLE, SETNULL} setLP; //目前更改的是直线的起点和终点
     Line *curLine; //当前聚焦的直线
-    QPainter *painter;
-    QPen pen;
+//    QPainter *painter;
+//    QPen pen;
     DRAW_STATE *state;
 };
 

@@ -6,9 +6,9 @@ class CycleController : public FigureController
 {
 public:
     CycleController();
-    void mousePressEvent(QPainter* painter,QPoint *start, QPoint *end, QPixmap*pix);
-    void mouseMoveEvent(QPainter* painter,QPoint *start, QPoint *end, QPixmap*pix);
-    void mouseReleaseEvent(QPainter* painter,QPoint *start, QPoint *end, QPixmap*pix);
+    void mousePressEvent(QPainter* painter, QMouseEvent *e, QPen pen);
+    void mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen);
+    void mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen);
     void MyDrawCycleMidpoint(QPainter* painter,QPoint &start,QPoint &end);
     void MyDrawCycleBresenham(QPainter* painter,QPoint &start,QPoint &end);
     void drawEighthCycle(QPainter* painter,int x0, int y0, int x, int y);

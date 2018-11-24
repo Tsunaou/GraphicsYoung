@@ -5,17 +5,17 @@ EllipseController::EllipseController()
 
 }
 
-void EllipseController::mousePressEvent(QPainter *painter, QPoint *start, QPoint *end, QPixmap *pix)
+void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
 
 }
 
-void EllipseController::mouseMoveEvent(QPainter *painter, QPoint *start, QPoint *end, QPixmap *pix)
+void EllipseController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen)
 {
 
 }
 
-void EllipseController::mouseReleaseEvent(QPainter *painter, QPoint *start, QPoint *end, QPixmap *pix)
+void EllipseController::mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen)
 {
 
 }
