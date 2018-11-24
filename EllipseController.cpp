@@ -2,68 +2,212 @@
 
 EllipseController::EllipseController()
 {
-
-}
-
-bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
-{
-
-}
-
-void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
-{
-
-}
-
-void EllipseController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen)
-{
-
-}
-
-void EllipseController::mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen)
-{
-
-}
-
-void EllipseController::setStartPoint(Point point)
-{
-
-}
-
-void EllipseController::setEndPoint(Point point)
-{
-
-}
-
-void EllipseController::moveToPoint(Point point)
-{
-
-}
-
-void EllipseController::rotateToPoint(Point point)
-{
-
-}
-
-void EllipseController::setState(DRAW_STATE *state)
-{
-
-}
-
-void EllipseController::drawHandle(QPainter *painter, QPen pen)
-{
-
+    this->curEllipse = NULL;
+    this->painter = NULL;
+    this->setEllipse = ELLIPSE_NULL;
 }
 
 void EllipseController::clearState()
 {
-
+    this->curEllipse = NULL;
+    this->painter = NULL;
+    this->setEllipse = ELLIPSE_NULL;
 }
 
 void EllipseController::getStartAndEnd(QPoint &start, QPoint &end)
 {
-
+    start = curEllipse->startPoint.getQPoint(); //将椭圆信息存储下来
+    end = curEllipse->endPoint.getQPoint();    //将最终绘制的椭圆信息存储下来
 }
+
+
+bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
+{
+ if(curEllipse->startPoint.distanceToPoint(e->pos())<=5)
+    {
+        qDebug()<<"ELLIPSE_CENTER"<<endl;
+        setEllipse = ELLIPSE_CENTER;
+        return true;
+    }
+    else if(curEllipse->endPoint.distanceToPoint(e->pos())<=5)
+    {
+        qDebug()<<"ELLIPSE_OUT"<<endl;
+        setEllipse = ELLIPSE_OUT;
+        return true;
+    }
+    else if(curEllipse->rotatePoint.distanceToPoint(e->pos())<=5)
+    {
+        qDebug()<<"ELLIPSE_HANDLE"<<endl;
+        setEllipse = ELLIPSE_HANDLE;
+        return true;
+    }
+    setEllipse = ELLIPSE_NULL;
+    *state = UNDO;
+    start = curEllipse->startPoint.getQPoint(); //将圆信息存储下来
+    end = curEllipse->endPoint.getQPoint();    //将最终绘制的圆信息存储下来
+    Ellipse* p = curEllipse;   //防止野指针
+    delete p;
+    curEllipse = NULL;
+    return false;
+}
+
+
+void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
+{
+  qDebug()<<"CycleController::mousePressEvent"<<endl;
+    if(curEllipse!=NULL){
+        qDebug()<<"cycle!=NULL"<<endl;
+    }else{
+        qDebug()<<"cycle==NULL"<<endl;
+    }
+    if(e->button()==Qt::LeftButton)
+    {
+        if(curEllipse!=NULL)
+        {
+            if(curEllipse->startPoint.distanceToPoint(e->pos())<=5)
+            {
+                qDebug()<<"ELLIPSE_CENTER"<<endl;
+                setEllipse = ELLIPSE_CENTER;
+                return;
+            }
+            else if(curEllipse->endPoint.distanceToPoint(e->pos())<=5)
+            {
+                qDebug()<<"ELLIPSE_OUT"<<endl;
+                setEllipse = ELLIPSE_OUT;
+                return;
+            }
+            else if(curEllipse->rotatePoint.distanceToPoint(e->pos())<=5)
+            {
+                qDebug()<<"ELLIPSE_HANDLE"<<endl;
+                setEllipse = ELLIPSE_HANDLE;
+                return;
+            }
+            setEllipse = ELLIPSE_NULL;
+            *state = UNDO;
+            Ellipse* p = curEllipse;   //防止野指针
+            delete p;
+            curEllipse = NULL;
+            return;
+        }
+        Point curPoint(e->pos().x(),e->pos().y());
+        curEllipse = new Ellipse();
+        curEllipse->setStartPoint(curPoint);
+        curEllipse->setEndPoint(curPoint);
+        setEllipse = ELLIPSE_OUT;
+        *state = DRAWING;
+    }
+}
+
+void EllipseController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen)
+{
+ qDebug()<<"CycleController::mouseMoveEvent"<<endl;
+    this->painter = painter;
+    Point curPoint(e->pos().x(),e->pos().y());
+    if (curEllipse == NULL)
+        return;
+    switch(setEllipse){
+        case ELLIPSE_OUT: this->setEndPoint(curPoint); break;
+        case ELLIPSE_CENTER: this->moveToPoint(curPoint); break;
+        case ELLIPSE_HANDLE: this->rotateToPoint(curPoint); break;
+        default:
+            qDebug()<<"Error setLP"<<endl;
+    }
+}
+
+void EllipseController::mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen)
+{
+  qDebug()<<"CycleController::mouseReleaseEvent"<<endl;
+    qDebug()<<"state is";
+    switch (*state) {
+        case UNDO:
+            qDebug()<<"UNDO"<<endl;
+            break;
+        case DRAWING :
+            qDebug()<<"DRAWING"<<endl;
+            break;
+    }
+    this->painter = painter;
+    MyDrawEllipse(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
+    drawHandle(painter,pen);
+}
+
+void EllipseController::setStartPoint(Point point)
+{
+ qDebug() << "setStartPoint("<<endl;
+    curEllipse->setStartPoint(point);
+    qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
+    qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;
+    //顺序不知道为啥会影响粗细。。
+    MyDrawEllipse(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
+    drawHandle(painter,pen);
+}
+
+void EllipseController::setEndPoint(Point point)
+{
+    qDebug() << "setEndPoint("<<endl;
+
+    curEllipse->setEndPoint(point);
+    qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
+    qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;
+    MyDrawEllipse(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
+    drawHandle(painter,pen);
+}
+
+void EllipseController::moveToPoint(Point point)
+{
+    int offsetX = point.getX() - curEllipse->centerPoint.getX();
+    int offsetY = point.getY() - curEllipse->centerPoint.getY();
+    curEllipse->setStartPoint(Point(curEllipse->startPoint.getX()+offsetX,curEllipse->startPoint.getY()+offsetY));
+    curEllipse->setEndPoint(Point(curEllipse->endPoint.getX()+offsetX,curEllipse->endPoint.getY()+offsetY));
+    qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
+    qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;
+    MyDrawEllipse(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
+    drawHandle(painter,pen);
+}
+
+void EllipseController::rotateToPoint(Point point)
+{
+    double RotaryAngle = getRotaryAngle(curEllipse->centerPoint,curEllipse->rotatePoint,point);
+    bool wiseFlag = clockWise(curEllipse->centerPoint,curEllipse->rotatePoint,point);
+    if(wiseFlag)
+        qDebug()<<"顺时针旋转"<<endl;
+    else
+        qDebug()<<"逆时针"<<endl;
+
+    if(wiseFlag){//顺时针转
+        RotaryAngle *= -1;
+    }
+    int x = curEllipse->endPoint.getX();         //旋转点
+    int y = curEllipse->endPoint.getY();         //旋转点
+    int rx0 = curEllipse->centerPoint.getX();    //基准点
+    int ry0 = curEllipse->centerPoint.getY();    //基准点
+
+    int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 + 0.5;
+    int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 + 0.5;
+    curEllipse->setEndPoint(Point(rotateStartX,rotateStartY));
+    //有精度损失。。导致可能会变大变小
+    qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
+    qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;
+    MyDrawEllipse(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
+    drawHandle(painter,pen);
+}
+
+void EllipseController::setState(DRAW_STATE *state)
+{
+    this->state = state;
+}
+
+void EllipseController::drawHandle(QPainter *painter, QPen pen)
+{
+    curEllipse->startPoint.DrawCyclePoint(painter,pen);
+    curEllipse->endPoint.DrawCyclePoint(painter,pen);
+    //cycle->centerPoint.DrawCyclePoint(painter,pen);
+    curEllipse->rotatePoint.DrawCyclePoint(painter,pen);
+}
+
+
+
+
 
 void EllipseController::drawQuarterEllipse(QPainter *painter, int x0, int y0, int x, int y)
 {

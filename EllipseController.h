@@ -23,6 +23,9 @@ public:
     //该类的特有方法
     void drawQuarterEllipse(QPainter* painter,int x0, int y0, int x, int y);
     void MyDrawEllipse(QPainter* painter,QPoint &start,QPoint &end);
+private:
+    SETELLIPSE setEllipse; //更改椭圆的中心/外围/旋转点/不作操作
+    Ellipse *curEllipse; //当前聚焦的椭圆
 };
 
 #endif // ELLIPSECONTROLLER_H

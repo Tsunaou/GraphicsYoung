@@ -7,6 +7,8 @@ class Ellipse : public Figure
 public:
     Ellipse();
     Ellipse(QPoint* start,QPoint* end);
+    void setStartPoint(Point p);
+    void setEndPoint(Point p);
 };
 
 #endif // ELLIPSE_H
