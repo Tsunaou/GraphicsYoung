@@ -5,6 +5,11 @@ CycleController::CycleController()
 
 }
 
+bool CycleController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
+{
+
+}
+
 void CycleController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
 
@@ -16,6 +21,41 @@ void CycleController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen
 }
 
 void CycleController::mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen)
+{
+
+}
+
+void CycleController::setStartPoint(Point point)
+{
+
+}
+
+void CycleController::setEndPoint(Point point)
+{
+
+}
+
+void CycleController::moveToPoint(Point point)
+{
+
+}
+
+void CycleController::rotateToPoint(Point point)
+{
+
+}
+
+void CycleController::setState(DRAW_STATE *state)
+{
+
+}
+
+void CycleController::drawHandle(QPainter *painter, QPen pen)
+{
+
+}
+
+void CycleController::clearState()
 {
 
 }

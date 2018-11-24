@@ -5,6 +5,11 @@ EllipseController::EllipseController()
 
 }
 
+bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
+{
+
+}
+
 void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
 
@@ -16,6 +21,41 @@ void EllipseController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen p
 }
 
 void EllipseController::mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen)
+{
+
+}
+
+void EllipseController::setStartPoint(Point point)
+{
+
+}
+
+void EllipseController::setEndPoint(Point point)
+{
+
+}
+
+void EllipseController::moveToPoint(Point point)
+{
+
+}
+
+void EllipseController::rotateToPoint(Point point)
+{
+
+}
+
+void EllipseController::setState(DRAW_STATE *state)
+{
+
+}
+
+void EllipseController::drawHandle(QPainter *painter, QPen pen)
+{
+
+}
+
+void EllipseController::clearState()
 {
 
 }
