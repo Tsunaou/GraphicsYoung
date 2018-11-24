@@ -23,8 +23,8 @@ void LineController::getStartAndEnd(QPoint &start, QPoint &end)
 void LineController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
 {
     qDebug()<<"Before Bigger,start.x is"<< this->curLine->startPoint.getX() <<endl;
-    this->curLine->startPoint = this->curLine->startPoint*2;
-    this->curLine->endPoint = this->curLine->endPoint*2;
+    this->curLine->setStartPoint(this->curLine->startPoint*2);
+    this->curLine->setEndPoint(this->curLine->endPoint*2);
     qDebug()<<"Line bigger"<<endl;
     qDebug()<<"After Bigger,start.x is"<< this->curLine->startPoint.getX() <<endl;
     MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
@@ -33,8 +33,8 @@ void LineController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
 
 void LineController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 {
-    this->curLine->startPoint = this->curLine->startPoint* 0.5;
-    this->curLine->endPoint = this->curLine->endPoint*0.5;
+    this->curLine->setStartPoint(this->curLine->startPoint*0.5);
+    this->curLine->setEndPoint(this->curLine->endPoint*0.5);
     qDebug()<<"Line smaller"<<endl;
     MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
     drawHandle(painter,pen);

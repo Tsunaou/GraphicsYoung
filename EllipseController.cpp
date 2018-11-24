@@ -22,12 +22,24 @@ void EllipseController::getStartAndEnd(QPoint &start, QPoint &end)
 
 void EllipseController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
 {
-
+    qDebug()<<"Before Bigger,start.x is"<< this->curEllipse->startPoint.getX() <<endl;
+    this->curEllipse->setStartPoint(this->curEllipse->startPoint*2);
+    this->curEllipse->setEndPoint(this->curEllipse->endPoint*2);
+    qDebug()<<"Line bigger"<<endl;
+    qDebug()<<"After Bigger,start.x is"<< this->curEllipse->startPoint.getX() <<endl;
+    MyDrawEllipse(painter,curEllipse->startPoint.point,curEllipse->endPoint.point);
+    drawHandle(painter,pen);
 }
 
 void EllipseController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 {
-
+    qDebug()<<"Before Bigger,start.x is"<< this->curEllipse->startPoint.getX() <<endl;
+    this->curEllipse->setStartPoint(this->curEllipse->startPoint*0.5);
+    this->curEllipse->setEndPoint(this->curEllipse->endPoint*0.5);
+    qDebug()<<"Line bigger"<<endl;
+    qDebug()<<"After Bigger,start.x is"<< this->curEllipse->startPoint.getX() <<endl;
+    MyDrawEllipse(painter,curEllipse->startPoint.point,curEllipse->endPoint.point);
+    drawHandle(painter,pen);
 }
 
 

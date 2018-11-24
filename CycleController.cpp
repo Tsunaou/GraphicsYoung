@@ -22,12 +22,24 @@ void CycleController::getStartAndEnd(QPoint &start, QPoint &end)
 
 void CycleController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
 {
-
+    qDebug()<<"Before Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
+    this->cycle->setStartPoint(this->cycle->startPoint*2);
+    this->cycle->setEndPoint(this->cycle->endPoint*2);
+    qDebug()<<"Line bigger"<<endl;
+    qDebug()<<"After Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
+    MyDrawCycleMidpoint(painter,cycle->startPoint.point,cycle->endPoint.point);
+    drawHandle(painter,pen);
 }
 
 void CycleController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 {
-
+    qDebug()<<"Before Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
+    this->cycle->setStartPoint(this->cycle->startPoint*0.5);
+    this->cycle->setEndPoint(this->cycle->endPoint*0.5);
+    qDebug()<<"Line bigger"<<endl;
+    qDebug()<<"After Bigger,start.x is"<< this->cycle->startPoint.getX() <<endl;
+    MyDrawCycleMidpoint(painter,cycle->startPoint.point,cycle->endPoint.point);
+    drawHandle(painter,pen);
 }
 
 bool CycleController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
