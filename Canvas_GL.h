@@ -45,6 +45,9 @@ public:
     void setMode(FIGURE_TYPE type); //设置图形
     QPixmap *getPixCopy();              //得到当前画布的拷贝
     QPixmap *getPixCopy(QPixmap* pic);  //得到指定pic的拷贝
+    //一些辅助调试的函数
+    void showDrawingStates();   //输出状态信息
+    void drawBeforeNewState();  //进入另一个状态前绘图
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;

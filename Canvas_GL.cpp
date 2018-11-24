@@ -28,7 +28,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     this->lineController.setState(&this->drawState);
     this->cycleController.setState(&this->drawState);
     this->ellipseController.setState(&this->drawState);
-    //用统一的接口来约束行为（测试中）
+    //用统一的接口来约束行为（测试中，目前效果还行。。）
     figureController.push_back(&lineController);
     figureController.push_back(&lineController);
     figureController.push_back(&cycleController);
@@ -39,21 +39,13 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
 void Canvas_GL::mousePressEvent(QMouseEvent *e)
 {
     qDebug()<<"mousePressEvent"<<endl;
-    qDebug()<<"state is";
-    switch (drawState) {
-        case UNDO:
-            qDebug()<<"UNDO"<<endl;
-            break;
-        case DRAWING :
-            qDebug()<<"DRAWING"<<endl;
-            break;
-    }
+    showDrawingStates();
     if(this->drawState == UNDO){ //上次绘画状态结束，pixToMove更新到最新状态
         pixToMove = getPixCopy();
     }
     else{
 
-        if(figureMode != ELLIPSE && figureController[figureMode]->isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
+        if(figureController[figureMode]->isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
             *pix = *pixToMove;
         }else{
             //对保存上次绘画状态的图像在图中,此时startPos和endPos存储上次图像的信息
@@ -64,7 +56,9 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
             switch(figureMode){
                 case LINE: lineController.MyDrawLineDDA(painter,startPos,endPos);break;
                 case CYCLE:cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
-                case ELLIPSE:break;
+                case ELLIPSE:ellipseController.MyDrawEllipse(painter,startPos,endPos); break;
+            default:
+                break;
             }
 
             painter->end();
@@ -81,7 +75,7 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
     painter->begin(pix);
     painter->setPen(pen);
-    if(this->figureMode == LINE || this->figureMode == CYCLE){
+    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
         figureController[figureMode]->mousePressEvent(painter,e,pen);
         painter->end();
         delete painter;
@@ -112,7 +106,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     painter->setPen(pen);
 
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
-    if(this->figureMode == LINE || this->figureMode == CYCLE){
+    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
         //lineController.mouseMoveEvent(painter,e,pen);
         figureController[figureMode]->mouseMoveEvent(painter,e,pen);
         painter->end();
@@ -152,7 +146,7 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 
     QPoint endPos = e->pos();
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
-    if(this->figureMode == LINE || this->figureMode == CYCLE){
+    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
         figureController[figureMode]->mouseReleaseEvent(painter,e,pen);
         painter->end();
         delete painter;
@@ -284,7 +278,9 @@ void Canvas_GL::setMode(FIGURE_TYPE type)
         switch(figureMode){
             case LINE: lineController.MyDrawLineDDA(painter,startPos,endPos);break;
             case CYCLE:cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
-            case ELLIPSE:break;
+            case ELLIPSE:ellipseController.MyDrawEllipse(painter,startPos,endPos); break;
+        default:
+            break;
         }
 
         painter->end();
@@ -323,6 +319,19 @@ QPixmap *Canvas_GL::getPixCopy(QPixmap *pic)
     p.drawPixmap(QPoint(0,0),*pic);         //在newPix中绘制原pix中的内容
     qDebug()<<"Pix Copy at"<<&newPix<<endl;
     return newPix;
+}
+
+void Canvas_GL::showDrawingStates()
+{
+    qDebug()<<"state is";
+    switch (drawState) {
+        case UNDO:
+            qDebug()<<"UNDO"<<endl;
+            break;
+        case DRAWING :
+            qDebug()<<"DRAWING"<<endl;
+            break;
+    }
 }
 
 

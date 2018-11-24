@@ -203,6 +203,7 @@ void EllipseController::drawHandle(QPainter *painter, QPen pen)
     curEllipse->endPoint.DrawCyclePoint(painter,pen);
     //cycle->centerPoint.DrawCyclePoint(painter,pen);
     curEllipse->rotatePoint.DrawCyclePoint(painter,pen);
+    this->drawOutlineToDebug(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
 }
 
 
