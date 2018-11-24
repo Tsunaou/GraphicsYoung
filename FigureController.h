@@ -31,6 +31,7 @@ public:
     virtual void setState(DRAW_STATE *state) =0;    //设置状态
     virtual void drawHandle(QPainter* painter, QPen pen) =0;    //描绘辅助信息
     virtual void clearState() =0;   //情况状态
+    virtual void getStartAndEnd(QPoint &start,QPoint &end) = 0;
     //非抽象函数
     double getRotaryAngle(Point center,Point a,Point b); //得到夹角（返回值是弧度）
     bool clockWise(Point center,Point a,Point b);    //判断是否顺时针

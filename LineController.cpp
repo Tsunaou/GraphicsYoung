@@ -14,6 +14,12 @@ void LineController::clearState()
     this->setLP =SETNULL;
 }
 
+void LineController::getStartAndEnd(QPoint &start, QPoint &end)
+{
+    start = curLine->startPoint.getQPoint(); //将直线信息存储下来
+    end = curLine->endPoint.getQPoint();    //将最终绘制的直线信息存储下来
+}
+
 bool LineController::isOperationing(QMouseEvent *e,QPoint &start,QPoint &end)
 {
     if(curLine->startPoint.distanceToPoint(e->pos())<=5)

@@ -19,6 +19,7 @@ public:
     void setState(DRAW_STATE *state);
     void drawHandle(QPainter* painter, QPen pen);
     void clearState();
+    void getStartAndEnd(QPoint &start,QPoint &end);
     //该类的特有方法
     void drawQuarterEllipse(QPainter* painter,int x0, int y0, int x, int y);
     void MyDrawEllipse(QPainter* painter,QPoint &start,QPoint &end);

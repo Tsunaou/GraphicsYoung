@@ -14,6 +14,12 @@ void CycleController::clearState()
     this->setCycle = CYCLE_NULL;
 }
 
+void CycleController::getStartAndEnd(QPoint &start, QPoint &end)
+{
+    start = cycle->startPoint.getQPoint(); //将圆信息存储下来
+    end = cycle->endPoint.getQPoint();    //将最终绘制的圆信息存储下来
+}
+
 bool CycleController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {
     if(cycle->startPoint.distanceToPoint(e->pos())<=5)
@@ -28,14 +34,9 @@ bool CycleController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
         setCycle = CYCLE_OUT;
         return true;
     }
-    else if(cycle->centerPoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"CYCLE_CENTER"<<endl;
-        setCycle = CYCLE_CENTER;
-        return true;
-    }
     else if(cycle->rotatePoint.distanceToPoint(e->pos())<=5)
     {
+        qDebug()<<"CYCLE_OUT"<<endl;
         setCycle = CYCLE_HANDLE;
         return true;
     }
@@ -43,6 +44,8 @@ bool CycleController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
     *state = UNDO;
     start = cycle->startPoint.getQPoint(); //将圆信息存储下来
     end = cycle->endPoint.getQPoint();    //将最终绘制的圆信息存储下来
+    Cycle* p = cycle;   //防止野指针
+    delete p;
     cycle = NULL;
     return false;
 }
@@ -71,19 +74,16 @@ void CycleController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pe
                 setCycle = CYCLE_OUT;
                 return;
             }
-            else if(cycle->centerPoint.distanceToPoint(e->pos())<=5)
-            {
-                qDebug()<<"CYCLE_CENTER"<<endl;
-                setCycle = CYCLE_CENTER;
-                return;
-            }
             else if(cycle->rotatePoint.distanceToPoint(e->pos())<=5)
             {
+                qDebug()<<"CYCLE_HANDLE_ROATATE"<<endl;
                 setCycle = CYCLE_HANDLE;
                 return;
             }
             setCycle=CYCLE_NULL;
             *state = UNDO;
+            Cycle* p = cycle;   //防止野指针
+            delete p;
             cycle = NULL;
             return;
         }
@@ -104,7 +104,6 @@ void CycleController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen
     if (cycle == NULL)
         return;
     switch(setCycle){
-        //case CYCLE_CENTER: this->setStartPoint(curPoint); break;
         case CYCLE_OUT: this->setEndPoint(curPoint); break;
         case CYCLE_CENTER: this->moveToPoint(curPoint); break;
         case CYCLE_HANDLE: this->rotateToPoint(curPoint); break;
@@ -166,24 +165,30 @@ void CycleController::moveToPoint(Point point)
 
 void CycleController::rotateToPoint(Point point)
 {
+    qDebug()<<"圆旋转起始：半径为"<<cycle->getRadius()<<endl;
     double RotaryAngle = getRotaryAngle(cycle->centerPoint,cycle->rotatePoint,point);
     bool wiseFlag = clockWise(cycle->centerPoint,cycle->rotatePoint,point);
     if(wiseFlag)
-        qDebug()<<"顺时针"<<endl;
+        qDebug()<<"顺时针旋转"<<endl;
     else
         qDebug()<<"逆时针"<<endl;
 
     if(wiseFlag){//顺时针转
         RotaryAngle *= -1;
     }
-    int x = cycle->startPoint.getX();
-    int y = cycle->startPoint.getY();
-    int rx0 = cycle->centerPoint.getX();
-    int ry0 = cycle->centerPoint.getY();
-    int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 ;
-    int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 ;
-    cycle->setStartPoint(Point(rotateStartX,rotateStartY));
-    cycle->setEndPoint(Point(2*rx0-rotateStartX,2*ry0-rotateStartY));
+    int x = cycle->endPoint.getX();         //旋转点
+    int y = cycle->endPoint.getY();         //旋转点
+    int rx0 = cycle->centerPoint.getX();    //基准点
+    int ry0 = cycle->centerPoint.getY();    //基准点
+    if(cycle->centerPoint.getQPoint()!=cycle->startPoint.getQPoint()){
+        qDebug()<<"圆心不一"<<endl;
+    }
+    qDebug()<<"圆旋转中：半径为"<<cycle->getRadius()<<endl;
+    int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 + 0.5;
+    int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 + 0.5;
+    cycle->setEndPoint(Point(rotateStartX,rotateStartY));
+    qDebug()<<"圆旋转后：半径为"<<cycle->getRadius()<<endl;
+    //有精度损失。。导致圆可能会变大变小
     qDebug() << "StartPoint(" <<cycle->startPoint.point.x()<<","<<cycle->startPoint.point.y()<<")"<<endl;
     qDebug() << "EndPoint(" <<cycle->endPoint.point.x()<<","<<cycle->endPoint.point.y()<<")"<<endl;
     MyDrawCycleMidpoint(painter,cycle->startPoint.getQPoint(),cycle->endPoint.getQPoint());
@@ -199,7 +204,7 @@ void CycleController::drawHandle(QPainter *painter, QPen pen)
 {
     cycle->startPoint.DrawCyclePoint(painter,pen);
     cycle->endPoint.DrawCyclePoint(painter,pen);
-    cycle->centerPoint.DrawCyclePoint(painter,pen);
+    //cycle->centerPoint.DrawCyclePoint(painter,pen);
     cycle->rotatePoint.DrawCyclePoint(painter,pen);
 }
 

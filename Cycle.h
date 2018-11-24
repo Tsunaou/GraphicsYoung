@@ -9,6 +9,7 @@ public:
     Cycle(QPoint*start,QPoint*end,FIGURE_TYPE type);
     void setStartPoint(Point p);
     void setEndPoint(Point p);
+    double getRadius();
 };
 
 #endif // CYCLE_H

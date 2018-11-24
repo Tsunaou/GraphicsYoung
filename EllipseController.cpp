@@ -60,6 +60,11 @@ void EllipseController::clearState()
 
 }
 
+void EllipseController::getStartAndEnd(QPoint &start, QPoint &end)
+{
+
+}
+
 void EllipseController::drawQuarterEllipse(QPainter *painter, int x0, int y0, int x, int y)
 {
     QPoint temPt1(x0+x,y0+y);

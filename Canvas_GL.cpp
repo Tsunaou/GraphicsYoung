@@ -23,7 +23,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     reVec.push_back(tmp);
 
     //状态设置
-    //this->figureMode = LINE; 笔比较OK感觉
+    this->figureMode = FIGURE; //笔比较OK感觉
     this->drawState = UNDO;
     this->lineController.setState(&this->drawState);
     this->cycleController.setState(&this->drawState);
@@ -53,7 +53,7 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     }
     else{
 
-        if(lineController.isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
+        if(figureMode != ELLIPSE && figureController[figureMode]->isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
             *pix = *pixToMove;
         }else{
             //对保存上次绘画状态的图像在图中,此时startPos和endPos存储上次图像的信息
@@ -61,7 +61,12 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
             QPainter *painter = new QPainter();
             painter->begin(pix);
             painter->setPen(pen);
-            lineController.MyDrawLineDDA(painter,startPos,endPos);
+            switch(figureMode){
+                case LINE: lineController.MyDrawLineDDA(painter,startPos,endPos);break;
+                case CYCLE:cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
+                case ELLIPSE:break;
+            }
+
             painter->end();
             delete painter;
             //为撤销做准备
@@ -76,8 +81,8 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
     painter->begin(pix);
     painter->setPen(pen);
-    if(this->figureMode == LINE){
-        lineController.mousePressEvent(painter,e,pen);
+    if(this->figureMode == LINE || this->figureMode == CYCLE){
+        figureController[figureMode]->mousePressEvent(painter,e,pen);
         painter->end();
         delete painter;
         if(this->drawState == UNDO){
@@ -107,7 +112,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     painter->setPen(pen);
 
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
-    if(this->figureMode == LINE){
+    if(this->figureMode == LINE || this->figureMode == CYCLE){
         //lineController.mouseMoveEvent(painter,e,pen);
         figureController[figureMode]->mouseMoveEvent(painter,e,pen);
         painter->end();
@@ -147,8 +152,8 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 
     QPoint endPos = e->pos();
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
-    if(this->figureMode == LINE){
-        lineController.mouseReleaseEvent(painter,e,pen);
+    if(this->figureMode == LINE || this->figureMode == CYCLE){
+        figureController[figureMode]->mouseReleaseEvent(painter,e,pen);
         painter->end();
         delete painter;
         update();
@@ -239,6 +244,8 @@ void Canvas_GL::clearImage()
     reVec.push_back(clearPix);
     this->drawState = UNDO;
     this->lineController.clearState();
+    this->cycleController.clearState();
+    this->ellipseController.clearState();
     update();
 }
 
@@ -264,7 +271,38 @@ void Canvas_GL::recallImage()
 
 void Canvas_GL::setMode(FIGURE_TYPE type)
 {
-    this->figureMode = type;
+    if(figureMode == FIGURE){//初始化
+        this->figureMode = type;
+    }
+    else{
+        //只坐到上面，图像上会留下辅助点，因为还是得处理下QAQ
+        figureController[figureMode]->getStartAndEnd(startPos,endPos);
+        *pix = *pixToMove;
+        QPainter *painter = new QPainter();
+        painter->begin(pix);
+        painter->setPen(pen);
+        switch(figureMode){
+            case LINE: lineController.MyDrawLineDDA(painter,startPos,endPos);break;
+            case CYCLE:cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
+            case ELLIPSE:break;
+        }
+
+        painter->end();
+        delete painter;
+        //切换前应该要注意清空信息
+        this->drawState = UNDO;
+        this->lineController.clearState();
+        this->cycleController.clearState();
+        this->ellipseController.clearState();
+        //为撤销做准备
+        QPixmap* tmp = this->getPixCopy();
+        reVec.push_back(tmp);
+        update();
+        //
+        pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
+        //
+        this->figureMode = type;
+    }
 }
 
 QPixmap *Canvas_GL::getPixCopy()
