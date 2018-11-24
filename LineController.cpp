@@ -7,7 +7,14 @@ LineController::LineController()
     this->setLP =SETNULL;
 }
 
-bool LineController::isOperationing(QMouseEvent *e)
+void LineController::clearState()
+{
+    this->curLine = NULL;
+    this->painter = NULL;
+    this->setLP =SETNULL;
+}
+
+bool LineController::isOperationing(QMouseEvent *e,QPoint &start,QPoint &end)
 {
     if(curLine->startPoint.distanceToPoint(e->pos())<=5)
     {
@@ -33,6 +40,8 @@ bool LineController::isOperationing(QMouseEvent *e)
     }
     setLP=SETNULL;
     *state = UNDO;
+    start = curLine->startPoint.getQPoint(); //将直线信息存储下来
+    end = curLine->endPoint.getQPoint();    //将最终绘制的直线信息存储下来
     curLine = NULL;
     return false;
 }
@@ -350,3 +359,5 @@ bool LineController::clockWise(Point center, Point a, Point b)
 
 
 }
+
+

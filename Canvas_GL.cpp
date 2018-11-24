@@ -45,16 +45,30 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     if(this->drawState == UNDO){ //上次绘画状态结束，pixToMove更新到最新状态
         pixToMove = getPixCopy();
     }else{
+
         //pixToMove = getPixCopy();
-        if(lineController.isOperationing(e)){ //绘画状态中，双缓冲准备
+        if(lineController.isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
             *pix = *pixToMove;
         }else{
+            //对保存上次绘画状态的图像在图中,此时startPos和endPos存储上次图像的信息
+            *pix = *pixToMove;
+            QPainter *painter = new QPainter();
+            painter->begin(pix);
+            painter->setPen(pen);
+            lineController.MyDrawLineDDA(painter,startPos,endPos);
+            painter->end();
+            delete painter;
+            //为撤销做准备
+            QPixmap* tmp = this->getPixCopy();
+            reVec.push_back(tmp);
+            update();
+            //
             pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
         }
     }
     QPainter *painter = new QPainter();
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
-    painter->begin(pix);					//(b)
+    painter->begin(pix);
     painter->setPen(pen);
     if(this->figureMode == LINE){
         qDebug()<<"1"<<endl;
@@ -210,13 +224,17 @@ void Canvas_GL::saveImage()
 
 void Canvas_GL::clearImage()
 {
+    //清屏后，重置状态
     QPixmap *clearPix =new QPixmap(size());
     clearPix->fill(Qt::white);
     this->pix = clearPix;
+    this->pixToMove = this->pix;
     while(!reVec.empty()){
         reVec.pop_back();
     }
     reVec.push_back(clearPix);
+    this->drawState = UNDO;
+    this->lineController.clearState();
     update();
 }
 
@@ -229,9 +247,11 @@ void Canvas_GL::recallImage()
         clearPix->fill(Qt::white);
         reVec[0]=clearPix;
         pix = clearPix;
+        pixToMove = pix;
         update();
     }else{
         pix = reVec[reVec.size()-1];
+        pixToMove = pix;
         reVec.pop_back();
         figureVec.pop_back();//这里可能会有bug
         update();

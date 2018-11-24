@@ -11,7 +11,7 @@ class LineController/* : public FigureController*/
 {
 public:
     LineController();
-    bool isOperationing(QMouseEvent *e);
+    bool isOperationing(QMouseEvent *e,QPoint &start,QPoint &end);
     void mousePressEvent(QPainter* painter, QMouseEvent *e, QPen pen);
     void mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen);
     void mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen);
@@ -25,6 +25,7 @@ public:
     void drawHandle(QPainter* painter, QPen pen);
     double getRotaryAngle(Point center,Point a,Point b);
     bool clockWise(Point center,Point a,Point b);
+    void clearState();
 private:
     enum SetLP{SETBEGIN, SETEND, SETCENTER, SETHANDLE, SETNULL} setLP; //目前更改的是直线的起点和终点
     Line *curLine; //当前聚焦的直线

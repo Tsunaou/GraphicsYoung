@@ -37,6 +37,11 @@ void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &
 {
     //用一个虚线框来解决
 //    drawOutlineToDebug(painter,start,end);
+    //绘制一个点
+    if(start == end){
+        painter->drawPoint(start);
+        return;
+    }
 
     //首先先在这里实现我的椭圆算法
     qDebug()<<"MyDrawEllipse "<<endl;
