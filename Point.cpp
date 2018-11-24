@@ -56,3 +56,14 @@ double Point::distanceToPoint(QPoint p)
 {
     return distanceToPoint(p.x(),p.y());
 }
+
+Point Point::operator*(const double size)
+{
+    int xn = this->x * size;
+    int yn = this->y * size;
+    return Point(xn,yn);
+}
+
+
+
+

@@ -20,6 +20,26 @@ void LineController::getStartAndEnd(QPoint &start, QPoint &end)
     end = curLine->endPoint.getQPoint();    //将最终绘制的直线信息存储下来
 }
 
+void LineController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
+{
+    qDebug()<<"Before Bigger,start.x is"<< this->curLine->startPoint.getX() <<endl;
+    this->curLine->startPoint = this->curLine->startPoint*2;
+    this->curLine->endPoint = this->curLine->endPoint*2;
+    qDebug()<<"Line bigger"<<endl;
+    qDebug()<<"After Bigger,start.x is"<< this->curLine->startPoint.getX() <<endl;
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+    drawHandle(painter,pen);
+}
+
+void LineController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
+{
+    this->curLine->startPoint = this->curLine->startPoint* 0.5;
+    this->curLine->endPoint = this->curLine->endPoint*0.5;
+    qDebug()<<"Line smaller"<<endl;
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+    drawHandle(painter,pen);
+}
+
 bool LineController::isOperationing(QMouseEvent *e,QPoint &start,QPoint &end)
 {
     if(curLine->startPoint.distanceToPoint(e->pos())<=5)

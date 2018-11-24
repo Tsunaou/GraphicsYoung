@@ -20,6 +20,8 @@ public:
     void drawHandle(QPainter* painter, QPen pen);
     void clearState();
     void getStartAndEnd(QPoint &start,QPoint &end);
+    void setBigger(QPainter* painter, QMouseEvent *e, QPen pen);   //放大
+    void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen);  //缩小
     //该类的特有方法
     void drawQuarterEllipse(QPainter* painter,int x0, int y0, int x, int y);
     void MyDrawEllipse(QPainter* painter,QPoint &start,QPoint &end);

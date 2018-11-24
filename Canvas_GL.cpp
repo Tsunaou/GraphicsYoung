@@ -258,6 +258,46 @@ void Canvas_GL::setMode(FIGURE_TYPE type)
     }
 }
 
+void Canvas_GL::setBigger()
+{
+    QMouseEvent *e;//纯属失误,不过也不会用到
+    if(this->drawState == UNDO){
+        return;
+    }
+    else{
+        if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+            *pix = *pixToMove;
+            QPainter *painter = new QPainter();
+            painter->begin(pix);
+            painter->setPen(pen);
+            figureController[figureMode]->setBigger(painter,e,pen);
+            painter->end();
+            delete painter;
+            update();
+        }
+    }
+}
+
+void Canvas_GL::setSmaller()
+{
+    QMouseEvent *e;//纯属失误,不过也不会用到
+    if(this->drawState == UNDO){
+        return;
+    }
+    else{
+        if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+            *pix = *pixToMove;
+            QPainter *painter = new QPainter();
+            painter->begin(pix);
+            painter->setPen(pen);
+            figureController[figureMode]->setSmaller(painter,e,pen);
+            painter->end();
+            delete painter;
+            update();
+        }
+    }
+}
+
 QPixmap *Canvas_GL::getPixCopy()
 {
     QPixmap *newPix = new QPixmap(size());	//创建一个新的QPixmap对象

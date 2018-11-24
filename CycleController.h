@@ -19,6 +19,8 @@ public:
     void drawHandle(QPainter* painter, QPen pen);
     void clearState();
     void getStartAndEnd(QPoint &start,QPoint &end);
+    void setBigger(QPainter* painter, QMouseEvent *e, QPen pen);   //放大
+    void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen);  //缩小
     //该类特有方法
     void MyDrawCycleMidpoint(QPainter* painter,QPoint &start,QPoint &end);
     void MyDrawCycleBresenham(QPainter* painter,QPoint &start,QPoint &end);

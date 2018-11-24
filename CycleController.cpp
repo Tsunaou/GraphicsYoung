@@ -20,6 +20,16 @@ void CycleController::getStartAndEnd(QPoint &start, QPoint &end)
     end = cycle->endPoint.getQPoint();    //将最终绘制的圆信息存储下来
 }
 
+void CycleController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
+{
+
+}
+
+void CycleController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
+{
+
+}
+
 bool CycleController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {
     if(cycle->startPoint.distanceToPoint(e->pos())<=5)

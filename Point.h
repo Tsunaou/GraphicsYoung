@@ -23,6 +23,7 @@ public:
     QPoint& getQPoint(){
         return point;
     }
+    Point operator*(const double size);
 //private:
     int x;  //横坐标
     int y;  //纵坐标

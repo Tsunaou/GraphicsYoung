@@ -138,3 +138,15 @@ void MainWindow::on_actionBrush_triggered()
 {
     this->setFigureMode(BRUSH);
 }
+
+void MainWindow::on_actionBigger_triggered()
+{
+    int index = this->getCurCanvasNum();
+    this->canvases[index]->setBigger();
+}
+
+void MainWindow::on_actionSmaller_triggered()
+{
+    int index = this->getCurCanvasNum();
+    this->canvases[index]->setSmaller();
+}

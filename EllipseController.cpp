@@ -20,6 +20,16 @@ void EllipseController::getStartAndEnd(QPoint &start, QPoint &end)
     end = curEllipse->endPoint.getQPoint();    //将最终绘制的椭圆信息存储下来
 }
 
+void EllipseController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen)
+{
+
+}
+
+void EllipseController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
+{
+
+}
+
 
 bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {

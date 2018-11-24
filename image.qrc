@@ -12,5 +12,7 @@
         <file>icon/ellipse.png</file>
         <file>icon/pen.png</file>
         <file>icon/brush.png</file>
+        <file>icon/bigger.png</file>
+        <file>icon/smaller.png</file>
     </qresource>
 </RCC>

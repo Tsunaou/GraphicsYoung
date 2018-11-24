@@ -43,6 +43,8 @@ public:
     void clearImage(); //清空当前画布内容
     void recallImage();//撤销上一步操作
     void setMode(FIGURE_TYPE type); //设置图形
+    void setBigger();   //放大图形
+    void setSmaller();  //缩小图形
     QPixmap *getPixCopy();              //得到当前画布的拷贝
     QPixmap *getPixCopy(QPixmap* pic);  //得到指定pic的拷贝
     //一些辅助调试的函数

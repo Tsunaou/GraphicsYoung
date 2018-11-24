@@ -64,6 +64,9 @@
    <addaction name="actionCurve"/>
    <addaction name="actionCycle"/>
    <addaction name="actionEllipse"/>
+   <addaction name="separator"/>
+   <addaction name="actionBigger"/>
+   <addaction name="actionSmaller"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -253,6 +256,39 @@
    </property>
    <property name="toolTip">
     <string>刷子</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionBigger">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/bigger.png</normaloff>:/icon/icon/bigger.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bigger</string>
+   </property>
+   <property name="toolTip">
+    <string>放大</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
+  </action>
+  <action name="actionSmaller">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/smaller.png</normaloff>:/icon/icon/smaller.png</iconset>
+   </property>
+   <property name="text">
+    <string>Smaller</string>
+   </property>
+   <property name="toolTip">
+    <string>缩小</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
    </property>
   </action>
  </widget>
