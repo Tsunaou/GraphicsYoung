@@ -21,7 +21,7 @@ public:
     void drawHandle(QPainter* painter, QPen pen);
     void clearState();
 private:
-    SETLINE setLP; //目前更改的是直线的起点和终点
+    SETLINE setLP; //更改直线的起点/终点/中点/旋转点/不作操作
     Line *curLine; //当前聚焦的直线
 };
 

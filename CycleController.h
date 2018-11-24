@@ -22,7 +22,9 @@ public:
     void MyDrawCycleMidpoint(QPainter* painter,QPoint &start,QPoint &end);
     void MyDrawCycleBresenham(QPainter* painter,QPoint &start,QPoint &end);
     void drawEighthCycle(QPainter* painter,int x0, int y0, int x, int y);
-
+private:
+    SETCYCLE setCycle; //更改圆的圆心/外围/旋转点/不作操作
+    Cycle *cycle; //当前聚焦的圆
 
 };
 

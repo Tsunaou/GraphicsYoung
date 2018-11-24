@@ -20,7 +20,7 @@ public:
     int getY(){
         return y;
     }
-    QPoint getQPoint(){
+    QPoint& getQPoint(){
         return point;
     }
 //private:

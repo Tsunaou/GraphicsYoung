@@ -7,6 +7,8 @@ class Cycle : public Figure
 public:
     Cycle();
     Cycle(QPoint*start,QPoint*end,FIGURE_TYPE type);
+    void setStartPoint(Point p);
+    void setEndPoint(Point p);
 };
 
 #endif // CYCLE_H

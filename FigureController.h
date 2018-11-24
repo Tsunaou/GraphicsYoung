@@ -11,6 +11,8 @@
 #include <QPen>
 #include <QVector>
 #include "Line.h"
+#include "Cycle.h"
+#include "Ellipse.h"
 #include "constParams.h"
 
 class FigureController
