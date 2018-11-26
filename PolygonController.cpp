@@ -53,6 +53,8 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
                 curPolyon->colseFlag = true;
                 Point curPoint = curPolyon->startPoint;
                 this->curPolyon->setNextPoint(curPoint);
+                this->drawPolygon(painter);
+                this->drawHandle(painter,pen);
                 return;
             }
             else if(curPolyon->colseFlag==false && *state!=UNDO){ //暂时苟且一下
@@ -129,7 +131,9 @@ void PolygonController::mouseReleaseEvent(QPainter *painter, QMouseEvent *e, QPe
         setPolygon = POLYGON_START;
         curPolyon->colseFlag = true;
         Point curPoint = curPolyon->startPoint;
-        this->curPolyon->setNextPoint(curPoint);
+        this->curPolyon->changeNextPoint(curPoint);
+        this->drawPolygon(painter);
+        this->drawHandle(painter,pen);
         return;
     }
 
