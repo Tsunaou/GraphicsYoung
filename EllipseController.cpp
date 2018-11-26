@@ -5,6 +5,7 @@ EllipseController::EllipseController()
     this->curEllipse = NULL;
     this->painter = NULL;
     this->setEllipse = ELLIPSE_NULL;
+    this->rotateAngle = 0;
 }
 
 void EllipseController::clearState()
@@ -12,6 +13,7 @@ void EllipseController::clearState()
     this->curEllipse = NULL;
     this->painter = NULL;
     this->setEllipse = ELLIPSE_NULL;
+    this->rotateAngle = 0;
 }
 
 void EllipseController::getStartAndEnd(QPoint &start, QPoint &end)
@@ -199,17 +201,29 @@ void EllipseController::rotateToPoint(Point point)
     if(wiseFlag){//顺时针转
         RotaryAngle *= -1;
     }
-    int x = curEllipse->endPoint.getX();         //旋转点
-    int y = curEllipse->endPoint.getY();         //旋转点
+    //基准点
     int rx0 = curEllipse->centerPoint.getX();    //基准点
     int ry0 = curEllipse->centerPoint.getY();    //基准点
+    //对每个点进行处理(这里有BUG，但是不知道为什么会有)
 
-    int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 + 0.5;
-    int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 + 0.5;
-    curEllipse->setEndPoint(Point(rotateStartX,rotateStartY));
-    //有精度损失。。导致可能会变大变小
-    qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
-    qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;
+    //对旋转点处理（用内置的旋转角）
+    Point up(this->curEllipse->centerPoint.getX(),0); //表示竖直向上的点
+    qreal newAngel = getRotaryAngle(this->curEllipse->centerPoint,up,point);//与竖直的夹角
+    if(point.getX()<up.getX()){
+        newAngel *= -1;
+    }
+    this->curEllipse->rotateAngle = newAngel;
+    this->curEllipse->setRotatePoint();
+    this->rotateAngle = newAngel;   //为椭圆旋转做准备
+//    int x = curEllipse->endPoint.getX();         //旋转点
+//    int y = curEllipse->endPoint.getY();         //旋转点
+
+//    int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 + 0.5;
+//    int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 + 0.5;
+//    curEllipse->setEndPoint(Point(rotateStartX,rotateStartY));
+//    //有精度损失。。导致可能会变大变小
+//    qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
+//    qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;
     MyDrawEllipse(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
     drawHandle(painter,pen);
 }
@@ -221,9 +235,9 @@ void EllipseController::setState(DRAW_STATE *state)
 
 void EllipseController::drawHandle(QPainter *painter, QPen pen)
 {
-    curEllipse->startPoint.DrawCyclePoint(painter,pen);
+    lineDrawer.MyDrawLineDDA(painter,curEllipse->centerPoint.getQPoint(),curEllipse->rotatePoint.getQPoint());
+    curEllipse->startPoint.DrawWarnPoint(painter,pen);
     curEllipse->endPoint.DrawCyclePoint(painter,pen);
-    //cycle->centerPoint.DrawCyclePoint(painter,pen);
     curEllipse->rotatePoint.DrawCyclePoint(painter,pen);
     this->drawOutlineToDebug(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
 }
@@ -234,10 +248,20 @@ void EllipseController::drawHandle(QPainter *painter, QPen pen)
 
 void EllipseController::drawQuarterEllipse(QPainter *painter, int x0, int y0, int x, int y)
 {
-    QPoint temPt1(x0+x,y0+y);
-    QPoint temPt2(x0+x,y0-y);
-    QPoint temPt3(x0-x,y0+y);
-    QPoint temPt4(x0-x,y0-y);
+
+    int rotateStartX = (x)*cos(rotateAngle) + (y)*sin(rotateAngle)  + 0.5;
+    int rotateStartY = -(x)*sin(rotateAngle) + (y)*cos(rotateAngle) + 0.5;
+
+    int rotateStartX2 = (x)*cos(-rotateAngle) + (y)*sin(-rotateAngle)  + 0.5;
+    int rotateStartY2 = -(x)*sin(-rotateAngle) + (y)*cos(-rotateAngle) + 0.5;
+
+//    rotateStartX = x;
+//    rotateStartY = y;
+
+    QPoint temPt1(x0+rotateStartX2,y0+rotateStartY2);
+    QPoint temPt2(x0+rotateStartX,y0-rotateStartY);
+    QPoint temPt3(x0-rotateStartX,y0+rotateStartY);
+    QPoint temPt4(x0-rotateStartX2,y0-rotateStartY2);
 
     painter->drawPoint(temPt1);
     painter->drawPoint(temPt2);

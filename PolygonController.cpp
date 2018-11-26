@@ -261,6 +261,7 @@ void PolygonController::clearState()
     this->curPolyon = nullptr;
     this->painter = nullptr;
     this->setPolygon = POLYGON_NULL;
+    this->firstEdgeFlag = false;
 }
 
 void PolygonController::getStartAndEnd(QPoint &start, QPoint &end)

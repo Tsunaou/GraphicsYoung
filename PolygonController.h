@@ -35,7 +35,7 @@ private:
     Polygon *curPolyon; //当前聚焦的直线
     Polygon upStreamPolyon; //向上传递的直线
     LineController lineDrawer;//辅助画线
-    bool firstEdgeFlag;
+    bool firstEdgeFlag;     //好像没用到QAQ
     int indexChange; //当前正在操作的多边形的顶点
 
 };

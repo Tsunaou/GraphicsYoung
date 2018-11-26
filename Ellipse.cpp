@@ -18,20 +18,32 @@ void Ellipse::setStartPoint(Point p)
 {
     this->startPoint = p;   //圆心
     this->centerPoint = p;  //圆心
-    //接下来处理旋转点(R/2的点)
-    int newCx = (startPoint.x+endPoint.x)/2;
-    int newCy = (startPoint.y+endPoint.y)/2;
-    Point rp(newCx,newCy);
-    this->rotatePoint =rp;
+
+    //2018/11/26对旋转点的定义采取多边形的旋转点定义法
+    setRotatePoint();
+
+
 }
 
 void Ellipse::setEndPoint(Point p)
 {
     this->endPoint = p;
     this->centerPoint = this->startPoint;
-    //接下来处理旋转点(R/2的点)
-    int newCx = (startPoint.x+endPoint.x)/2;
-    int newCy = (startPoint.y+endPoint.y)/2;
-    Point rp(newCx,newCy);
-    this->rotatePoint =rp;
+
+    setRotatePoint();
+
+}
+
+void Ellipse::setRotatePoint()
+{
+    double cX = this->centerPoint.getX();
+    double cY = this->centerPoint.getY();
+    qDebug()<<"中点坐标为: "<<"("<<(int)cX<<","<<(int)cY<<")"<<endl;
+
+    double halfR = startPoint.distanceToPoint(endPoint.getQPoint())/3;
+
+    double offSetX = cX + halfR*qSin(rotateAngle);
+    double offSetY = cY - halfR*qCos(rotateAngle);
+
+    rotatePoint.setPoint(offSetX,offSetY); //旋转点
 }

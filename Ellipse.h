@@ -9,6 +9,7 @@ public:
     Ellipse(QPoint* start,QPoint* end);
     void setStartPoint(Point p);
     void setEndPoint(Point p);
+    void setRotatePoint();
 };
 
 #endif // ELLIPSE_H
