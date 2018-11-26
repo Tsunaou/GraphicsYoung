@@ -44,12 +44,10 @@ private slots:
     void on_actionCurve_triggered();
     void on_actionEllipse_triggered();
     void on_actionPen_triggered();
-
     void on_actionBrush_triggered();
-
     void on_actionBigger_triggered();
-
     void on_actionSmaller_triggered();
+    void on_actionPolygon_triggered();
 
 private:
     Ui::MainWindow *ui;

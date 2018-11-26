@@ -42,7 +42,9 @@ SOURCES += \
     LineController.cpp \
     Cycle.cpp \
     Ellipse.cpp \
-    Point.cpp
+    Point.cpp \
+    Polygon.cpp \
+    PolygonController.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -57,7 +59,9 @@ HEADERS += \
     LineController.h \
     Cycle.h \
     Ellipse.h \
-    Point.h
+    Point.h \
+    Polygon.h \
+    PolygonController.h
 
 FORMS += \
         mainwindow.ui

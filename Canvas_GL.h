@@ -8,6 +8,7 @@
 #include "LineController.h"
 #include "CycleController.h"
 #include "EllipseController.h"
+#include "PolygonController.h"
 #include "Point.h"
 
 #include <QWidget>
@@ -85,6 +86,7 @@ private:
     LineController lineController;      //控制直线的行为
     CycleController cycleController;    //控制圆的行为
     EllipseController ellipseController;//控制椭圆的行为
+    PolygonController polygonController; //控制多边形行为
     QVector<FigureController*> figureController; //图形控制器集合
 
     FIGURE_TYPE figureMode;     //当前画图系统模式

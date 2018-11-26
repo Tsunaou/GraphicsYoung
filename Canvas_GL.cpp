@@ -28,11 +28,16 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     this->lineController.setState(&this->drawState);
     this->cycleController.setState(&this->drawState);
     this->ellipseController.setState(&this->drawState);
+    this->polygonController.setState(&this->drawState);
     //用统一的接口来约束行为（测试中，目前效果还行。。）
     figureController.push_back(&lineController);
     figureController.push_back(&lineController);
     figureController.push_back(&cycleController);
     figureController.push_back(&ellipseController);
+    figureController.push_back(&polygonController);
+
+    //鼠标跟踪
+    //setMouseTracking(true);
 
 }
 
@@ -46,8 +51,10 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     else{
         if(figureController[figureMode]->isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
             *pix = *pixToMove;
+            setCursor(Qt::PointingHandCursor);//设置鼠标样式
         }else{
             //对保存上次绘画状态的图像在图中,此时startPos和endPos存储上次图像的信息
+            setCursor(Qt::ArrowCursor);//设置鼠标样式
             drawBeforeNewState();
         }
     }
@@ -91,6 +98,11 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     painter->setPen(pen);
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
     if(isDrawingFigure()){
+//        if(figureController[figureMode]->isOperationing(e,startPos,endPos)){
+//            setCursor(Qt::PointingHandCursor);//设置鼠标样式
+//        }
+//        setCursor(Qt::ArrowCursor);//设置鼠标样式
+
         //lineController.mouseMoveEvent(painter,e,pen);
         figureController[figureMode]->mouseMoveEvent(painter,e,pen);
         painter->end();
@@ -118,6 +130,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 {
     qDebug()<<"mouseReleaseEvent"<<endl;
+    setCursor(Qt::ArrowCursor);//设置鼠标样式
 
     if(this->figureMode!=PEN && this->figureMode !=BRUSH){
         *pix = *pixToMove;
@@ -386,7 +399,7 @@ void Canvas_GL::fillColor(int x, int y, QColor color, QColor backColor)
 
 bool Canvas_GL::isDrawingFigure()
 {
-    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE){
+    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE || this->figureMode == POLYGON){
         return true;
     }else{
         return false;

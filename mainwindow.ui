@@ -64,6 +64,7 @@
    <addaction name="actionCurve"/>
    <addaction name="actionCycle"/>
    <addaction name="actionEllipse"/>
+   <addaction name="actionPolygon"/>
    <addaction name="separator"/>
    <addaction name="actionBigger"/>
    <addaction name="actionSmaller"/>
@@ -289,6 +290,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionPolygon">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/polygon.png</normaloff>:/icon/icon/polygon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Polygon</string>
+   </property>
+   <property name="toolTip">
+    <string>多边形</string>
    </property>
   </action>
  </widget>

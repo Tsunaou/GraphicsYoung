@@ -14,5 +14,6 @@
         <file>icon/brush.png</file>
         <file>icon/bigger.png</file>
         <file>icon/smaller.png</file>
+        <file>icon/polygon.png</file>
     </qresource>
 </RCC>

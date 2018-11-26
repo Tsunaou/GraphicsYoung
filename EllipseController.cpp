@@ -45,7 +45,7 @@ void EllipseController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 
 bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {
- if(curEllipse->startPoint.distanceToPoint(e->pos())<=5)
+    if(curEllipse->startPoint.distanceToPoint(e->pos())<=5)
     {
         qDebug()<<"ELLIPSE_CENTER"<<endl;
         setEllipse = ELLIPSE_CENTER;
@@ -76,7 +76,7 @@ bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &en
 
 void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
-  qDebug()<<"CycleController::mousePressEvent"<<endl;
+    qDebug()<<"CycleController::mousePressEvent"<<endl;
     if(curEllipse!=NULL){
         qDebug()<<"cycle!=NULL"<<endl;
     }else{
@@ -122,7 +122,7 @@ void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
 
 void EllipseController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen)
 {
- qDebug()<<"CycleController::mouseMoveEvent"<<endl;
+    qDebug()<<"CycleController::mouseMoveEvent"<<endl;
     this->painter = painter;
     Point curPoint(e->pos().x(),e->pos().y());
     if (curEllipse == NULL)
@@ -138,7 +138,7 @@ void EllipseController::mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen p
 
 void EllipseController::mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen)
 {
-  qDebug()<<"CycleController::mouseReleaseEvent"<<endl;
+    qDebug()<<"CycleController::mouseReleaseEvent"<<endl;
     qDebug()<<"state is";
     switch (*state) {
         case UNDO:
@@ -155,7 +155,7 @@ void EllipseController::mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPe
 
 void EllipseController::setStartPoint(Point point)
 {
- qDebug() << "setStartPoint("<<endl;
+    qDebug() << "setStartPoint("<<endl;
     curEllipse->setStartPoint(point);
     qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
     qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;

@@ -150,3 +150,8 @@ void MainWindow::on_actionSmaller_triggered()
     int index = this->getCurCanvasNum();
     this->canvases[index]->setSmaller();
 }
+
+void MainWindow::on_actionPolygon_triggered()
+{
+    this->setFigureMode(POLYGON);
+}
