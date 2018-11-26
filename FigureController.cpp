@@ -132,3 +132,24 @@ void FigureController::drawOutlineToDebug(QPainter *painter, QPoint &start, QPoi
 
     painter->setPen(savePen);
 }
+
+void FigureController::drawOutlineToDebug(QPainter *painter, QPoint a, QPoint b, QPoint c, QPoint d)
+{
+    QPen debugPen;
+    debugPen.setStyle(Qt::DashLine);
+    debugPen.setWidth(1);
+    debugPen.setColor(Qt::black);
+    QPen savePen;
+    savePen.setStyle(Qt::SolidLine);
+    savePen.setWidth(1);
+    savePen.setColor(Qt::black);
+
+    painter->setPen(debugPen);
+
+    painter->drawLine(a,b);
+    painter->drawLine(b,c);
+    painter->drawLine(c,d);
+    painter->drawLine(d,a);
+
+    painter->setPen(savePen);
+}

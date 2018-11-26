@@ -40,6 +40,7 @@ public:
     bool clockWise(Point center,Point a,Point b);    //判断是否顺时针
     double getLength(QPoint &start,QPoint &end);    //得到两点间距离
     void drawOutlineToDebug(QPainter* painter,QPoint &start,QPoint &end);   //描绘轮廓
+    void drawOutlineToDebug(QPainter* painter,QPoint a,QPoint b,QPoint c,QPoint d);   //描绘轮廓
     void printCtrlDebugMessage(QString msg){
         qDebug()<<msg<<endl;
     }

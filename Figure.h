@@ -4,6 +4,7 @@
 #include "constParams.h"
 #include "Point.h"
 #include <QPoint>
+#include <QtMath>
 
 class Figure
 {
@@ -18,6 +19,8 @@ public:
     Point endPoint;     //终点
     Point centerPoint;  //中点
     Point rotatePoint;  //旋转点
+    //多边形用（可能椭圆也会用到）
+    double rotateAngle; //与竖直向上方向的夹角
 };
 
 #endif // FIGURE_H

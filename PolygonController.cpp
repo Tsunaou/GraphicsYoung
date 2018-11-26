@@ -205,6 +205,38 @@ void PolygonController::moveToPoint(Point point)
 
 void PolygonController::rotateToPoint(Point point)
 {
+    //先得到与先前旋转点的夹角，用一般方法把所有的点都转了
+    double RotaryAngle = getRotaryAngle(curPolyon->centerPoint,curPolyon->rotatePoint,point);   //旋转角
+    bool wiseFlag = clockWise(curPolyon->centerPoint,curPolyon->rotatePoint,point);             //是否顺时针
+    if(wiseFlag)
+        qDebug()<<"顺时针"<<endl;
+    else
+        qDebug()<<"逆时针"<<endl;
+
+    if(wiseFlag){//顺时针转
+        RotaryAngle *= -1;
+    }
+    //基准点
+    int rx0 = curPolyon->centerPoint.getX();
+    int ry0 = curPolyon->centerPoint.getY();
+    //对每个点进行处理(这里有BUG，但是不知道为什么会有)
+    for(int i=0;i<this->curPolyon->vertex.size();i++){
+        int x = this->curPolyon->vertex[i].getX();
+        int y = this->curPolyon->vertex[i].getY();
+        int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 ;
+        int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 ;
+        this->curPolyon->vertex[i].setPoint(rotateStartX,rotateStartY);
+    }
+    //对旋转点处理（用内置的旋转角）
+    Point up(this->curPolyon->centerPoint.getX(),0); //表示竖直向上的点
+    qreal newAngel = getRotaryAngle(this->curPolyon->centerPoint,up,point);//与竖直的夹角
+    if(point.getX()<up.getX()){
+        newAngel *= -1;
+    }
+    this->curPolyon->rotateAngle = newAngel;
+    //绘制旋转后图形
+    drawPolygon(painter);
+    drawHandle(painter,pen);
 
 }
 
@@ -220,6 +252,8 @@ void PolygonController::drawHandle(QPainter *painter, QPen pen)
     }
     curPolyon->vertex.first().DrawWarnPoint(painter,pen);
     curPolyon->centerPoint.DrawWarnPoint(painter,pen);
+    curPolyon->rotatePoint.DrawCyclePoint(painter,pen);
+    lineDrawer.MyDrawLineDDA(painter,curPolyon->centerPoint.getQPoint(),curPolyon->rotatePoint.getQPoint());
 }
 
 void PolygonController::clearState()
@@ -276,8 +310,16 @@ void PolygonController::changeNextPoints(Point point)
 
 void PolygonController::drawPolygon(QPainter* painter)
 {
-    this->curPolyon->getRectangle();
-    this->drawOutlineToDebug(painter,curPolyon->centerPoint.getQPoint(),curPolyon->LeftUp.getQPoint());
+    if(this->setPolygon != POLYGON_ROTATE){
+        this->curPolyon->getRectangle();
+        this->drawOutlineToDebug(painter,curPolyon->centerPoint.getQPoint(),curPolyon->LeftUp.getQPoint());
+    }else{
+        this->curPolyon->getRectangleRotating();
+        this->drawOutlineToDebug(painter,   curPolyon->LeftUp.getQPoint(),
+                                            curPolyon->RightUp.getQPoint(),
+                                            curPolyon->RightDown.getQPoint(),
+                                            curPolyon->LeftDown.getQPoint());
+    }
     qDebug()<<"drawPolygon"<<endl;
     //return ;
     for(int i=0;i<curPolyon->vertex.size();i++){
