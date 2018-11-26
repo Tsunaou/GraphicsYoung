@@ -53,7 +53,7 @@ bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &en
         setEllipse = ELLIPSE_CENTER;
         return true;
     }
-    else if(curEllipse->endPoint.distanceToPoint(e->pos())<=5)
+    else if(curEllipse->RightDown.distanceToPoint(e->pos())<=5)
     {
         qDebug()<<"ELLIPSE_OUT"<<endl;
         setEllipse = ELLIPSE_OUT;
@@ -94,7 +94,7 @@ void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
                 setEllipse = ELLIPSE_CENTER;
                 return;
             }
-            else if(curEllipse->endPoint.distanceToPoint(e->pos())<=5)
+            else if(curEllipse->RightDown.distanceToPoint(e->pos())<=5)
             {
                 qDebug()<<"ELLIPSE_OUT"<<endl;
                 setEllipse = ELLIPSE_OUT;
@@ -169,7 +169,16 @@ void EllipseController::setStartPoint(Point point)
 void EllipseController::setEndPoint(Point point)
 {
     qDebug() << "setEndPoint("<<endl;
-
+    //把point转回去，再赋给endPoint
+    int rx0 = curEllipse->centerPoint.getX(); //基准,圆心
+    int ry0 = curEllipse->centerPoint.getY();
+    //-------------------------------------------------------------------------
+    int x = point.getX();      //右下
+    int y = point.getY();
+    int rx = (x - rx0)*cos(rotateAngle) + (y - ry0)*sin(rotateAngle) + rx0 + 0.5;
+    int ry = -(x - rx0)*sin(rotateAngle) + (y - ry0)*cos(rotateAngle) + ry0 + 0.5;
+    point.setPoint(rx,ry);
+    //--------------------------------------
     curEllipse->setEndPoint(point);
     qDebug() << "StartPoint(" <<curEllipse->startPoint.point.x()<<","<<curEllipse->startPoint.point.y()<<")"<<endl;
     qDebug() << "EndPoint(" <<curEllipse->endPoint.point.x()<<","<<curEllipse->endPoint.point.y()<<")"<<endl;
@@ -235,12 +244,16 @@ void EllipseController::setState(DRAW_STATE *state)
 
 void EllipseController::drawHandle(QPainter *painter, QPen pen)
 {
+    this->curEllipse->getRectangle();
     lineDrawer.MyDrawLineDDA(painter,curEllipse->centerPoint.getQPoint(),curEllipse->rotatePoint.getQPoint());
     curEllipse->startPoint.DrawWarnPoint(painter,pen);
-    curEllipse->endPoint.DrawCyclePoint(painter,pen);
+    //curEllipse->endPoint.DrawCyclePoint(painter,pen);
+    curEllipse->RightDown.DrawCyclePoint(painter,pen);
     curEllipse->rotatePoint.DrawCyclePoint(painter,pen);
-    this->drawOutlineToDebug(painter,curEllipse->startPoint.getQPoint(),curEllipse->endPoint.getQPoint());
-}
+    this->drawOutlineToDebug(painter,   curEllipse->LeftUp.getQPoint(),
+                                        curEllipse->RightUp.getQPoint(),
+                                        curEllipse->RightDown.getQPoint(),
+                                        curEllipse->LeftDown.getQPoint());}
 
 
 
