@@ -19,6 +19,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QPixmap>
+#include <QImage>
 #include <QPoint>
 #include <QPainter>
 #include <QPalette>
@@ -45,6 +46,7 @@ public:
     void setMode(FIGURE_TYPE type); //设置图形
     void setBigger();   //放大图形
     void setSmaller();  //缩小图形
+    void fillColor(int x,int y,QColor color,QColor backColor);   //填充算法
     QPixmap *getPixCopy();              //得到当前画布的拷贝
     QPixmap *getPixCopy(QPixmap* pic);  //得到指定pic的拷贝
     //一些辅助调试的函数

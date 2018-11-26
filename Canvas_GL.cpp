@@ -354,6 +354,34 @@ void Canvas_GL::drawBeforeNewState()
     reVec.push_back(tmp);
     update();
     pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
+    //填充测试
+    if(this->figureMode == CYCLE){
+        QImage img = pix->toImage();
+        int x = startPos.x();
+        int y = startPos.y();
+        QColor toInCoor = img.pixel(x,y);
+        fillColor(x,y,color,toInCoor);
+    }
+    //
+}
+
+void Canvas_GL::fillColor(int x, int y, QColor color, QColor backColor)
+{
+    printDebugMessage("fillColor");
+    QPainter *painter = new QPainter();
+    painter->begin(pix);
+    backColor =Qt::red;
+    pen.setColor(backColor);
+    painter->setPen(pen);
+    for(int i=x-20;i<x+20;i++){
+        for(int j=y-20;j<y+20;j++){
+            painter->drawPoint(x,y);
+        }
+    }
+    pen.setColor(color);
+    painter->end();
+    delete painter;
+    update();
 }
 
 bool Canvas_GL::isDrawingFigure()
