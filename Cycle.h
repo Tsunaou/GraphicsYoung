@@ -10,6 +10,8 @@ public:
     void setStartPoint(Point p);
     void setEndPoint(Point p);
     double getRadius();
+private:
+    qreal Ridius;
 };
 
 #endif // CYCLE_H

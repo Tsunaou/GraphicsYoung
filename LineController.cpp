@@ -287,7 +287,7 @@ void LineController::drawHandle(QPainter *painter, QPen pen)
 {
     curLine->startPoint.DrawCyclePoint(painter,pen);
     curLine->endPoint.DrawCyclePoint(painter,pen);
-    curLine->centerPoint.DrawCyclePoint(painter,pen);
+    curLine->centerPoint.DrawWarnPoint(painter,pen);
     curLine->rotatePoint.DrawCyclePoint(painter,pen);
 }
 

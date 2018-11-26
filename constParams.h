@@ -18,5 +18,6 @@ const double ZOOM_OUT = 1/ZOOM_IN;  //缩放比例
 const double JUDGE_RIDUS = 5;       //判断是否是一个点的基准
 const double ROTATE_RIDUS = 30;     //旋转点距离中心的距离（多边形和椭圆可能用到）
 const double DEFAULT_ANGLE = 0;     //旋转点和竖直向上的夹角
+const int ROTATE_ACCURACY = 5;      //旋转的精度（主要用于圆旋转的校正）
 
 #endif // CONSTPARAMS_H

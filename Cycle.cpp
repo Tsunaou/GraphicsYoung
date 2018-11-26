@@ -38,5 +38,6 @@ void Cycle::setEndPoint(Point p)
 
 double Cycle::getRadius()
 {
-    return startPoint.distanceToPoint(endPoint.getQPoint());
+    this->Ridius = (this->Ridius+startPoint.distanceToPoint(endPoint.getQPoint()))/2;
+    return this->Ridius;
 }

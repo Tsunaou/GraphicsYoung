@@ -208,7 +208,10 @@ void CycleController::rotateToPoint(Point point)
     qDebug()<<"圆旋转中：半径为"<<cycle->getRadius()<<endl;
     int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 + 0.5;
     int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 + 0.5;
-    cycle->setEndPoint(Point(rotateStartX,rotateStartY));
+
+    qreal r = this->cycle->getRadius();
+
+    cycle->setEndPoint(getTheAccurayRotatePoint(r,rotateStartX,rotateStartY));
     qDebug()<<"圆旋转后：半径为"<<cycle->getRadius()<<endl;
     //有精度损失。。导致圆可能会变大变小
     qDebug() << "StartPoint(" <<cycle->startPoint.point.x()<<","<<cycle->startPoint.point.y()<<")"<<endl;
@@ -224,7 +227,7 @@ void CycleController::setState(DRAW_STATE *state)
 
 void CycleController::drawHandle(QPainter *painter, QPen pen)
 {
-    cycle->startPoint.DrawCyclePoint(painter,pen);
+    cycle->startPoint.DrawWarnPoint(painter,pen);
     cycle->endPoint.DrawCyclePoint(painter,pen);
     //cycle->centerPoint.DrawCyclePoint(painter,pen);
     cycle->rotatePoint.DrawCyclePoint(painter,pen);
@@ -310,4 +313,24 @@ void CycleController::drawEighthCycle(QPainter *painter, int x0, int y0, int x, 
     painter->drawPoint(temPt6);
     painter->drawPoint(temPt7);
     painter->drawPoint(temPt8);
+}
+
+Point CycleController::getTheAccurayRotatePoint(qreal ridus, int x, int y)
+{
+    int resX = x-ROTATE_ACCURACY;
+    int resY = y-ROTATE_ACCURACY;
+    double minDiff =100;
+    for(int i=x-ROTATE_ACCURACY;i<=x+ROTATE_ACCURACY;i++){
+        for(int j=y-ROTATE_ACCURACY;j<=y+ROTATE_ACCURACY;j++){
+            Point tmp(i,j);
+            double diffTmp = fabs(this->cycle->centerPoint.distanceToPoint(tmp.getQPoint())-ridus);
+            if(diffTmp<minDiff){
+                resX=i;
+                resY=j;
+                minDiff = diffTmp;
+            }
+
+        }
+    }
+    return Point(resX,resY);
 }
