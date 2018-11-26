@@ -30,6 +30,8 @@ void Point::setPoint(int x, int y)
 {
     this->point.setX(x);
     this->point.setY(y);
+    this->x = x;
+    this->y = y;
 }
 
 void Point::DrawCyclePoint(QPainter *painter,QPen &pen)

@@ -26,6 +26,16 @@ bool PolygonController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &en
         setPolygon = POLYGON_CHANGE;
         return true;
     }
+    else if(curPolyon->centerPoint.distanceToPoint(e->pos())<= JUDGE_RIDUS){
+        qDebug()<<"POLYGON_MOVE"<<endl;
+        setPolygon = POLYGON_MOVE;
+        return true;
+    }
+    else if(curPolyon->rotatePoint.distanceToPoint(e->pos())<= JUDGE_RIDUS){
+        qDebug()<<"POLYGON_ROTATE"<<endl;
+        setPolygon = POLYGON_ROTATE;
+        return true;
+    }
 
     setPolygon = POLYGON_NULL;
     *state = UNDO;
@@ -59,6 +69,7 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
                 curPolyon->colseFlag = true;
                 Point curPoint = curPolyon->startPoint;
                 this->curPolyon->setNextPoint(curPoint);
+                this->curPolyon->getRectangle();
                 this->drawPolygon(painter);
                 this->drawHandle(painter,pen);
                 return;
@@ -74,6 +85,16 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
             else if(changeingVertexs(e)){
                 qDebug()<<"POLYGON_CHANGE"<<endl;
                 setPolygon = POLYGON_CHANGE;
+                return;
+            }
+            else if(curPolyon->centerPoint.distanceToPoint(e->pos())<= JUDGE_RIDUS){
+                qDebug()<<"POLYGON_MOVE"<<endl;
+                setPolygon = POLYGON_MOVE;
+                return;
+            }
+            else if(curPolyon->rotatePoint.distanceToPoint(e->pos())<= JUDGE_RIDUS){
+                qDebug()<<"POLYGON_ROTATE"<<endl;
+                setPolygon = POLYGON_ROTATE;
                 return;
             }
             if(returnFlag){
@@ -114,6 +135,8 @@ void PolygonController::mouseMoveEvent(QPainter *painter, QMouseEvent *e, QPen p
         case POLYGON_START: this->setStartPoint(curPoint); break;
         case POLYGON_NEXT: this->changeNextPoints(curPoint); break;
         case POLYGON_CHANGE: this->changeVertexs(curPoint); break;
+        case POLYGON_MOVE: this->moveToPoint(curPoint);break;
+        case POLYGON_ROTATE: this->rotateToPoint(curPoint);break;
         default:
             qDebug()<<"Error setPolygon"<<endl;
     }
@@ -143,6 +166,7 @@ void PolygonController::mouseReleaseEvent(QPainter *painter, QMouseEvent *e, QPe
         curPolyon->colseFlag = true;
         Point curPoint = curPolyon->startPoint;
         this->curPolyon->changeNextPoint(curPoint);
+        this->curPolyon->getRectangle();
         this->drawPolygon(painter);
         this->drawHandle(painter,pen);
         return;
@@ -168,7 +192,15 @@ void PolygonController::setEndPoint(Point point)
 
 void PolygonController::moveToPoint(Point point)
 {
-
+    int offsetX = point.getX() - curPolyon->centerPoint.getX();
+    int offsetY = point.getY() - curPolyon->centerPoint.getY();
+    for(int i=0;i<this->curPolyon->vertex.size();i++){
+        this->curPolyon->vertex[i].addX(offsetX);
+        this->curPolyon->vertex[i].addY(offsetY);
+    }
+    curPolyon->getRectangle();
+    drawPolygon(painter);
+    drawHandle(painter,pen);
 }
 
 void PolygonController::rotateToPoint(Point point)
@@ -187,6 +219,7 @@ void PolygonController::drawHandle(QPainter *painter, QPen pen)
         i.DrawCyclePoint(painter,pen);
     }
     curPolyon->vertex.first().DrawWarnPoint(painter,pen);
+    curPolyon->centerPoint.DrawCyclePoint(painter,pen);
 }
 
 void PolygonController::clearState()
@@ -231,6 +264,8 @@ void PolygonController::changeNextPoints(Point point)
 
 void PolygonController::drawPolygon(QPainter* painter)
 {
+    this->curPolyon->getRectangle();
+    this->drawOutlineToDebug(painter,curPolyon->centerPoint.getQPoint(),curPolyon->LeftUp.getQPoint());
     qDebug()<<"drawPolygon"<<endl;
     //return ;
     for(int i=0;i<curPolyon->vertex.size();i++){

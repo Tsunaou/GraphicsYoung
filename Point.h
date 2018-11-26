@@ -26,6 +26,14 @@ public:
     int getY(){
         return y;
     }
+    void addX(int i){
+        this->x+=i;
+        this->point.setX(x);
+    }
+    void addY(int i){
+        this->y+=i;
+        this->point.setY(y);
+    }
     QPoint& getQPoint(){
         return point;
     }
