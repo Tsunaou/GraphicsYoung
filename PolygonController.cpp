@@ -2,22 +2,25 @@
 
 PolygonController::PolygonController()
 {
-    painter = NULL;
+    this->curPolyon = NULL;
+    this->painter = NULL;
+    this->setPolygon = POLYGON_NULL;
+    firstEdgeFlag = true;
 }
 
 bool PolygonController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {
-    if(curPolyon->startPoint.distanceToPoint(e->pos())<=5)
+    if(curPolyon->startPoint.distanceToPoint(e->pos())<=25)
     {
         qDebug()<<"POLYGON_START"<<endl;
         setPolygon = POLYGON_START;
         return true;
     }
-//    else if(curPolyon->colseFlag==false && *state!=UNDO){ //暂时苟且一下
-//        qDebug()<<"POLYGON_NEXT"<<endl;
-//        setPolygon = POLYGON_NEXT;
-//        return true;
-//    }
+    else if(curPolyon->colseFlag==false && *state!=UNDO){ //暂时苟且一下
+        qDebug()<<"POLYGON_NEXT"<<endl;
+        setPolygon = POLYGON_NEXT;
+        return true;
+    }
 
     setPolygon = POLYGON_NULL;
     *state = UNDO;
@@ -41,17 +44,30 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
     {
         if(curPolyon!=NULL)
         {
-            if(curPolyon->startPoint.distanceToPoint(e->pos())<=5)
+            bool returnFlag = false; //暂时没有什么用
+            if(curPolyon->startPoint.distanceToPoint(e->pos())<=25)
             {
-                qDebug()<<"POLYGON_START"<<endl;
+                qDebug()<<"POLYGON_START The Edges Limits"<<endl;
                 setPolygon = POLYGON_START;
+                returnFlag = true;
+                curPolyon->colseFlag = true;
+                Point curPoint = curPolyon->startPoint;
+                this->curPolyon->setNextPoint(curPoint);
                 return;
             }
-//            else if(curPolyon->colseFlag==false && *state!=UNDO){ //暂时苟且一下
-//                qDebug()<<"POLYGON_NEXT"<<endl;
-//                setPolygon = POLYGON_NEXT;
-//                return;
-//            }
+            else if(curPolyon->colseFlag==false && *state!=UNDO){ //暂时苟且一下
+                qDebug()<<"POLYGON_NEXT"<<endl;
+                setPolygon = POLYGON_NEXT;
+                returnFlag = true;
+                Point curPoint(e->pos().x(),e->pos().y());
+                this->curPolyon->setNextPoint(curPoint);
+                return;
+            }
+            if(returnFlag){
+                return;
+            }
+            curPolyon->colseFlag = false;
+
 
             setPolygon = POLYGON_NULL;
             *state = UNDO;
@@ -60,10 +76,15 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
             curPolyon = NULL;
             return;
         }
+        //printCtrlDebugMessage("PolygonController::mousePressEvent end when cur is null 1");
         QPoint curPoint(e->pos().x(),e->pos().y());
         curPolyon = new Polygon(&curPoint,&curPoint,POLYGON);
+        curPolyon->setNextPoint(Point());
+        //printCtrlDebugMessage("PolygonController::mousePressEvent end when cur is null 2");
         setPolygon = POLYGON_NEXT;
+        //printCtrlDebugMessage("PolygonController::mousePressEvent end when cur is null 3");
         *state = DRAWING;
+        //printCtrlDebugMessage("PolygonController::mousePressEvent end when cur is null 4");
     }
 }
 
@@ -71,19 +92,19 @@ void PolygonController::mouseMoveEvent(QPainter *painter, QMouseEvent *e, QPen p
 {
     qDebug()<<"PolygonController::mouseMoveEvent"<<endl;
     this->painter = painter;
-    printCtrlDebugMessage("mouseMoveEvent 1");
+    //printCtrlDebugMessage("mouseMoveEvent 1");
     Point curPoint(e->pos().x(),e->pos().y());
-    printCtrlDebugMessage("mouseMoveEvent 2");
+    //printCtrlDebugMessage("mouseMoveEvent 2");
     if (curPolyon == NULL)
         return;
     switch(setPolygon){
         case POLYGON_START: this->setStartPoint(curPoint); break;
-        case POLYGON_NEXT: this->setNextPoints(curPoint); break;
+        case POLYGON_NEXT: this->changeNextPoints(curPoint); break;
         case POLYGON_CHANGE: this->rotateToPoint(curPoint); break;
         default:
             qDebug()<<"Error setPolygon"<<endl;
     }
-    printCtrlDebugMessage("mouseMoveEvent 3");
+    //printCtrlDebugMessage("mouseMoveEvent 3");
 }
 
 
@@ -99,14 +120,30 @@ void PolygonController::mouseReleaseEvent(QPainter *painter, QMouseEvent *e, QPe
             qDebug()<<"DRAWING"<<endl;
             break;
     }
+
     this->painter = painter;
+
+    if(curPolyon->startPoint.distanceToPoint(e->pos())<=25)
+    {
+        qDebug()<<"POLYGON_START The Edges Limits"<<endl;
+        setPolygon = POLYGON_START;
+        curPolyon->colseFlag = true;
+        Point curPoint = curPolyon->startPoint;
+        this->curPolyon->setNextPoint(curPoint);
+        return;
+    }
+
     drawPolygon(painter);
     drawHandle(painter,pen);
 }
 
 void PolygonController::setStartPoint(Point point)
 {
-
+    qDebug() << "setStartPoint("<<endl;
+    this->curPolyon->setNextPoint(point);
+    //顺序不知道为啥会影响粗细。。
+    drawPolygon(painter);
+    drawHandle(painter,pen);
 }
 
 void PolygonController::setEndPoint(Point point)
@@ -126,17 +163,22 @@ void PolygonController::rotateToPoint(Point point)
 
 void PolygonController::setState(DRAW_STATE *state)
 {
-
+    this->state = state;
 }
 
 void PolygonController::drawHandle(QPainter *painter, QPen pen)
 {
-
+    for(Point i : this->curPolyon->vertex){
+        i.DrawCyclePoint(painter,pen);
+    }
+    curPolyon->vertex.first().DrawWarnPoint(painter,pen);
 }
 
 void PolygonController::clearState()
 {
-
+    this->curPolyon = NULL;
+    this->painter = NULL;
+    this->setPolygon = POLYGON_NULL;
 }
 
 void PolygonController::getStartAndEnd(QPoint &start, QPoint &end)
@@ -163,10 +205,22 @@ void PolygonController::setNextPoints(Point point)
     drawHandle(painter,pen);
 }
 
+void PolygonController::changeNextPoints(Point point)
+{
+    qDebug() << "setNextPoints("<<endl;
+    this->curPolyon->changeNextPoint(point);
+    //顺序不知道为啥会影响粗细。。
+    drawPolygon(painter);
+    drawHandle(painter,pen);
+}
+
 void PolygonController::drawPolygon(QPainter* painter)
 {
     qDebug()<<"drawPolygon"<<endl;
-    return ;
+    //return ;
+    for(int i=0;i<curPolyon->vertex.size();i++){
+        curPolyon->vertex[i].printPointCoodinate();
+    }
     for(int i=0;i<curPolyon->vertex.size();i++){
         if((i+1)<curPolyon->vertex.size()){
             lineDrawer.MyDrawLineDDA(painter,

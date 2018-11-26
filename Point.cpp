@@ -18,6 +18,14 @@ Point::Point(int x, int y)
     point.setY(y);
 }
 
+Point::Point(QPoint p)
+{
+    this->x = p.x();
+    this->y = p.y();
+    ridus = 6;
+    this->point = p;
+}
+
 void Point::setPoint(int x, int y)
 {
     this->point.setX(x);
@@ -42,6 +50,24 @@ void Point::DrawCyclePoint(QPainter *painter,QPen &pen)
     painter->setPen(pen);
 
 
+}
+
+void Point::DrawWarnPoint(QPainter *painter, QPen &pen)
+{
+    QPen debugPen;
+    debugPen.setWidth(1);
+    debugPen.setColor(Qt::red);
+    painter->setPen(debugPen);
+
+    for(int i=x-ridus;i<x+ridus;i++){
+        for(int j=y-ridus;j<y+ridus;j++){
+            if(distanceToPoint(i,j)<=ridus){
+                painter->drawPoint(i,j);
+            }
+        }
+    }
+
+    painter->setPen(pen);
 }
 
 double Point::distanceToPoint(int x, int y)

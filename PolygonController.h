@@ -25,11 +25,13 @@ public:
     void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen);  //缩小
     //本类特有的方法
     void setNextPoints(Point point); //设置下一个顶点
+    void changeNextPoints(Point point);
     void drawPolygon(QPainter* painter); //画多边形
 private:
     SETPOLYGON setPolygon; //更改多边形的起点/下一个点/任一点/不作操作
     Polygon *curPolyon; //当前聚焦的直线
     LineController lineDrawer;//辅助画线
+    bool firstEdgeFlag;
 
 };
 

@@ -3,17 +3,23 @@
 #include <QPoint>
 #include <QPainter>
 #include <QPen>
+#include <QDebug>
 class Point
 {
 public:
     Point();
     Point(int x,int y);
+    Point(QPoint p);
     void setX(int x);
     void setY(int y);
     void setPoint(int x,int y);
     void DrawCyclePoint(QPainter *painter,QPen &pen);
+    void DrawWarnPoint(QPainter *painter,QPen &pen);
     double distanceToPoint(int x,int y);
     double distanceToPoint(QPoint p);
+    void printPointCoodinate(){
+        qDebug()<<"("<<x<<","<<y<<"),";
+    }
     int getX(){
         return x;
     }

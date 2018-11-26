@@ -44,6 +44,7 @@ public:
     void saveImage(); //保存当前画布内容（pix内容）
     void clearImage(); //清空当前画布内容
     void recallImage();//撤销上一步操作
+    void clearStates();//清空控制器状态
     void setMode(FIGURE_TYPE type); //设置图形
     void setBigger();   //放大图形
     void setSmaller();  //缩小图形

@@ -66,6 +66,7 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     if(isDrawingFigure()){
         figureController[figureMode]->mousePressEvent(painter,e,pen);
         painter->end();
+        printDebugMessage("mouseMoveEvent painter end");
         delete painter;
         if(this->drawState == UNDO){
             pixToMove = getPixCopy();
@@ -93,15 +94,18 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     if(this->figureMode!=PEN && this->figureMode !=BRUSH){
         *pix = *pixToMove; //实现图形随着鼠标动态加载,双缓冲
     }
+    printDebugMessage("mouseMoveEvent 1");
     QPainter *painter = new QPainter();
     painter->begin(pix);
     painter->setPen(pen);
+    printDebugMessage("mouseMoveEvent 2");
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
     if(isDrawingFigure()){
 //        if(figureController[figureMode]->isOperationing(e,startPos,endPos)){
 //            setCursor(Qt::PointingHandCursor);//设置鼠标样式
 //        }
 //        setCursor(Qt::ArrowCursor);//设置鼠标样式
+        printDebugMessage("mouseMoveEvent 3");
 
         //lineController.mouseMoveEvent(painter,e,pen);
         figureController[figureMode]->mouseMoveEvent(painter,e,pen);
@@ -219,12 +223,14 @@ void Canvas_GL::clearImage()
     this->lineController.clearState();
     this->cycleController.clearState();
     this->ellipseController.clearState();
+    this->polygonController.clearState();
     update();
 }
 
 void Canvas_GL::recallImage()
 {
     qDebug()<<"Recall"<<endl;
+    clearStates();
     if(reVec.size()<=1){
         qDebug()<<"It the initial state of the image."<<endl;
         QPixmap *clearPix =new QPixmap(size());
@@ -242,24 +248,27 @@ void Canvas_GL::recallImage()
     }
 }
 
+void Canvas_GL::clearStates()
+{
+    this->drawState = UNDO;
+    this->lineController.clearState();
+    this->cycleController.clearState();
+    this->ellipseController.clearState();
+    this->polygonController.clearState();
+}
+
 void Canvas_GL::setMode(FIGURE_TYPE type)
 {
     if(figureMode == FIGURE || figureMode == PEN || figureMode == BRUSH){//初始化
         this->figureMode = type;
-        this->drawState = UNDO;
-        this->lineController.clearState();
-        this->cycleController.clearState();
-        this->ellipseController.clearState();
+        clearStates();
     }
     else{
         //只坐到上面，图像上会留下辅助点，因为还是得处理下QAQ
         figureController[figureMode]->getStartAndEnd(startPos,endPos);
         drawBeforeNewState();
         //切换前应该要注意清空信息
-        this->drawState = UNDO;
-        this->lineController.clearState();
-        this->cycleController.clearState();
-        this->ellipseController.clearState();
+        clearStates();
         //
         this->figureMode = type;
     }
