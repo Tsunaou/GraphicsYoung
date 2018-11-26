@@ -27,11 +27,16 @@ public:
     void setNextPoints(Point point); //设置下一个顶点
     void changeNextPoints(Point point);
     void drawPolygon(QPainter* painter); //画多边形
+    void drawUpPolygon(QPainter* painter);//主界面多边形
+    bool changeingVertexs(QMouseEvent *e);  //判断是否在对多边形顶点进行操作
+    void changeVertexs(Point point);    //改变顶点位置
 private:
     SETPOLYGON setPolygon; //更改多边形的起点/下一个点/任一点/不作操作
     Polygon *curPolyon; //当前聚焦的直线
+    Polygon upStreamPolyon; //向上传递的直线
     LineController lineDrawer;//辅助画线
     bool firstEdgeFlag;
+    int indexChange; //当前正在操作的多边形的顶点
 
 };
 

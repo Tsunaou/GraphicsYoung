@@ -366,6 +366,7 @@ void Canvas_GL::drawBeforeNewState()
         case LINE: lineController.MyDrawLineDDA(painter,startPos,endPos);break;
         case CYCLE:cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
         case ELLIPSE:ellipseController.MyDrawEllipse(painter,startPos,endPos); break;
+        case POLYGON:polygonController.drawUpPolygon(painter);break;
     default:
         break;
     }

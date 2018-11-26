@@ -10,7 +10,7 @@ PolygonController::PolygonController()
 
 bool PolygonController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {
-    if(curPolyon->startPoint.distanceToPoint(e->pos())<=25)
+    if(curPolyon->colseFlag==false && curPolyon->startPoint.distanceToPoint(e->pos())<=25)
     {
         qDebug()<<"POLYGON_START"<<endl;
         setPolygon = POLYGON_START;
@@ -21,11 +21,17 @@ bool PolygonController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &en
         setPolygon = POLYGON_NEXT;
         return true;
     }
+    else if(changeingVertexs(e)){
+        qDebug()<<"POLYGON_CHANGE"<<endl;
+        setPolygon = POLYGON_CHANGE;
+        return true;
+    }
 
     setPolygon = POLYGON_NULL;
     *state = UNDO;
     start = curPolyon->startPoint.getQPoint(); //将多边形信息存储下来
     end = curPolyon->endPoint.getQPoint();    //将最终绘制的多边形信息存储下来
+    this->upStreamPolyon = *curPolyon;
     Polygon* p = curPolyon;   //防止野指针
     delete p;
     curPolyon = NULL;
@@ -45,7 +51,7 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
         if(curPolyon!=NULL)
         {
             bool returnFlag = false; //暂时没有什么用
-            if(curPolyon->startPoint.distanceToPoint(e->pos())<=25)
+            if(curPolyon->colseFlag==false && curPolyon->startPoint.distanceToPoint(e->pos())<=25)
             {
                 qDebug()<<"POLYGON_START The Edges Limits"<<endl;
                 setPolygon = POLYGON_START;
@@ -63,6 +69,11 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
                 returnFlag = true;
                 Point curPoint(e->pos().x(),e->pos().y());
                 this->curPolyon->setNextPoint(curPoint);
+                return;
+            }
+            else if(changeingVertexs(e)){
+                qDebug()<<"POLYGON_CHANGE"<<endl;
+                setPolygon = POLYGON_CHANGE;
                 return;
             }
             if(returnFlag){
@@ -102,7 +113,7 @@ void PolygonController::mouseMoveEvent(QPainter *painter, QMouseEvent *e, QPen p
     switch(setPolygon){
         case POLYGON_START: this->setStartPoint(curPoint); break;
         case POLYGON_NEXT: this->changeNextPoints(curPoint); break;
-        case POLYGON_CHANGE: this->rotateToPoint(curPoint); break;
+        case POLYGON_CHANGE: this->changeVertexs(curPoint); break;
         default:
             qDebug()<<"Error setPolygon"<<endl;
     }
@@ -187,7 +198,7 @@ void PolygonController::clearState()
 
 void PolygonController::getStartAndEnd(QPoint &start, QPoint &end)
 {
-
+    this->upStreamPolyon = *curPolyon;
 }
 
 void PolygonController::setBigger(QPainter *painter, QMouseEvent *e, QPen pen)
@@ -233,4 +244,48 @@ void PolygonController::drawPolygon(QPainter* painter)
                                      );
         }
     }
+}
+
+void PolygonController::drawUpPolygon(QPainter *painter)
+{
+    qDebug()<<"drawPolygon"<<endl;
+    //return ;
+    for(int i=0;i<upStreamPolyon.vertex.size();i++){
+        upStreamPolyon.vertex[i].printPointCoodinate();
+    }
+    for(int i=0;i<upStreamPolyon.vertex.size();i++){
+        if((i+1)<upStreamPolyon.vertex.size()){
+            lineDrawer.MyDrawLineDDA(painter,
+                                     upStreamPolyon.vertex[i].getQPoint(),
+                                     upStreamPolyon.vertex[i+1].getQPoint()
+                                     );
+        }
+    }
+}
+
+bool PolygonController::changeingVertexs(QMouseEvent *e)
+{
+    for(int i=0;i<curPolyon->vertex.size();i++){
+        if(curPolyon->vertex[i].distanceToPoint(e->pos())<= JUDGE_RIDUS){
+            this->indexChange = i;
+            printCtrlDebugMessage("当前操作的顶点是");
+            qDebug()<<i<<"号顶点"<<endl;
+            return true;
+        }
+        if(curPolyon->startPoint.distanceToPoint(e->pos())<= JUDGE_RIDUS){
+            this->indexChange = 0;
+            printCtrlDebugMessage("当前操作的顶点是0号顶点");
+            return true;
+        }
+    }
+    return false;
+}
+
+void PolygonController::changeVertexs(Point point)
+{
+    qDebug() << "changeVertexs("<<endl;
+    this->curPolyon->changePoint(indexChange,point);
+    //顺序不知道为啥会影响粗细。。
+    drawPolygon(painter);
+    drawHandle(painter,pen);
 }

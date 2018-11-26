@@ -29,3 +29,17 @@ void Polygon::changeNextPoint(Point p)
 {
     vertex[vertex.size()-1] = p;
 }
+
+void Polygon::changePoint(int index, Point p)
+{
+    if(index<0 || index >= vertex.size()){
+        qDebug()<<"Change Points in polygon error"<<endl;
+    }else{
+        if(index == 0){
+            this->vertex[0] = p;
+            this->vertex[this->vertex.size()-1] = p;
+        }else{
+            this->vertex[index] = p;
+        }
+    }
+}

@@ -14,5 +14,6 @@ const int BRUSH_WIDTH = 10;
 const int PEN_WIDTH = 1;
 const double ZOOM_IN = 2;
 const double ZOOM_OUT = 1/ZOOM_IN;
+const double JUDGE_RIDUS = 5;
 
 #endif // CONSTPARAMS_H
