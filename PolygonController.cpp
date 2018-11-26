@@ -2,8 +2,8 @@
 
 PolygonController::PolygonController()
 {
-    this->curPolyon = NULL;
-    this->painter = NULL;
+    this->curPolyon = nullptr;
+    this->painter = nullptr;
     this->setPolygon = POLYGON_NULL;
     firstEdgeFlag = true;
 }
@@ -44,21 +44,21 @@ bool PolygonController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &en
     this->upStreamPolyon = *curPolyon;
     Polygon* p = curPolyon;   //防止野指针
     delete p;
-    curPolyon = NULL;
+    curPolyon = nullptr;
     return false;
 }
 
 void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
     qDebug()<<"PolygonController::mousePressEvent"<<endl;
-    if(curPolyon!=NULL){
+    if(curPolyon!=nullptr){
         qDebug()<<"curPolyon!=NULL"<<endl;
     }else{
         qDebug()<<"curPolyon==NULL"<<endl;
     }
     if(e->button()==Qt::LeftButton)
     {
-        if(curPolyon!=NULL)
+        if(curPolyon!=nullptr)
         {
             bool returnFlag = false; //暂时没有什么用
             if(curPolyon->colseFlag==false && curPolyon->startPoint.distanceToPoint(e->pos())<=25)
@@ -107,7 +107,7 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
             *state = UNDO;
             Polygon* p = curPolyon;   //防止野指针
             delete p;
-            curPolyon = NULL;
+            curPolyon = nullptr;
             return;
         }
         //printCtrlDebugMessage("PolygonController::mousePressEvent end when cur is null 1");
@@ -129,7 +129,7 @@ void PolygonController::mouseMoveEvent(QPainter *painter, QMouseEvent *e, QPen p
     //printCtrlDebugMessage("mouseMoveEvent 1");
     Point curPoint(e->pos().x(),e->pos().y());
     //printCtrlDebugMessage("mouseMoveEvent 2");
-    if (curPolyon == NULL)
+    if (curPolyon == nullptr)
         return;
     switch(setPolygon){
         case POLYGON_START: this->setStartPoint(curPoint); break;
@@ -219,13 +219,13 @@ void PolygonController::drawHandle(QPainter *painter, QPen pen)
         i.DrawCyclePoint(painter,pen);
     }
     curPolyon->vertex.first().DrawWarnPoint(painter,pen);
-    curPolyon->centerPoint.DrawCyclePoint(painter,pen);
+    curPolyon->centerPoint.DrawWarnPoint(painter,pen);
 }
 
 void PolygonController::clearState()
 {
-    this->curPolyon = NULL;
-    this->painter = NULL;
+    this->curPolyon = nullptr;
+    this->painter = nullptr;
     this->setPolygon = POLYGON_NULL;
 }
 
@@ -236,12 +236,24 @@ void PolygonController::getStartAndEnd(QPoint &start, QPoint &end)
 
 void PolygonController::setBigger(QPainter *painter, QMouseEvent *e, QPen pen)
 {
-
+    for(int i=0;i<this->curPolyon->vertex.size();i++){
+        this->curPolyon->vertex[i].mulX(ZOOM_IN);
+        this->curPolyon->vertex[i].mulY(ZOOM_IN);
+    }
+    curPolyon->getRectangle();
+    drawPolygon(painter);
+    drawHandle(painter,pen);
 }
 
 void PolygonController::setSmaller(QPainter *painter, QMouseEvent *e, QPen pen)
 {
-
+    for(int i=0;i<this->curPolyon->vertex.size();i++){
+        this->curPolyon->vertex[i].mulX(ZOOM_OUT);
+        this->curPolyon->vertex[i].mulY(ZOOM_OUT);
+    }
+    curPolyon->getRectangle();
+    drawPolygon(painter);
+    drawHandle(painter,pen);
 }
 
 void PolygonController::setNextPoints(Point point)

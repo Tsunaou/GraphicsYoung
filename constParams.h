@@ -12,7 +12,7 @@ enum SETPOLYGON{POLYGON_START,POLYGON_NEXT,POLYGON_CHANGE,POLYGON_NULL,POLYGON_M
 
 const int BRUSH_WIDTH = 10;
 const int PEN_WIDTH = 1;
-const double ZOOM_IN = 2;
+const double ZOOM_IN = 1.25;
 const double ZOOM_OUT = 1/ZOOM_IN;
 const double JUDGE_RIDUS = 5;
 

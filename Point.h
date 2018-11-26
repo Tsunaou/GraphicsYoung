@@ -34,6 +34,14 @@ public:
         this->y+=i;
         this->point.setY(y);
     }
+    void mulX(double i){
+        this->x*=i;
+        this->point.setX(x);
+    }
+    void mulY(double i){
+        this->y*=i;
+        this->point.setY(y);
+    }
     QPoint& getQPoint(){
         return point;
     }
