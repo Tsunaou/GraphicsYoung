@@ -38,6 +38,12 @@ void Cycle::setEndPoint(Point p)
 
 double Cycle::getRadius()
 {
+    if(fabs(this->Ridius)<1e-6){
+        this->Ridius = startPoint.distanceToPoint(endPoint.getQPoint());
+        return this->Ridius;
+    }
+    qDebug()<<"before set Ridus is"<<this->Ridius<<endl;
     this->Ridius = (this->Ridius+startPoint.distanceToPoint(endPoint.getQPoint()))/2;
+    qDebug()<<"after set Ridus is"<<this->Ridius<<endl;
     return this->Ridius;
 }

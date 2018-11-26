@@ -40,6 +40,26 @@ void LineController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
     drawHandle(painter,pen);
 }
 
+Point LineController::getTheAccurayRotatePoint(qreal ridus, int x, int y)
+{
+    int resX = x-ROTATE_ACCURACY;
+    int resY = y-ROTATE_ACCURACY;
+    double minDiff =100;
+    for(int i=x-ROTATE_ACCURACY;i<=x+ROTATE_ACCURACY;i++){
+        for(int j=y-ROTATE_ACCURACY;j<=y+ROTATE_ACCURACY;j++){
+            Point tmp(i,j);
+            double diffTmp = fabs((2*this->curLine->endPoint.distanceToPoint(tmp.getQPoint()))-ridus);
+            if(diffTmp<minDiff){
+                resX=i;
+                resY=j;
+                minDiff = diffTmp;
+            }
+
+        }
+    }
+    return Point(resX,resY);
+}
+
 bool LineController::isOperationing(QMouseEvent *e,QPoint &start,QPoint &end)
 {
     if(curLine->startPoint.distanceToPoint(e->pos())<=5)
@@ -270,6 +290,13 @@ void LineController::rotateToPoint(Point point)
     int ry0 = curLine->centerPoint.getY();
     int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 ;
     int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 ;
+
+//    qreal l = this->curLine->getLength();
+
+//    Point accurayP = this->getTheAccurayRotatePoint(l,rotateStartX,rotateStartY);
+//    rotateStartX = accurayP.getX();
+//    rotateStartY = accurayP.getY();
+
     curLine->setStartPoint(Point(rotateStartX,rotateStartY));
     curLine->setEndPoint(Point(2*rx0-rotateStartX,2*ry0-rotateStartY));
     qDebug() << "StartPoint(" <<curLine->startPoint.point.x()<<","<<curLine->startPoint.point.y()<<")"<<endl;
