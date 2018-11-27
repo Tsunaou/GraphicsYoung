@@ -24,6 +24,7 @@
 #include <QPoint>
 #include <QPainter>
 #include <QPalette>
+#include <QStack>
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -48,7 +49,7 @@ public:
     void setMode(FIGURE_TYPE type); //设置图形
     void setBigger();   //放大图形
     void setSmaller();  //缩小图形
-    void fillColor(int x,int y,QColor color,QColor backColor);   //填充算法
+    void fillColor(QImage* img, QColor backcolor,QPainter *painter,int cx,int cy);   //填充算法
     QPixmap *getPixCopy();              //得到当前画布的拷贝
     QPixmap *getPixCopy(QPixmap* pic);  //得到指定pic的拷贝
     //一些辅助调试的函数
@@ -92,6 +93,8 @@ private:
 
     FIGURE_TYPE figureMode;     //当前画图系统模式
     DRAW_STATE drawState;       //当前画图状态
+
+    bool** processed;
 
 
 };

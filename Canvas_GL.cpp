@@ -9,7 +9,8 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     pix->fill(Qt::white);               //填充背景色为白色
     setMaximumSize(1366,768);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
     setMinimumSize(1366,768);            //设置绘制区窗体的最小尺寸
-
+//    setMaximumSize(1980,768);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
+//    setMinimumSize(1366,768);            //设置绘制区窗体的最小尺寸
     //painter = new QPainter;
     style = static_cast<int>(Qt::SolidLine);//设置QPainter的属性
     weight = PEN_WIDTH;                     //画笔宽度
@@ -38,6 +39,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
 
     //鼠标跟踪
     //setMouseTracking(true);
+    this->processed = nullptr;
 
 }
 
@@ -76,6 +78,20 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
         update();
         return;
     }
+
+    //填充
+    if(e->button()==Qt::RightButton){
+        QImage img = pix->toImage();
+        QColor pcolor = img.pixelColor(e->pos().x(),e->pos().y());   //得到Press点的信息
+        qDebug()<< pcolor <<endl;
+        //
+        qDebug()<<"命中"<<endl;
+
+        fillColor(&img, pcolor,painter,e->pos().x(),e->pos().y());
+        painter->end();
+        update();
+    }
+    //
     painter->end();
     delete painter;
     //Refactor End---------------------------------------------------------------------------------------------------------------------------------------
@@ -320,6 +336,60 @@ void Canvas_GL::setSmaller()
     }
 }
 
+void Canvas_GL::fillColor(QImage *img, QColor backcolor, QPainter *painter, int cx, int cy)
+{
+    QStack<QPoint> *stack = new QStack<QPoint>;
+
+    int maxWidth = pix->width()-1;
+    int maxHeight = pix->height()-1;
+
+    bool **flag = new bool*[maxWidth];
+    for(int i=0;i<maxWidth;i++){
+        flag[i] = new bool[maxHeight];
+    }
+    for(int i=0;i<maxWidth;i++){
+        for(int j=0;j<maxHeight;j++){
+            flag[i][j] = false;
+        }
+    }
+    this->processed = flag;
+
+
+    stack->clear();
+    stack->push(QPoint(cx,cy));    //要填充的press的那个点
+    while(!stack->empty()){
+        //qDebug()<<"stack size is"<<stack.size()<<endl;
+        QPoint p = stack->pop();
+        int x = p.x();
+        int y = p.y();
+
+        if(x<=0 || x>=pix->width()-2) continue;     //超限
+        if(y<=0 || y>=pix->height()-2) continue;    //超限
+        if(img->pixelColor(x,y) != backcolor) continue;   //边界
+        if(processed[x][y] == true) continue;      //上色过了
+        //qDebug()<<"print a"<<x<<","<<y<<")"<<endl;
+        processed[x][y] = true;
+        painter->drawPoint(x,y);
+        if(!processed[x][y+1]){
+            stack->push(QPoint(x,y+1));
+            //qDebug()<<"y+1"<<endl;
+        }
+        if(!processed[x][y-1]){
+            stack->push(QPoint(x,y-1));
+            //qDebug()<<"y-1"<<endl;
+        }
+        if(!processed[x-1][y]){
+            stack->push(QPoint(x-1,y));
+            //qDebug()<<"x-1"<<endl;
+        }
+        if(!processed[x+1][y]){
+            stack->push(QPoint(x+1,y));
+            //qDebug()<<"x+1"<<endl;
+        }
+    }
+    stack->clear();
+}
+
 QPixmap *Canvas_GL::getPixCopy()
 {
     QPixmap *newPix = new QPixmap(size());	//创建一个新的QPixmap对象
@@ -380,35 +450,9 @@ void Canvas_GL::drawBeforeNewState()
     reVec.push_back(tmp);
     update();
     pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
-    //填充测试
-    if(this->figureMode == CYCLE){
-        QImage img = pix->toImage();
-        int x = startPos.x();
-        int y = startPos.y();
-        QColor toInCoor = img.pixel(x,y);
-        fillColor(x,y,color,toInCoor);
-    }
-    //
 }
 
-void Canvas_GL::fillColor(int x, int y, QColor color, QColor backColor)
-{
-    printDebugMessage("fillColor");
-    QPainter *painter = new QPainter();
-    painter->begin(pix);
-    backColor =Qt::red;
-    pen.setColor(backColor);
-    painter->setPen(pen);
-    for(int i=x-20;i<x+20;i++){
-        for(int j=y-20;j<y+20;j++){
-            painter->drawPoint(x,y);
-        }
-    }
-    pen.setColor(color);
-    painter->end();
-    delete painter;
-    update();
-}
+
 
 bool Canvas_GL::isDrawingFigure()
 {
@@ -446,6 +490,7 @@ void Canvas_GL::setColor(QColor c)
 {
     //drawBeforeNewState();
     setMode(this->figureMode);
+    this->drawBeforeNewState();
     color = c;
     pen.setColor(color);
 }
