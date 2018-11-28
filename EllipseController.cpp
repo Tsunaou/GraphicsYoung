@@ -47,24 +47,27 @@ void EllipseController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 
 bool EllipseController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {
-    if(curEllipse->startPoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"ELLIPSE_CENTER"<<endl;
-        setEllipse = ELLIPSE_CENTER;
-        return true;
+    if(e->button()==Qt::LeftButton){
+        if(curEllipse->startPoint.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"ELLIPSE_CENTER"<<endl;
+            setEllipse = ELLIPSE_CENTER;
+            return true;
+        }
+        else if(curEllipse->RightDown.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"ELLIPSE_OUT"<<endl;
+            setEllipse = ELLIPSE_OUT;
+            return true;
+        }
+        else if(curEllipse->rotatePoint.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"ELLIPSE_HANDLE"<<endl;
+            setEllipse = ELLIPSE_HANDLE;
+            return true;
+        }
     }
-    else if(curEllipse->RightDown.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"ELLIPSE_OUT"<<endl;
-        setEllipse = ELLIPSE_OUT;
-        return true;
-    }
-    else if(curEllipse->rotatePoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"ELLIPSE_HANDLE"<<endl;
-        setEllipse = ELLIPSE_HANDLE;
-        return true;
-    }
+
     setEllipse = ELLIPSE_NULL;
     *state = UNDO;
     start = curEllipse->startPoint.getQPoint(); //将圆信息存储下来
@@ -84,9 +87,9 @@ void EllipseController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
     }else{
         qDebug()<<"cycle==NULL"<<endl;
     }
-    if(e->button()==Qt::LeftButton)
+    if(e->button()==Qt::LeftButton || e->button()== Qt::RightButton)
     {
-        if(curEllipse!=NULL)
+        if(e->button()==Qt::LeftButton && curEllipse!=NULL)
         {
             if(curEllipse->startPoint.distanceToPoint(e->pos())<=5)
             {

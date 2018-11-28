@@ -56,12 +56,13 @@ void PolygonController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen 
     }else{
         qDebug()<<"curPolyon==NULL"<<endl;
     }
-    if(e->button()==Qt::LeftButton)
+    if(e->button()==Qt::LeftButton || e->button()== Qt::RightButton)
     {
         if(curPolyon!=nullptr)
         {
             bool returnFlag = false; //暂时没有什么用
-            if(curPolyon->colseFlag==false && curPolyon->startPoint.distanceToPoint(e->pos())<=25)
+            if((curPolyon->colseFlag==false && curPolyon->startPoint.distanceToPoint(e->pos())<=25)
+                    || e->button() == Qt::RightButton)
             {
                 qDebug()<<"POLYGON_START The Edges Limits"<<endl;
                 setPolygon = POLYGON_START;
@@ -262,6 +263,7 @@ void PolygonController::clearState()
     this->painter = nullptr;
     this->setPolygon = POLYGON_NULL;
     this->firstEdgeFlag = false;
+    //*this->state = UNDO;
 }
 
 void PolygonController::getStartAndEnd(QPoint &start, QPoint &end)

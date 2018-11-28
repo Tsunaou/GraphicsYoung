@@ -62,28 +62,31 @@ Point LineController::getTheAccurayRotatePoint(qreal ridus, int x, int y)
 
 bool LineController::isOperationing(QMouseEvent *e,QPoint &start,QPoint &end)
 {
-    if(curLine->startPoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"SETBEGIN"<<endl;
-        setLP = SETBEGIN;
-        return true;
+    if(e->button()==Qt::LeftButton){
+        if(curLine->startPoint.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"SETBEGIN"<<endl;
+            setLP = SETBEGIN;
+            return true;
+        }
+        else if(curLine->endPoint.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"SETEND"<<endl;
+            setLP = SETEND;
+            return true;
+        }
+        else if(curLine->centerPoint.distanceToPoint(e->pos())<=5)
+        {
+            setLP = SETCENTER;
+            return true;
+        }
+        else if(curLine->rotatePoint.distanceToPoint(e->pos())<=5)
+        {
+            setLP = SETHANDLE;
+            return true;
+        }
     }
-    else if(curLine->endPoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"SETEND"<<endl;
-        setLP = SETEND;
-        return true;
-    }
-    else if(curLine->centerPoint.distanceToPoint(e->pos())<=5)
-    {
-        setLP = SETCENTER;
-        return true;
-    }
-    else if(curLine->rotatePoint.distanceToPoint(e->pos())<=5)
-    {
-        setLP = SETHANDLE;
-        return true;
-    }
+
     setLP=SETNULL;
     *state = UNDO;
     start = curLine->startPoint.getQPoint(); //将直线信息存储下来
@@ -100,9 +103,9 @@ void LineController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pen
     }else{
         qDebug()<<"curLine==NULL"<<endl;
     }
-    if(e->button()==Qt::LeftButton)
+    if(e->button()==Qt::LeftButton || e->button()== Qt::RightButton)
     {
-        if(curLine!=NULL)
+        if(e->button()==Qt::LeftButton && curLine!=NULL)
         {
             if(curLine->startPoint.distanceToPoint(e->pos())<=5)
             {

@@ -117,13 +117,7 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     printDebugMessage("mouseMoveEvent 2");
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
     if(isDrawingFigure()){
-//        if(figureController[figureMode]->isOperationing(e,startPos,endPos)){
-//            setCursor(Qt::PointingHandCursor);//设置鼠标样式
-//        }
-//        setCursor(Qt::ArrowCursor);//设置鼠标样式
         printDebugMessage("mouseMoveEvent 3");
-
-        //lineController.mouseMoveEvent(painter,e,pen);
         figureController[figureMode]->mouseMoveEvent(painter,e,pen);
         painter->end();
         delete painter;
@@ -133,11 +127,6 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
 
     //不是LINE,CYCLE,ELLIPSE才会执行下列语句
-//    Point pStart(startPos.x(),startPos.y());
-//    Point pEnd(endPos.x(),endPos.y());
-//    pStart.DrawCyclePoint(painter,pen);
-//    pEnd.DrawCyclePoint(painter,pen);
-
     //Pen的话能到这里
     printDebugMessage("Pen here move");
     lineController.MyDrawLineDDA(painter,startPos,endPos);
@@ -372,19 +361,15 @@ void Canvas_GL::fillColor(QImage *img, QColor backcolor, QPainter *painter, int 
         painter->drawPoint(x,y);
         if(!processed[x][y+1]){
             stack->push(QPoint(x,y+1));
-            //qDebug()<<"y+1"<<endl;
         }
         if(!processed[x][y-1]){
             stack->push(QPoint(x,y-1));
-            //qDebug()<<"y-1"<<endl;
         }
         if(!processed[x-1][y]){
             stack->push(QPoint(x-1,y));
-            //qDebug()<<"x-1"<<endl;
         }
         if(!processed[x+1][y]){
             stack->push(QPoint(x+1,y));
-            //qDebug()<<"x+1"<<endl;
         }
     }
     stack->clear();

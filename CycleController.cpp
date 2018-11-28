@@ -44,24 +44,27 @@ void CycleController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 
 bool CycleController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
 {
-    if(cycle->startPoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"CYCLE_CENTER"<<endl;
-        setCycle = CYCLE_CENTER;
-        return true;
+    if(e->button()==Qt::LeftButton){
+        if(cycle->startPoint.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"CYCLE_CENTER"<<endl;
+            setCycle = CYCLE_CENTER;
+            return true;
+        }
+        else if(cycle->endPoint.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"CYCLE_OUT"<<endl;
+            setCycle = CYCLE_OUT;
+            return true;
+        }
+        else if(cycle->rotatePoint.distanceToPoint(e->pos())<=5)
+        {
+            qDebug()<<"CYCLE_OUT"<<endl;
+            setCycle = CYCLE_HANDLE;
+            return true;
+        }
     }
-    else if(cycle->endPoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"CYCLE_OUT"<<endl;
-        setCycle = CYCLE_OUT;
-        return true;
-    }
-    else if(cycle->rotatePoint.distanceToPoint(e->pos())<=5)
-    {
-        qDebug()<<"CYCLE_OUT"<<endl;
-        setCycle = CYCLE_HANDLE;
-        return true;
-    }
+
     setCycle=CYCLE_NULL;
     *state = UNDO;
     start = cycle->startPoint.getQPoint(); //将圆信息存储下来
@@ -80,9 +83,9 @@ void CycleController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pe
     }else{
         qDebug()<<"cycle==NULL"<<endl;
     }
-    if(e->button()==Qt::LeftButton)
+    if(e->button()==Qt::LeftButton || e->button()== Qt::RightButton)
     {
-        if(cycle!=NULL)
+        if(e->button()==Qt::LeftButton && cycle!=NULL)
         {
             if(cycle->startPoint.distanceToPoint(e->pos())<=5)
             {
