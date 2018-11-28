@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     initMdiArea();
     initColorSelection();
 
+    ui->actionPen->setChecked(true);
+
 
 }
 
@@ -77,6 +79,13 @@ void MainWindow::clearCheckedState()
     ui->actionEllipse->setChecked(false);
     ui->actionPolygon->setChecked(false);
     ui->actionFiller->setChecked(false);
+}
+
+void MainWindow::setCutState(CUTTER mode)
+{
+    for(int i=0;i<canvases.size();i++){
+        canvases[i]->setCutMode(mode);
+    }
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -205,7 +214,9 @@ void MainWindow::on_actionCutter_toggled(bool arg1)
     qDebug()<<"toggle"<<endl;
     if(arg1){
         qDebug()<<"State on"<<endl;
+        this->setCutState(CUTTING);
     }else{
         qDebug()<<"State close"<<endl;
+        this->setCutState(UNCUT);
     }
 }

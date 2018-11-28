@@ -40,6 +40,68 @@ void LineController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
     drawHandle(painter,pen);
 }
 
+int clipTest(float p,float q,float *u1,float *u2)
+{
+    int flag = 1;
+    float r;
+    if(p<0.0){
+        r = q/p;
+        if(r>*u2)
+            flag=0;
+        else if(r>*u1)
+            *u1=r;
+    }
+    else if(p>0.0){
+        r = q/p;
+        if(r<*u1)
+            flag = 0;
+        else if(r<*u2)
+            *u2=r;
+    }else if(q<0.0){
+        flag = 0;
+    }
+    return flag;
+
+}
+
+void LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter *painter, QPen pen)
+{
+    qDebug()<<"直线裁剪！！"<<endl;
+    //在这里进行判断
+    int xwmin = cutStart.x();
+    int ywmin = cutStart.y();
+    int xwmax = cutEnd.x();
+    int ywmax = cutEnd.y();
+    int x1 = curLine->startPoint.getX();
+    int y1 = curLine->startPoint.getY();
+    int x2 = curLine->endPoint.getX();
+    int y2 = curLine->endPoint.getY();
+    //在这里进行判断
+    float u1=0.0,u2=1.0,dx=x2-x1,dy;
+    if(clipTest(-dx,x1-xwmin,&u1,&u2))
+     if(clipTest(dx,xwmax-x1,&u1,&u2))
+     { dy=y2-y1;
+      if(clipTest(-dy,y1-ywmin,&u1,&u2))
+       if(clipTest(dy,ywmax-y1,&u1,&u2))
+        {
+        if(u2<1.0)
+        {
+         x2=x1+u2*dx; /*通过u2求得裁剪后的p2端点*/
+         y2=y1+u2*dy;
+        }
+        if(u1>0.0)
+        {
+         x1=x1+u1*dx; /*通过u1求得裁剪后的p1端点*/
+         y1=y1+u1*dy;
+        }
+        curLine->setStartPoint(Point(x1,y1));
+        curLine->setEndPoint(Point(x2,y2));
+        MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+        drawHandle(painter,pen);       }
+     }
+
+}
+
 Point LineController::getTheAccurayRotatePoint(qreal ridus, int x, int y)
 {
     int resX = x-ROTATE_ACCURACY;
@@ -315,6 +377,15 @@ void LineController::setState(DRAW_STATE *state)
 
 void LineController::drawHandle(QPainter *painter, QPen pen)
 {
+    curLine->startPoint.DrawCyclePoint(painter,pen);
+    curLine->endPoint.DrawCyclePoint(painter,pen);
+    curLine->centerPoint.DrawWarnPoint(painter,pen);
+    curLine->rotatePoint.DrawCyclePoint(painter,pen);
+}
+
+void LineController::drawWhileCutting(QPainter *painter, QPen pen)
+{
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
     curLine->startPoint.DrawCyclePoint(painter,pen);
     curLine->endPoint.DrawCyclePoint(painter,pen);
     curLine->centerPoint.DrawWarnPoint(painter,pen);

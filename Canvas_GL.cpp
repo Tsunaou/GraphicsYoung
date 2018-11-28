@@ -26,6 +26,7 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     //状态设置
     this->figureMode = PEN; //笔比较OK感觉
     this->drawState = UNDO;
+    this->cutMode = UNCUT;
     this->lineController.setState(&this->drawState);
     this->cycleController.setState(&this->drawState);
     this->ellipseController.setState(&this->drawState);
@@ -47,6 +48,12 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
 {
     qDebug()<<"mousePressEvent"<<endl;
     showDrawingStates();
+    //裁剪2018/11/29
+    if(this->cutMode == CUTTING){
+        this->cutStart = e->pos();
+        return;
+    }
+
     if(this->drawState == UNDO){ //上次绘画状态结束，pixToMove更新到最新状态,双缓冲结束（此时可以认为是首次Press）
         pixToMove = getPixCopy();
     }
@@ -125,10 +132,28 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
     painter->begin(pix);
     painter->setPen(pen);
     printDebugMessage("mouseMoveEvent 2");
+
+
 //Refactor---------------------------------------------------------------------------------------------------------------------------------------
     if(isDrawingFigure()){
         printDebugMessage("mouseMoveEvent 3");
-        figureController[figureMode]->mouseMoveEvent(painter,e,pen);
+        //裁剪
+        if(this->cutMode == CUTTING){
+            this->cutEnd = e->pos();
+            QPen debugPen;
+            debugPen.setWidth(1);
+            debugPen.setColor(Qt::blue);
+            debugPen.setStyle(Qt::DashLine);
+            painter->setPen(debugPen);
+            painter->drawRect(cutStart.x(),cutStart.y(),cutEnd.x()-cutStart.x(),cutEnd.y()-cutStart.y());
+            painter->setPen(pen);
+            if(this->figureMode == LINE){
+                this->lineController.drawWhileCutting(painter,pen);
+            }
+        }else{
+            figureController[figureMode]->mouseMoveEvent(painter,e,pen);
+        }
+        //
         painter->end();
         delete painter;
         update();
@@ -166,7 +191,21 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 
     //Refactor--------------------------------------------------------------------------------------------------------------------------------------
     if(isDrawingFigure()){
-        figureController[figureMode]->mouseReleaseEvent(painter,e,pen);
+        if(this->cutMode == CUTTING){
+            this->cutEnd = e->pos();
+            QPen debugPen;
+            debugPen.setWidth(1);
+            debugPen.setColor(Qt::blue);
+            debugPen.setStyle(Qt::DashLine);
+            painter->setPen(debugPen);
+            painter->drawRect(cutStart.x(),cutStart.y(),cutEnd.x()-cutStart.x(),cutEnd.y()-cutStart.y());
+            painter->setPen(pen);
+            if(this->figureMode == LINE){
+                this->lineController.drawWhileCutting(painter,pen);
+            }
+        }else{
+            figureController[figureMode]->mouseReleaseEvent(painter,e,pen);
+        }
         painter->end();
         delete painter;
         update();
@@ -297,6 +336,24 @@ void Canvas_GL::setMode(FIGURE_TYPE type)
     }else{
         pen.setWidth(this->weight);
     }
+}
+
+void Canvas_GL::setCutMode(CUTTER mode)
+{
+    if(this->cutMode==CUTTING && mode == UNCUT){ //进行裁剪事件
+        if(this->figureMode == LINE){
+            *pix = *pixToMove;
+            QPainter *painter = new QPainter();
+            painter->begin(pix);
+            painter->setPen(pen);
+            lineController.cutLineLiangBsrsky(this->cutStart,this->cutEnd,painter,pen);
+            painter->end();
+            delete painter;
+            update();
+
+        }
+    }
+    this->cutMode = mode;
 }
 
 void Canvas_GL::setBigger()

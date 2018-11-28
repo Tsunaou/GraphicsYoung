@@ -25,7 +25,7 @@ ColorPanel::ColorPanel(QWidget* parent):QWidget(parent)
     Btn9->resize(10,10);
 
 
-    Btn1->setStyleSheet("QPushButton{background:black}");
+    Btn1->setStyleSheet("QPushButton{background:black;}");
     Btn2->setStyleSheet("QPushButton{background:white}");
     Btn3->setStyleSheet("QPushButton{background:red}");
     Btn4->setStyleSheet("QPushButton{background:blue}");

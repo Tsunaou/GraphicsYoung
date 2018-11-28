@@ -19,12 +19,14 @@ public:
     void rotateToPoint(Point point);
     void setState(DRAW_STATE *state);
     void drawHandle(QPainter* painter, QPen pen);
+    void drawWhileCutting(QPainter* painter, QPen pen);
     void clearState();
     void getStartAndEnd(QPoint &start,QPoint &end);
     void setBigger(QPainter* painter, QMouseEvent *e, QPen pen);   //放大
     void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen);  //缩小
+    void cutLineLiangBsrsky(QPoint cutStart,QPoint cutEnd,QPainter* painter, QPen pen); //梁友栋裁剪直线算法
     Point getTheAccurayRotatePoint(qreal ridus,int x,int y);//得到旋转后误差最小的点
-
+    //
 private:
     SETLINE setLP; //更改直线的起点/终点/中点/旋转点/不作操作
     Line *curLine; //当前聚焦的直线

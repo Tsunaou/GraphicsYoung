@@ -31,6 +31,7 @@ public:
     void initColorSelection();  //初始化toolbar上的颜色选择框
     void setFigureMode(FIGURE_TYPE type);   //设置你要绘画的图形
     void clearCheckedState();   //清空选择状态
+    void setCutState(CUTTER mode);  //设置裁剪状态
 
 private slots:
     void on_actionNew_triggered();      //新建
@@ -54,7 +55,7 @@ private slots:
     void on_actionPolygon_triggered();  //多边形
     void on_actionFiller_triggered();   //填充
 
-    void on_actionCutter_toggled(bool arg1);
+    void on_actionCutter_toggled(bool arg1);    //裁剪
 
 private:
     Ui::MainWindow *ui;

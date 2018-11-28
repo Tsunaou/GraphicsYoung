@@ -47,6 +47,7 @@ public:
     void recallImage();//撤销上一步操作
     void clearStates();//清空控制器状态
     void setMode(FIGURE_TYPE type); //设置图形
+    void setCutMode(CUTTER mode);   //设置裁剪状态
     void setBigger();   //放大图形
     void setSmaller();  //缩小图形
     void fillColor(QImage* img, QColor backcolor,QPainter *painter,int cx,int cy);   //填充算法
@@ -78,6 +79,10 @@ private:
     QPoint startPos;    //捕捉画图的起始点
     QPoint endPos;      //捕捉画图的终止点
     QPoint regPos;      //缓冲点
+    //裁剪用
+    QPoint cutStart;
+    QPoint cutEnd;
+    //------
     int style;          //画笔样式
     int weight;         //画笔粗细
     QColor color;       //画笔颜色
@@ -93,6 +98,7 @@ private:
 
     FIGURE_TYPE figureMode;     //当前画图系统模式
     DRAW_STATE drawState;       //当前画图状态
+    CUTTER cutMode;             //当前裁剪状态
 
     bool** processed;
 
