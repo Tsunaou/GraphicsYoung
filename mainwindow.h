@@ -32,24 +32,26 @@ public:
     void setFigureMode(FIGURE_TYPE type);   //设置你要绘画的图形
 
 private slots:
-    void on_actionNew_triggered();
-    void on_actionSave_triggered();
-    void on_actionClear_triggered();
-    void ShowColor();
+    void on_actionNew_triggered();      //新建
+    void on_actionSave_triggered();     //保存
+    void on_actionOpen_triggered();     //打开文件
+    void on_actionClear_triggered();    //清屏
+    void on_actionRecall_triggered();   //撤销
 
-    void on_actionRecall_triggered();
+    void ShowColor();                   //展示颜色选择按钮颜色
 
-    void on_actionLine_triggered();
-    void on_actionCycle_triggered();
-    void on_actionCurve_triggered();
-    void on_actionEllipse_triggered();
-    void on_actionPen_triggered();
-    void on_actionBrush_triggered();
-    void on_actionBigger_triggered();
-    void on_actionSmaller_triggered();
-    void on_actionPolygon_triggered();
+    void on_actionLine_triggered();     //直线
+    void on_actionCycle_triggered();    //圆
+    void on_actionCurve_triggered();    //曲线
+    void on_actionEllipse_triggered();  //椭圆
 
-    void on_actionFiller_triggered();
+    void on_actionPen_triggered();      //画笔
+    void on_actionBrush_triggered();    //笔刷
+
+    void on_actionBigger_triggered();   //放大
+    void on_actionSmaller_triggered();  //缩小
+    void on_actionPolygon_triggered();  //多边形
+    void on_actionFiller_triggered();   //填充
 
 private:
     Ui::MainWindow *ui;

@@ -160,3 +160,8 @@ void MainWindow::on_actionFiller_triggered()
 {
     this->setFigureMode(FILLER);
 }
+
+void MainWindow::on_actionOpen_triggered()
+{
+
+}

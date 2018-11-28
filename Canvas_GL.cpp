@@ -89,7 +89,13 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
 
         fillColor(&img, pcolor,painter,e->pos().x(),e->pos().y());
         painter->end();
+        //update();
+
+        QPixmap* tmp = this->getPixCopy();
+        reVec.push_back(tmp);
         update();
+        pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
+
     }
     //
     painter->end();
