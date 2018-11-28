@@ -68,6 +68,7 @@
    <addaction name="separator"/>
    <addaction name="actionBigger"/>
    <addaction name="actionSmaller"/>
+   <addaction name="actionFiller"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -302,6 +303,18 @@
    </property>
    <property name="toolTip">
     <string>多边形</string>
+   </property>
+  </action>
+  <action name="actionFiller">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/fill.png</normaloff>:/icon/icon/fill.png</iconset>
+   </property>
+   <property name="text">
+    <string>Filler</string>
+   </property>
+   <property name="toolTip">
+    <string>填充</string>
    </property>
   </action>
  </widget>

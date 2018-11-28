@@ -155,3 +155,8 @@ void MainWindow::on_actionPolygon_triggered()
 {
     this->setFigureMode(POLYGON);
 }
+
+void MainWindow::on_actionFiller_triggered()
+{
+    this->setFigureMode(FILLER);
+}

@@ -80,7 +80,7 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     }
 
     //填充
-    if(e->button()==Qt::RightButton){
+    if(e->button()==Qt::RightButton || this->figureMode == FILLER){
         QImage img = pix->toImage();
         QColor pcolor = img.pixelColor(e->pos().x(),e->pos().y());   //得到Press点的信息
         qDebug()<< pcolor <<endl;
@@ -106,6 +106,10 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 {
     qDebug()<<"mouseMoveEvent"<<endl;
     QPoint endPos = e->pos();
+
+    if(this->figureMode == FILLER){
+        return;
+    }
 
     if(this->figureMode!=PEN && this->figureMode !=BRUSH){
         *pix = *pixToMove; //实现图形随着鼠标动态加载,双缓冲
@@ -140,6 +144,10 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 {
     qDebug()<<"mouseReleaseEvent"<<endl;
     setCursor(Qt::ArrowCursor);//设置鼠标样式
+
+    if(this->figureMode == FILLER){
+        return;
+    }
 
     if(this->figureMode!=PEN && this->figureMode !=BRUSH){
         *pix = *pixToMove;
@@ -264,7 +272,7 @@ void Canvas_GL::clearStates()
 
 void Canvas_GL::setMode(FIGURE_TYPE type)
 {
-    if(figureMode == FIGURE || figureMode == PEN || figureMode == BRUSH){//初始化
+    if(figureMode == FIGURE || figureMode == PEN || figureMode == BRUSH || figureMode == FILLER){//初始化
         this->figureMode = type;
         clearStates();
     }
@@ -410,7 +418,7 @@ void Canvas_GL::showDrawingStates()
 
 void Canvas_GL::drawBeforeNewState()
 {
-    if(this->figureMode == PEN || this->figureMode == BRUSH){
+    if(this->figureMode == PEN || this->figureMode == BRUSH || this->figureMode == FILLER){
         return;
     }
     *pix = *pixToMove;

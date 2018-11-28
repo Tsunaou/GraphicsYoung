@@ -49,6 +49,8 @@ private slots:
     void on_actionSmaller_triggered();
     void on_actionPolygon_triggered();
 
+    void on_actionFiller_triggered();
+
 private:
     Ui::MainWindow *ui;
     QToolButton *colorBtn;      //颜色选择按钮
