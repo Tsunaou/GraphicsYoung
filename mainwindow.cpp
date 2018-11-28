@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     figureMode = LINE;
     initMdiArea();
     initColorSelection();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -56,10 +58,25 @@ void MainWindow::initColorSelection()
 
 void MainWindow::setFigureMode(FIGURE_TYPE type)
 {
+    if(type==PEN){
+        this->ui->actionPen->setChecked(true);
+    }
     this->figureMode = type;
     for(int i=0;i<canvases.size();i++){
         canvases[i]->setMode(type);
     }
+}
+
+void MainWindow::clearCheckedState()
+{
+    ui->actionPen->setChecked(false);
+    ui->actionBrush->setChecked(false);
+    ui->actionLine->setChecked(false);
+    ui->actionCurve->setChecked(false);
+    ui->actionCycle->setChecked(false);
+    ui->actionEllipse->setChecked(false);
+    ui->actionPolygon->setChecked(false);
+    ui->actionFiller->setChecked(false);
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -111,32 +128,45 @@ void MainWindow::on_actionRecall_triggered()
 
 void MainWindow::on_actionLine_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(LINE);
+    ui->actionLine->setChecked(true);
 }
 
 void MainWindow::on_actionCycle_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(CYCLE);
+    ui->actionCycle->setChecked(true);
 }
 
 void MainWindow::on_actionCurve_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(LINE); //TODO
+    ui->actionCurve->setChecked(true);
+
 }
 
 void MainWindow::on_actionEllipse_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(ELLIPSE);
+    ui->actionEllipse->setChecked(true);
 }
 
 void MainWindow::on_actionPen_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(PEN);
+    ui->actionPen->setChecked(true);
 }
 
 void MainWindow::on_actionBrush_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(BRUSH);
+    ui->actionBrush->setChecked(true);
 }
 
 void MainWindow::on_actionBigger_triggered()
@@ -153,15 +183,29 @@ void MainWindow::on_actionSmaller_triggered()
 
 void MainWindow::on_actionPolygon_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(POLYGON);
+    ui->actionPolygon->setChecked(true);
 }
 
 void MainWindow::on_actionFiller_triggered()
 {
+    clearCheckedState();
     this->setFigureMode(FILLER);
+    ui->actionFiller->setChecked(true);
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
+    qDebug()<<"Open"<<endl;
+}
 
+void MainWindow::on_actionCutter_toggled(bool arg1)
+{
+    qDebug()<<"toggle"<<endl;
+    if(arg1){
+        qDebug()<<"State on"<<endl;
+    }else{
+        qDebug()<<"State close"<<endl;
+    }
 }

@@ -66,6 +66,7 @@
    <addaction name="actionEllipse"/>
    <addaction name="actionPolygon"/>
    <addaction name="separator"/>
+   <addaction name="actionCutter"/>
    <addaction name="actionBigger"/>
    <addaction name="actionSmaller"/>
    <addaction name="actionFiller"/>
@@ -132,6 +133,9 @@
    </property>
   </action>
   <action name="actionLine">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/line.png</normaloff>:/icon/icon/line.png</iconset>
@@ -147,6 +151,9 @@
    </property>
   </action>
   <action name="actionCycle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/cycle.png</normaloff>:/icon/icon/cycle.png</iconset>
@@ -162,6 +169,9 @@
    </property>
   </action>
   <action name="actionCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/Curve.png</normaloff>:/icon/icon/Curve.png</iconset>
@@ -177,6 +187,9 @@
    </property>
   </action>
   <action name="actionEllipse">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/ellipse.png</normaloff>:/icon/icon/ellipse.png</iconset>
@@ -234,6 +247,9 @@
    </property>
   </action>
   <action name="actionPen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/pen.png</normaloff>:/icon/icon/pen.png</iconset>
@@ -249,6 +265,9 @@
    </property>
   </action>
   <action name="actionBrush">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/brush.png</normaloff>:/icon/icon/brush.png</iconset>
@@ -294,6 +313,9 @@
    </property>
   </action>
   <action name="actionPolygon">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/polygon.png</normaloff>:/icon/icon/polygon.png</iconset>
@@ -306,6 +328,9 @@
    </property>
   </action>
   <action name="actionFiller">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="image.qrc">
      <normaloff>:/icon/icon/fill.png</normaloff>:/icon/icon/fill.png</iconset>
@@ -315,6 +340,21 @@
    </property>
    <property name="toolTip">
     <string>填充</string>
+   </property>
+  </action>
+  <action name="actionCutter">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/cutter.png</normaloff>:/icon/icon/cutter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cutter</string>
+   </property>
+   <property name="toolTip">
+    <string>裁剪</string>
    </property>
   </action>
  </widget>
