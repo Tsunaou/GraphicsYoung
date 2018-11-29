@@ -346,7 +346,23 @@ void Canvas_GL::setCutMode(CUTTER mode)
             QPainter *painter = new QPainter();
             painter->begin(pix);
             painter->setPen(pen);
-            lineController.cutLineLiangBsrsky(this->cutStart,this->cutEnd,painter,pen);
+            if(lineController.cutLineLiangBsrsky(this->cutStart,this->cutEnd,painter,pen)) {
+                QPen debugPen;
+                debugPen.setWidth(1);
+                debugPen.setColor(Qt::blue);
+                debugPen.setStyle(Qt::DashLine);
+                painter->setPen(debugPen);
+                painter->drawRect(cutStart.x(),cutStart.y(),cutEnd.x()-cutStart.x(),cutEnd.y()-cutStart.y());
+                painter->setPen(pen);
+                //do nothing
+            }else //直线被舍弃了
+            {
+                this->drawState = UNDO;
+                this->lineController.clearState();
+                this->cycleController.clearState();
+                this->ellipseController.clearState();
+                this->polygonController.clearState();
+            }
             painter->end();
             delete painter;
             update();

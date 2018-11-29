@@ -40,65 +40,53 @@ void LineController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
     drawHandle(painter,pen);
 }
 
-int clipTest(float p,float q,float *u1,float *u2)
-{
-    int flag = 1;
-    float r;
-    if(p<0.0){
-        r = q/p;
-        if(r>*u2)
-            flag=0;
-        else if(r>*u1)
-            *u1=r;
-    }
-    else if(p>0.0){
-        r = q/p;
-        if(r<*u1)
-            flag = 0;
-        else if(r<*u2)
-            *u2=r;
-    }else if(q<0.0){
-        flag = 0;
-    }
-    return flag;
-
-}
-
-void LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter *painter, QPen pen)
+bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter *painter, QPen pen)
 {
     qDebug()<<"直线裁剪！！"<<endl;
     //在这里进行判断
-    int xwmin = cutStart.x();
-    int ywmin = cutStart.y();
-    int xwmax = cutEnd.x();
-    int ywmax = cutEnd.y();
-    int x1 = curLine->startPoint.getX();
-    int y1 = curLine->startPoint.getY();
-    int x2 = curLine->endPoint.getX();
-    int y2 = curLine->endPoint.getY();
-    //在这里进行判断
-    float u1=0.0,u2=1.0,dx=x2-x1,dy;
-    if(clipTest(-dx,x1-xwmin,&u1,&u2))
-     if(clipTest(dx,xwmax-x1,&u1,&u2))
-     { dy=y2-y1;
-      if(clipTest(-dy,y1-ywmin,&u1,&u2))
-       if(clipTest(dy,ywmax-y1,&u1,&u2))
-        {
-        if(u2<1.0)
-        {
-         x2=x1+u2*dx; /*通过u2求得裁剪后的p2端点*/
-         y2=y1+u2*dy;
+    double xmin = cutStart.x();     //决定裁剪窗口的参数
+    double ymin = cutStart.y();
+    double xmax = cutEnd.x();
+    double ymax = cutEnd.y();
+    double x1 = curLine->startPoint.getX();
+    double y1 = curLine->startPoint.getY();
+    double x2 = curLine->endPoint.getX();
+    double y2 = curLine->endPoint.getY();
+
+    double dx = x2-x1;  //△x
+    double dy = y2-y1;  //△y
+    double p[4] = {-dx,dx,-dy,dy};
+    double q[4] = {x1-xmin,xmax-x1,y1-ymin,ymax-y1};
+
+    double u1 = 0;
+    double u2 = 1;
+
+    for(int i=0;i<4;i++){
+
+        if(fabs(p[i])<1e-6 && q[i]<0){  //p=0且q＜0时，舍弃该线段
+            this->clearState();
+            return false;
         }
-        if(u1>0.0)
-        {
-         x1=x1+u1*dx; /*通过u1求得裁剪后的p1端点*/
-         y1=y1+u1*dy;
+
+        double r = q[i]/p[i];
+        if(p[i]<0){
+            u1 = r>u1?r:u1; //u1取0和各个r值之中的最大值
+        }else{
+            u2 = r<u2?r:u2; //u2取1和各个r值之中的最小值
         }
-        curLine->setStartPoint(Point(x1,y1));
-        curLine->setEndPoint(Point(x2,y2));
-        MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
-        drawHandle(painter,pen);       }
-     }
+
+        if(u1>u2){  //如果u1>u2，则线段完全落在裁剪窗口之外，应当被舍弃
+            this->clearState();
+            return false;
+        }
+    }
+
+    curLine->setStartPoint(Point(x1+int(u1*dx+0.5), y1+int(u1*dy+0.5)));
+    curLine->setEndPoint(Point(x1+int(u2*dx+0.5), y1+int(u2*dy+0.5)));
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+    drawHandle(painter,pen);
+
+    return true;
 
 }
 

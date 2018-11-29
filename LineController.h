@@ -24,7 +24,7 @@ public:
     void getStartAndEnd(QPoint &start,QPoint &end);
     void setBigger(QPainter* painter, QMouseEvent *e, QPen pen);   //放大
     void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen);  //缩小
-    void cutLineLiangBsrsky(QPoint cutStart,QPoint cutEnd,QPainter* painter, QPen pen); //梁友栋裁剪直线算法
+    bool cutLineLiangBsrsky(QPoint cutStart,QPoint cutEnd,QPainter* painter, QPen pen); //梁友栋裁剪直线算法
     Point getTheAccurayRotatePoint(qreal ridus,int x,int y);//得到旋转后误差最小的点
     //
 private:
