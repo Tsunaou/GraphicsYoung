@@ -462,6 +462,7 @@ void Canvas_GL::fillColor(QImage *img, QColor backcolor, QPainter *painter, int 
     stack->clear();
 }
 
+
 QPixmap *Canvas_GL::getPixCopy()
 {
     QPixmap *newPix = new QPixmap(size());	//创建一个新的QPixmap对象
