@@ -55,7 +55,7 @@
 
 ### 二、扩展功能
 
-1. 画布的创建
+1. 画布的创建，多画布切换
 
 2. 颜色的选择
 
@@ -355,6 +355,24 @@ void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &
 
 ## <div STYLE="page-break-after: always;"></div>
 
+### (4).平移算法 
+
+#### (a)基本原理
+
+平移是将物体沿着直线路径从一个坐标位置到另一个坐标位置重定位。对于原始位置$P(x,y)$平移$d_x$和 $d_y$ 到新位置 $P(x_1,y_1)$的移动满足
+$$
+x1=x+d_x\\
+y1=y+d_y
+$$
+
+#### (b)算法实现
+
+给每一个图形都定义一个中心点，绘制时加粗显示辅助，用户通过鼠标拖动中心点得到偏移量dx和dy
+
+对于不同图形的平移，采取这样的实现
+
+## <div STYLE="page-break-after: always;"></div>
+
 ## 3.系统介绍
 
 #### 3.1 实验环境
@@ -377,13 +395,37 @@ void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &
 | Canvas_GL         | QOpenGLWidget    | 每个Canvas_GL类都是一个绘图的画布，用户在上面绘图            |
 | ColorPanel        | QWidget          | 尚未完全实现，用于提供更为便捷的功能选择                     |
 | FigureController  |                  | 图形控制的接口，用于定义绘图行为（目前只有绘制，后期预计在此接口上实现更多功能） |
-| LineController    | FigureController | 控制直线的绘制，实现了DDA直线算法                            |
-| CycleController   | FigureController | 控制圆的绘制，实现了中点圆和Bresenham画圆法                  |
-| EllipseController | FigureController | 控制椭圆的绘制，实现了重点椭圆绘制算法                       |
+| LineController    | FigureController | 控制直线的输入和编辑，实现了DDA直线算法                      |
+| CycleController   | FigureController | 控制圆的输入和编辑，实现了中点圆和Bresenham画圆法            |
+| EllipseController | FigureController | 控制椭圆的输入和编辑，实现了中点点椭圆绘制算法               |
+| PolygonController | FigureController | 控制了多边形输入和编辑                                       |
 | Figure            |                  | 图形类的基类，用于记录画过的图形，便于后期操作               |
 | Line              | Figure           | 直线，记录了直线的起点和终点                                 |
-| Cycle             | Figure           | 圆，记录了圆心和半径                                         |
-| Ellipse           | Figure           | 椭圆，记录了代表长短轴的矩形                                 |
+| Cycle             | Figure           | 圆，记录了圆心和半径（实际上是圆周的任意一点）               |
+| Ellipse           | Figure           | 椭圆，记录了代表长短轴的矩形（其实是中心和矩形顶点）         |
+| Polygon           | Figure           | 多边形，记录了多边形的各个顶点坐标                           |
+| Point             |                  | 点，集成了QPoint，对于关于点的一些常用操作进行抽象集成       |
+
+
+
+程序基本流程
+
+1. 系统主题框架类：MainWindow，内集成一个画布类Canvas_GL的数组
+2. 每次创建新画布，就显示新创建的画布
+   - 画布可以自由切换
+   - 选择功能时，对所有的画布都生效
+   - 每个画布中都集成了各种图形的Controller
+   - 撤销、清空、保存功能都对当前活动的画布（活动窗口）处理，不影响其他窗口
+3. 画布接受事件输入
+   - 通过接受鼠标事件，对基本图形输入，编辑
+     - 共性通过对应图形的Controller的对应函数来处理，这里用到了动态绑定来精简代码
+       - mousePressEvent
+       - mouseMoveEvent
+       - mouseReleaseEvent
+     - 对图形的特殊性质特别处理
+   - 对于画笔和笔刷，将每次move的点通过直线连起来
+   - 填充功能直接对鼠标点击区域填充
+   - 裁剪目前只对直线有效，鼠标输入裁剪框，点击裁剪按钮即可裁剪
 
 ## <div STYLE="page-break-after: always;"></div>
 
@@ -458,7 +500,7 @@ void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &
 
 在9-10月关于图形学的学习中，基于我在课上所学的理论知识，以及课外对于Qt的交互、界面设计的学习，在截止10月底的系统中，我实现了二维图形中直线，圆以及椭圆的输入，并且实现创建多个窗口，画笔颜色的选择，绘画的撤销以及图像的保存功能。
 
-这次实验是我第一次写具有图形交互的的实验，感觉十分有趣。把图形学课上的理论同实践相结合并且不断探索，不断阅读各种文档资料学习新知识的感觉也不错。尤其是双缓冲绘图的实现，起初我为了实现类似画图程序的动态效果而自己实现了一个，后来听同学说这就是双缓冲技术，独立探索出了这样的技巧让我感觉我的确是有在学习东西的，这也让我对于该实验有着更大的兴趣。尽管由于其他原因，本次10月份的程序不能说尽善尽美，但是基于我对于程序的理解，一遍上着高级程序设计课学习C++各种高级性质，我尽可能把我的知识和设计体现在代码上。
+这次实验是我第一次写具有图形交互的的实验，感觉十分有趣。把图形学课上的理论同实践相结合并且不断探索，不断阅读各种文档资料学习新知识的感觉也不错。尤其是双缓冲绘图的实现，起初我为了实现类似画图程序的动态效果而自己实现了一个，后来听同学说这就是双缓冲技术，独立探索出了这样的技巧让我感觉我的确是有在学习东西的，这也让我对于该实验有着更大的兴趣。尽管由于其他原因，10月份的程序不能说尽善尽美，但是基于我对于程序的理解，一遍上着高级程序设计课学习C++各种高级性质，我尽可能把我的知识和设计体现在代码上。
 
 
 
