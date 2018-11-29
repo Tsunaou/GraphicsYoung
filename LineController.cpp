@@ -44,10 +44,10 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 {
     qDebug()<<"直线裁剪！！"<<endl;
     //在这里进行判断
-    double xmin = cutStart.x();     //决定裁剪窗口的参数
-    double ymin = cutStart.y();
-    double xmax = cutEnd.x();
-    double ymax = cutEnd.y();
+    double xmin = std::min(cutStart.x(),cutEnd.x());     //决定裁剪窗口的参数
+    double ymin = std::min(cutStart.y(),cutEnd.y());     //传入的是决定裁剪窗口的对角线上的顶点，因此做一下处理
+    double xmax = std::max(cutStart.x(),cutEnd.x());
+    double ymax = std::max(cutStart.y(),cutEnd.y());
     double x1 = curLine->startPoint.getX();
     double y1 = curLine->startPoint.getY();
     double x2 = curLine->endPoint.getX();

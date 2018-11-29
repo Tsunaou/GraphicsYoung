@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cur_canvasNum = -1;
     figureMode = LINE;
     initMdiArea();
-    initColorSelection();
+    //initColorSelection();
 
     ui->actionPen->setChecked(true);
 
