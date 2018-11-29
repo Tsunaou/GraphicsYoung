@@ -44,25 +44,26 @@ void LineController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen)
 
 bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter *painter, QPen pen)
 {
-    qDebug()<<"直线裁剪！！"<<endl;
     //在这里进行判断
+    //对裁剪窗口预处理
     double xmin = std::min(cutStart.x(),cutEnd.x());     //决定裁剪窗口的参数
     double ymin = std::min(cutStart.y(),cutEnd.y());     //传入的是决定裁剪窗口的对角线上的顶点，因此做一下处理
     double xmax = std::max(cutStart.x(),cutEnd.x());
     double ymax = std::max(cutStart.y(),cutEnd.y());
+    //得到待裁剪直线的各个端点
     double x1 = curLine->startPoint.getX();
     double y1 = curLine->startPoint.getY();
     double x2 = curLine->endPoint.getX();
     double y2 = curLine->endPoint.getY();
-
+    //各个参数的定义
     double dx = x2-x1;  //△x
     double dy = y2-y1;  //△y
     double p[4] = {-dx,dx,-dy,dy};
     double q[4] = {x1-xmin,xmax-x1,y1-ymin,ymax-y1};
-
     double u1 = 0;
     double u2 = 1;
 
+    //梁友栋裁剪算法，对p和q进行判断
     for(int i=0;i<4;i++){
 
         if(fabs(p[i])<1e-6 && q[i]<0){  //p=0且q＜0时，舍弃该线段

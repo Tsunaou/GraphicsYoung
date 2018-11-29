@@ -70,8 +70,6 @@
     <img src="image/1.png">
 </div>
 
-
-
 ## <div STYLE="page-break-after: always;"></div>
 
 ## 2.算法介绍
@@ -84,7 +82,7 @@
 
 #### **(b)理论绘制过程**
 
-##### **1.具有正斜率**
+##### 1.具有正斜率
 
 **1.1 从左到右生成线段。**
 
@@ -355,7 +353,7 @@ void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &
 
 ## <div STYLE="page-break-after: always;"></div>
 
-### (4).平移算法 
+### (4).平移变换算法 
 
 #### (a)基本原理
 
@@ -367,11 +365,333 @@ $$
 
 #### (b)算法实现
 
-给每一个图形都定义一个中心点，绘制时加粗显示辅助，用户通过鼠标拖动中心点得到偏移量dx和dy
+给每一个图形都定义一个中心点（一般是对称中心或外接矩形的中心），绘制时加粗显示辅助，用户通过鼠标拖动中心点得到偏移量dx和dy。对于不同图形的平移，采取不同的实现方法：
 
-对于不同图形的平移，采取这样的实现
+1. 直线：对线上的起始点和顶点平移dx和dy，然后重新绘制
+2. 圆：平移圆心和圆周上的点（决定半径），然后重新绘制
+3. 椭圆：平移中心和外界矩形的一个顶点（决定a、b），然后重新绘制
+4. 多边形：平移所有的顶点，然后重新绘制
 
-## <div STYLE="page-break-after: always;"></div>
+#### 
+
+### (5).旋转变换算法 
+
+#### (a)基本原理
+
+旋转是沿$xy$平面内圆弧路径重定位。指定旋转基准点位置$(x_r,y_r)$旋转$\theta$角，对任意基准位置的旋转
+$$
+x1=x_r+(x-x_r)cos\theta-(y-y_r)sin\theta\\
+y1=y_r+(x-x_r)sin\theta+(y-y_r)cos\theta\\
+$$
+
+#### (b)算法实现
+
+给每一个图形都定义一个旋转点，绘制时加粗显示辅助，用户通过鼠标拖动中心点得到旋转角$\theta$
+
+对于不同图形的旋转，采取不同的实现方法：
+
+1. 直线：直线的旋转点定义为四等分点。
+   - 用户操作旋转点，得到旋转角，然后对直线的两端点旋转，然后重新绘制
+2. 圆：圆的旋转点定义为在$r/2$的位置。（圆的旋转没必要就是了）
+   - 用户操作旋转点，得到旋转角，然后对圆周上的点旋转，然后重新绘制
+3. 椭圆：椭圆的旋转点相对于其他图形略有不同。
+   - 由于椭圆的中点椭圆算法只能实现对称轴垂直或者平行坐标轴的椭圆，因此在不引入其他算法的情况下，椭圆的旋转我定义了一个“偏向角$\alpha$”来付诸实现。
+     - $\alpha$的初始值为0，为了方便叙述，假设椭圆中心为$(0,0)$，对旋转点$(x_m,y_m)$，为向量$(0,1)$与$(x_m,y_m,)$的夹角，而实际处理时为了方便，当夹角超过$\pi/2$时，对$\alpha$取负
+     - 从而每次旋转时，只是对椭圆的旋转角做出了改变，但是实际上椭圆Ellipse类的对象中椭圆的关键信息并没有改变，只是每次绘制时，对椭圆的每个顶点都旋转$\alpha$角，这样就实现了旋转。与此同时，编辑的时候对编辑点也通过$\alpha$转化为未旋转前椭圆的编辑，这样让旋转后的椭圆也能够编辑
+     - 但是此方法有一个缺陷，就是椭圆的旋转由于是对点的旋转实现的，因此椭圆会变得稀疏，或者说变成不连续的椭圆。这个目前还在想办法解决。
+4. 多边形：多边形的旋转点定义与椭圆类似，但是也有区别
+   - 由于多边形的绘制是对各个端点连线，因此每次都对图形旋转$\alpha$的差值，但是旋转时保持旋转中心不动
+
+#### (C) C++实现实现
+
+这里主要介绍旋转时用到的一些辅助函数
+
+**(1) 角度函数**：对于点A绕着点CENTER旋转到点B的情况，用余弦定理得到角$\beta$
+
+```C++
+double FigureController::getRotaryAngle(Point center, Point a, Point b)
+{
+    double ab = a.distanceToPoint(b.getQPoint());
+    double ac = a.distanceToPoint(center.getQPoint());
+    double bc = b.distanceToPoint(center.getQPoint());
+    qreal cosC = (bc*bc+ac*ac-ab*ab)/(2*bc*ac);
+    double theta = qAcos(cosC);
+    return theta; //弧度制
+}
+```
+
+**(2) 顺逆时针判断函数**：$\beta$这并不是真正的旋转角，故通过判断顺逆时针来对$\beta$进行修正得到$\theta$角（通过线性规划）
+
+```c++
+bool FigureController::clockWise(Point center, Point a, Point b)
+{
+    //k=0
+    if(center.getY()==a.getY()){
+        if(a.getX()>center.getX())// -------->型向量
+        {
+            if(b.getY() > a.getY()){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        else// <--------型向量
+        {
+            if(b.getY() < a.getY()){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+    //k不存在
+    if(center.getX()==a.getX()){
+        if(a.getY()<center.getY())//竖直向上
+        {
+            if(b.getX()>a.getX()){
+                return true;
+            }else{
+                return  false;
+            }
+        }
+        else //竖直向下
+        {
+            if(b.getX()<a.getX()){
+                return true;
+            }else{
+                return  false;
+            }
+        }
+    }
+    //斜率存在切不为零
+    double x0 = 0;
+    double y0 = 0;
+    double x1 = a.getQPoint().x() - center.getQPoint().x(); //把中点当原点
+    double y1 = a.getQPoint().y() - center.getQPoint().y(); //把中点当原点
+    double k = (y1-y0)/(x1-x0);
+    double x2 = b.getX() - center.getX();   //把中点当原点（要用坐标直接比较还得标准化）
+    double y2 = b.getY() - center.getY();   //把中点当原点
+    if(a.getX()>center.getX())//方向向右
+    {
+        if(y2>(k*x2)){ //y > kx
+            return true;
+        }else{
+            return false;
+        }
+    }
+    else //方向朝左
+    {
+        if(y2<(k*x2)){ //y > kx
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+}
+```
+
+根据旋转方向对$\beta$处理得到旋转角$\theta$，便可以对点进行旋转
+
+**(3) 旋转误差修正函数**：
+
+这是在实现圆的旋转后（虽然圆的旋转并无意义，但是起码放大了精度损失这个问题）发现的，由于旋转具有一定的精度损失（像素点都是整数的坐标），因此当精度累积后，可能会导致旋转失真甚至图形不断放大或者缩小。因此我采取了3个措施来实现旋转误差的修正：
+
+（1）旋转时，在double转int时加上修正参数0.5
+
+（2）其中ROTATE_ACCURACY是误差的容许值，ridus是旋转前圆的半径，x，y分别是旋转后的点。由于绕着圆心旋转，因此就寻找以$(x,y)$的附近在点集$(x\pm ROTATEA\_CCURACY,y\pm ROTATEA\_CCURACY)$的范围内到圆心距离与原半径误差最小的点。这样确保了误差不会太大
+
+```c++
+Point CycleController::getTheAccurayRotatePoint(qreal ridus, int x, int y)
+{
+    int resX = x-ROTATE_ACCURACY;
+    int resY = y-ROTATE_ACCURACY;
+    double minDiff =100;
+    for(int i=x-ROTATE_ACCURACY;i<=x+ROTATE_ACCURACY;i++){
+        for(int j=y-ROTATE_ACCURACY;j<=y+ROTATE_ACCURACY;j++){
+            Point tmp(i,j);
+            double diffTmp = fabs(this->cycle->centerPoint.distanceToPoint(tmp.getQPoint())-ridus);
+            if(diffTmp<minDiff){
+                resX=i;
+                resY=j;
+                minDiff = diffTmp;
+            }
+
+        }
+    }
+    return Point(resX,resY);
+}
+```
+
+（3）由于半径的计算也有误差，因此在一次旋转中，对每次求得的半径取平均，以求达到稳定。
+
+### (6).放缩变换算法 
+
+#### (a)基本原理
+
+我实现但是相对于原点的缩放。
+
+将每个顶点坐标乘以缩放系数$s_x,s_y$到得到新坐标 $(x_1,y_1)$的移动满足
+$$
+x1=x\cdot s_x\\
+y1=y\cdot s_y
+$$
+
+#### (b)算法实现
+
+1. 直线：对线上的起始点和顶点放缩，然后重新绘制
+2. 圆：放缩圆心和圆周上的点（决定半径），然后重新绘制
+3. 椭圆：放缩中心和外界矩形的一个顶点（决定a、b），然后重新绘制
+4. 多边形：放缩所有的顶点，然后重新绘制
+
+### (7).直线裁剪算法 ——梁友栋-Barsky参数裁剪算法
+
+#### (a)基本原理
+
+对于直线段$P_1(x_1,y1),P_2(x_2,y2)$，可以用参数方程形式表示
+$$
+x = x_1+u(x_2-x_1) =x_1+\Delta x\\
+y = y_1+u(y_2-y_1) =y_1+\Delta y\\
+$$
+若有$P(x,y)$位于由$(xmin,ymin),(xmax,ymax)$所构成的裁剪窗口内，则有下式成立
+$$
+xmin\le x1+u \cdot\Delta x \le xmax\\
+ymin\le y1+u \cdot\Delta y \le ymax
+$$
+这四个不等式可以表达为
+$$
+u\cdot p_k\leq_k,k=1,2,3,4
+$$
+其中，$p,q$被定义为
+$$
+\begin{aligned}
+&p_1=-\Delta x,q_1=x1-xmin\\
+&p_2=\Delta x,\ \ \  q_2=xmax-x1\\
+&p_3=-\Delta y,q_3=y1-ymin\\
+&p_4=\Delta y,\ \ \  q_4=ymax-x1
+\end{aligned}
+$$
+则有以下结论:
+
+平行于窗口某边界的直线，其$p_k=0$，$k$值对应于相应的边界（$k=1，2，3，4$对应于左、右、下、上边界）。
+
+1. 如果  $q_k<0$，则线段完全在边界外，应舍弃该线段。
+2. 如果  $q_k≥0$，则线段平行于窗口某边界并在窗口内。
+3. 如果 $p_k<0$，则线段从裁剪边界延长线的外部延伸到内部；
+4. 如果 $p_k>0$，则线段从裁剪边界延长线的内部延伸到外部
+
+当$\Delta x\ge 0$时
+
+1. 对于左边界$p_1<0（p_1=-Δx）$，线段从左边界的外部到内部；
+2. 对于右边界$p_2>0（p_2=Δx）$，线段从右边界的内部到外部
+
+当$\Delta y < 0$时
+
+1. 对于下边界$p_3>0（p_3=-Δy）$，线段从下边界的内部到外部；
+2. 对于上边界$p_4<0（p_4=Δy）$，线段从上边界的外部到内部
+
+当$p_K≠0$时，可以计算出参数u的值，它对应于无限延伸的直线与延伸的窗口边界k的交点
+$$
+u=q_k/p_k
+$$
+对于每条直线，可以计算出参数$u_1$和$u_2$，该值定义了位于窗口内的线段部分：
+
+1. $u_1$的值由线段从外到内遇到的矩形边界所决定$（p_k<0）$，对这些边界计算$r_k=q_k/p_k$，$u_1$取0和各个$r$值之中的最大值。
+2. $u_2$的值由线段从内到外遇到的矩形边界所决定$（p_k>0）$，对这些边界计算$r_k=q_k/p_k$，$u_2$取1和各个$r$值之中的最小值。
+3. 如果$u1>u2$，则线段完全落在裁剪窗口之外，应当被舍弃；否则，被裁剪线段的端点可以由$u1$和$u2$计算出来。
+
+#### (b)优点——与Cohen-Sutherland算法的比较
+
+与Cohen-Sutherland算法相比，梁友栋-Barsky算法减少了交点计算次数：
+
+（1）梁友栋-Barsky
+
+- 更新参数$u_1、u_2$仅需一次除法；
+- 线段与窗口的交点仅计算一次就计算出$u_1、u_2$的最后值。
+
+（2）Cohen-Sutherland算法
+
+- 即使对完全落在裁剪窗口之外的一条线段，也要对它反复求交点，而且每次求交计算都需要除法和乘法运算。
+
+#### (c)算法过程
+
+1. 参数初始化：线段交点初始参数分别为：$u_1=0，u_2=1$。
+2. 定义判断函数
+
+   - 用$p、q$来判断：是舍弃线段？还是改变交点参数r
+     - $p＜0$，参数$r$用于更新$u_1$
+     - $p＞0$，参数$r$用于更新$u_2 $
+   - 更新后的判断
+     - 若更新$u_1$或$u_2$后，使$u_1$＞$u_2$，则舍弃该线段
+     - 否则，更新$u$值仅仅是求出交点、缩短线段
+3. 求解交点参数
+
+   - 测试四个$p、q$值后，若该线段被保留，则裁剪线段的端点由$u_1、u_2$值决定
+   - $p=0且q＜0$时，舍弃该线段
+4. 反复执行上述过程，计算各裁剪边界的$p，q$值进行判断。
+
+#### (d)算法的C++实现
+
+```c++
+bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter *painter, QPen pen)
+{
+    //在这里进行判断
+    //对裁剪窗口预处理
+    double xmin = std::min(cutStart.x(),cutEnd.x());
+    double ymin = std::min(cutStart.y(),cutEnd.y());  
+    double xmax = std::max(cutStart.x(),cutEnd.x());
+    double ymax = std::max(cutStart.y(),cutEnd.y());
+    //得到待裁剪直线的各个端点
+    double x1 = curLine->startPoint.getX();
+    double y1 = curLine->startPoint.getY();
+    double x2 = curLine->endPoint.getX();
+    double y2 = curLine->endPoint.getY();
+    //各个参数的定义
+    double dx = x2-x1;  //△x
+    double dy = y2-y1;  //△y
+    double p[4] = {-dx,dx,-dy,dy};
+    double q[4] = {x1-xmin,xmax-x1,y1-ymin,ymax-y1};
+    double u1 = 0;
+    double u2 = 1;
+
+    //梁友栋裁剪算法，对p和q进行判断
+    for(int i=0;i<4;i++){
+
+        if(fabs(p[i])<1e-6 && q[i]<0){  //p=0且q＜0时，舍弃该线段
+            this->clearState();
+            return false;
+        }
+
+        double r = q[i]/p[i];
+        if(p[i]<0){
+            u1 = r>u1?r:u1; //u1取0和各个r值之中的最大值
+        }else{
+            u2 = r<u2?r:u2; //u2取1和各个r值之中的最小值
+        }
+
+        if(u1>u2){  //如果u1>u2，则线段完全落在裁剪窗口之外，应当被舍弃
+            this->clearState();
+            return false;
+        }
+    }
+
+    curLine->setStartPoint(Point(x1+int(u1*dx+0.5), y1+int(u1*dy+0.5)));
+    curLine->setEndPoint(Point(x1+int(u2*dx+0.5), y1+int(u2*dy+0.5)));
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+    drawHandle(painter,pen);
+
+    return true;
+
+}
+```
+
+
+
+### (8).区域填充算法 ——洪泛算法
+
+
+
+<div STYLE="page-break-after: always;"></div>
 
 ## 3.系统介绍
 
@@ -382,8 +702,6 @@ $$
 | 开发语言             | C++         |
 | 开发环境             | Qt Creator  |
 | 编译环境             | MinGW 5.3.0 |
-
-
 
 #### 3.2 系统组织
 
@@ -406,9 +724,11 @@ $$
 | Polygon           | Figure           | 多边形，记录了多边形的各个顶点坐标                           |
 | Point             |                  | 点，集成了QPoint，对于关于点的一些常用操作进行抽象集成       |
 
+##### 3.2.1 系统结构和类关系图
 
 
-程序基本流程
+
+##### 3.2.2程序基本流程
 
 1. 系统主题框架类：MainWindow，内集成一个画布类Canvas_GL的数组
 2. 每次创建新画布，就显示新创建的画布
