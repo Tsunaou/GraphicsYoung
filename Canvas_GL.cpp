@@ -266,6 +266,37 @@ void Canvas_GL::saveImage()
             QMessageBox::warning(this,tr("Path"),QString::fromLocal8Bit("You haven't input the filename"));
 }
 
+void Canvas_GL::resizeImage(QImage *image, const QSize &newSize)
+{
+    if (image->size() == newSize)
+        return;
+
+    QImage newImage(newSize, QImage::Format_RGB32);
+    newImage.fill(qRgb(255, 255, 255));
+    QPainter painter(&newImage);
+    painter.drawImage(QPoint(0, 0), *image);
+    *image = newImage;
+}
+
+bool Canvas_GL::openImage(const QString &fileName)
+{
+    QImage loadedImage;
+    if (!loadedImage.load(fileName))
+        return false;
+
+    QSize newSize = loadedImage.size().expandedTo(size());
+    resizeImage(&loadedImage, newSize);
+    imageOpen = QPixmap::fromImage(loadedImage);
+    //modified = false;
+    int width = loadedImage.width();
+    int height = loadedImage.height();
+    setMaximumSize(width,height);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
+    setMinimumSize(width,height);            //设置绘制区窗体的最小尺寸
+    this->pix = &imageOpen;
+    update();
+    return true;
+}
+
 void Canvas_GL::clearImage()
 {
     //清屏后，重置状态

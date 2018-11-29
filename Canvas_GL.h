@@ -43,6 +43,8 @@ public:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
     void saveImage(); //保存当前画布内容（pix内容）
+    void resizeImage(QImage *image, const QSize &newSize);
+    bool openImage(const QString &fileName);
     void clearImage(); //清空当前画布内容
     void recallImage();//撤销上一步操作
     void clearStates();//清空控制器状态
@@ -74,6 +76,7 @@ public slots:
 private:
     QPixmap *pix;       //画布
     QPixmap *pixToMove; //用于实现图形随着鼠标动态移动的画布缓冲区
+    QPixmap imageOpen;
     QPen pen;           //画笔，默认颜色为黑色，大小为1像素，样式为solid，实现像素级绘图
 
     QPoint startPos;    //捕捉画图的起始点

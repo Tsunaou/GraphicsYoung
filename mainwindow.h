@@ -57,6 +57,8 @@ private slots:
 
     void on_actionCutter_toggled(bool arg1);    //裁剪
 
+    void on_actionAbout_triggered();    //关于
+
 private:
     Ui::MainWindow *ui;
     QToolButton *colorBtn;      //颜色选择按钮
