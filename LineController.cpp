@@ -5,6 +5,7 @@ LineController::LineController()
     this->curLine = NULL;
     this->painter = NULL;
     this->setLP =SETNULL;
+    this->errorPara = 0;
 }
 
 void LineController::clearState()
@@ -12,6 +13,7 @@ void LineController::clearState()
     this->curLine = NULL;
     this->painter = NULL;
     this->setLP =SETNULL;
+    this->errorPara = 0;
 }
 
 void LineController::getStartAndEnd(QPoint &start, QPoint &end)
@@ -98,7 +100,7 @@ Point LineController::getTheAccurayRotatePoint(qreal ridus, int x, int y)
     for(int i=x-ROTATE_ACCURACY;i<=x+ROTATE_ACCURACY;i++){
         for(int j=y-ROTATE_ACCURACY;j<=y+ROTATE_ACCURACY;j++){
             Point tmp(i,j);
-            double diffTmp = fabs((2*this->curLine->endPoint.distanceToPoint(tmp.getQPoint()))-ridus);
+            double diffTmp = fabs(this->curLine->centerPoint.distanceToPoint(tmp.getQPoint())-ridus);
             if(diffTmp<minDiff){
                 resX=i;
                 resY=j;
@@ -337,6 +339,7 @@ void LineController::rotateToPoint(Point point)
     if(wiseFlag){//顺时针转
         RotaryAngle *= -1;
     }
+    //把x和y绕rx0和ry0旋转RotaryAngle度
     int x = curLine->startPoint.getX();
     int y = curLine->startPoint.getY();
     int rx0 = curLine->centerPoint.getX();
@@ -344,14 +347,20 @@ void LineController::rotateToPoint(Point point)
     int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 ;
     int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 ;
 
-//    qreal l = this->curLine->getLength();
+    //curLine->setLength();
+    qreal l = this->curLine->getLength();
 
-//    Point accurayP = this->getTheAccurayRotatePoint(l,rotateStartX,rotateStartY);
-//    rotateStartX = accurayP.getX();
-//    rotateStartY = accurayP.getY();
+    qDebug()<<"校正前:坐标为(" << rotateStartX<<","<<rotateStartY<< "),长度为"<<l<<endl;
+    Point accurayP = this->getTheAccurayRotatePoint(l/2,rotateStartX,rotateStartY);
+    rotateStartX = accurayP.getX();
+    rotateStartY = accurayP.getY();
 
     curLine->setStartPoint(Point(rotateStartX,rotateStartY));
     curLine->setEndPoint(Point(2*rx0-rotateStartX,2*ry0-rotateStartY));
+    qreal l2 = curLine->startPoint.distanceToPoint(curLine->endPoint.getQPoint());
+    qDebug()<<"校正后:坐标为(" << rotateStartX<<","<<rotateStartY<< "),长度为"<<l2<<endl;
+    this->errorPara += l2-l;
+    qDebug()<<"旋转累积误差为"<<this->errorPara<<endl;
     qDebug() << "StartPoint(" <<curLine->startPoint.point.x()<<","<<curLine->startPoint.point.y()<<")"<<endl;
     qDebug() << "EndPoint(" <<curLine->endPoint.point.x()<<","<<curLine->endPoint.point.y()<<")"<<endl;
     MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);

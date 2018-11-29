@@ -29,7 +29,7 @@ void Line::setStartPoint(Point p)
     int newPy = (newCy+endPoint.y)/2;
     Point rp(newPx,newPy);
     this->rotatePoint =rp;
-    setLength();
+    //setLength();
 }
 
 void Line::setEndPoint(Point p)
@@ -44,7 +44,7 @@ void Line::setEndPoint(Point p)
     int newPy = (newCy+endPoint.y)/2;
     Point rp(newPx,newPy);
     this->rotatePoint =rp;
-    setLength();
+    //setLength();
 }
 
 void Line::setLength()
@@ -54,10 +54,11 @@ void Line::setLength()
 
 double Line::getLength()
 {
-    if(fabs(this->length)<1e-6){
-        this->length = startPoint.distanceToPoint(endPoint.getQPoint());
-    }else{
-        this->length = (this->length+(startPoint.distanceToPoint(endPoint.getQPoint()))/2);
-    }
+//    if(fabs(this->length)<1e-6){
+//        this->length = startPoint.distanceToPoint(endPoint.getQPoint());
+//    }else{
+//        this->length = (this->length+(startPoint.distanceToPoint(endPoint.getQPoint())))/2;
+//    }
+    this->length = startPoint.distanceToPoint(endPoint.getQPoint());
     return  this->length;
 }
