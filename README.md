@@ -916,7 +916,8 @@ public:
 3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
 
 <div>
-    <img src="image/4.png" width=90%>
+    <img src="image/4.png" width=100%>
+    <img src="image/gif/Line.gif" width=100%>
 </div>
 <div STYLE="page-break-after: always;"></div>
 
@@ -929,8 +930,10 @@ public:
 3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
 
 <div>
-    <img src="image/5.png" width=90%>
+    <img src="image/5.png" width=100%>
+    <img src="image/gif/Cycle.gif" width=100%>
 </div>
+
 
 ## <div STYLE="page-break-after: always;"></div>
 
@@ -943,7 +946,8 @@ public:
 3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
 
 <div>
-    <img src="image/6.png" width=90%>
+    <img src="image/6.png" width=100%>
+    <img src="image/gif/Ellipse.gif" width=100%>
 </div>
 <div STYLE="page-break-after: always;"></div>
 
@@ -956,7 +960,8 @@ public:
 3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
 
 <div>
-    <img src="image/11.png" width=90%>
+    <img src="image/11.png" width=100%>
+   	<img src="image/gif/Polygon.gif" width=100%>
 </div>
 <div STYLE="page-break-after: always;"></div>
 
@@ -967,8 +972,12 @@ public:
 点击工具栏的“油漆桶”即可使用填充功能。会对4-连通区域的同颜色点填充
 
 <div>
-    <img src="image/12.png" width=90%>
+    <img src="image/12.png" width=100%>
+    <img src="image/gif/Filler.gif" width=100%>
 </div>
+
+<div STYLE="page-break-after: always;"></div>
+
 ##### (8) 撤销：点击左侧工具栏撤销按钮，即可撤销
 
 <div>
@@ -982,9 +991,10 @@ public:
 在直线输入/编辑状态时，点击工具栏“裁剪”图标即可绘制裁剪框，再次点击“裁剪”图标即可对直线裁剪。
 
 <div>
-    <img src="image/13.png" width=90%>
-    <img src="image/14.png" width=90%>
+    <img src="image/gif/Cutter.gif" width=100%>
+    <img src="image/14.png" width=100%>
 </div>
+
 ## <div STYLE="page-break-after: always;"></div>
 
 ##### (10) 清屏：点击左侧工具栏清屏按钮，即可清屏
