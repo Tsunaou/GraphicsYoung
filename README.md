@@ -55,6 +55,8 @@
 
    - 讲绘制出来的图形保存为图像
 
+<div STYLE="page-break-after: always;"></div>
+
 ### 二、扩展功能：
 
 1. 画布的创建，多画布切换
@@ -63,8 +65,10 @@
 4. 清屏和撤销的功能
 5. 打开图片编辑的功能
 
+### 三、演示
 
-将项目打包成了一个.exe文件，放在161220096_系统工程\Demo\YoungPaint里供助教测试。
+- 将项目打包成了一个.exe文件，放在161220096_系统工程\Demo\YoungPaint里供助教测试。
+- 关于直线、圆等动态演示，可以在我的github个人主页查看 https://tsunaou.github.io/GraphicsYoung.html
 
 <div>
     <img src="image/1.png">
@@ -350,8 +354,6 @@ void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &
 
 ```
 
-## <div STYLE="page-break-after: always;"></div>
-
 ### (4).平移变换算法 
 
 #### (a)基本原理
@@ -371,7 +373,25 @@ $$
 3. 椭圆：平移中心和外界矩形的一个顶点（决定a、b），然后重新绘制
 4. 多边形：平移所有的顶点，然后重新绘制
 
-#### 
+#### (c)算法的C++实现
+
+这里以直线的平移做例子
+
+```c++
+void LineController::moveToPoint(Point point)
+{
+    int offsetX = point.getX() - curLine->centerPoint.getX();	//得到dx
+    int offsetY = point.getY() - curLine->centerPoint.getY();	//得到dy
+    curLine->setStartPoint( //对起点平移dx，dy
+        Point(curLine->startPoint.getX()+offsetX,curLine->startPoint.getY()+offsetY));
+    curLine->setEndPoint(	//对终点平移dx，dy
+        Point(curLine->endPoint.getX()+offsetX,curLine->endPoint.getY()+offsetY));
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);//重新绘制
+    drawHandle(painter,pen);
+}
+```
+
+<div STYLE="page-break-after: always;"></div>
 
 ### (5).旋转变换算法 
 
@@ -418,6 +438,8 @@ double FigureController::getRotaryAngle(Point center, Point a, Point b)
     return theta; //弧度制
 }
 ```
+
+<div STYLE="page-break-after: always;"></div>
 
 **(2) 顺逆时针判断函数**：$\beta$这并不是真正的旋转角，故通过判断顺逆时针来对$\beta$进行修正得到$\theta$角（通过线性规划）
 
@@ -486,7 +508,6 @@ bool FigureController::clockWise(Point center, Point a, Point b)
             return false;
         }
     }
-
 }
 ```
 
@@ -544,6 +565,27 @@ $$
 2. 圆：放缩圆心和圆周上的点（决定半径），然后重新绘制
 3. 椭圆：放缩中心和外界矩形的一个顶点（决定a、b），然后重新绘制
 4. 多边形：放缩所有的顶点，然后重新绘制
+
+#### c)算法的C++实现
+
+这里采用直线的做例子,其中```ZOOM_IN```和```ZOOM_OUT```是缩放参数，在constparam.h中定义，两者互为倒数。这里对于自定义的Point类重载了其乘法，得以直接对坐标进行变换
+
+```c++
+void LineController::setBigger(QPainter* painter, QMouseEvent *e, QPen pen){
+    this->curLine->setStartPoint(this->curLine->startPoint*ZOOM_IN);	//乘以放大系数
+    this->curLine->setEndPoint(this->curLine->endPoint*ZOOM_IN);		//乘以放大系数
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+    drawHandle(painter,pen);
+}
+void LineController::setSmaller(QPainter* painter, QMouseEvent *e, QPen pen){
+    this->curLine->setStartPoint(this->curLine->startPoint*ZOOM_OUT);	//乘以缩小系数
+    this->curLine->setEndPoint(this->curLine->endPoint*ZOOM_OUT);		//乘以缩小系数
+    MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
+    drawHandle(painter,pen);
+}
+```
+
+<div STYLE="page-break-after: always;"></div>
 
 ### (7).区域填充算法 ——泛滥填充
 
@@ -774,6 +816,8 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 | Polygon           | Figure           | 多边形，记录了多边形的各个顶点坐标                           |
 | Point             |                  | 点，集成了QPoint，对于关于点的一些常用操作进行抽象集成       |
 
+<div STYLE="page-break-after: always;"></div>
+
 ##### 3.2.1 系统结构和类关系图
 
 <div>
@@ -874,6 +918,8 @@ public:
 <div>
     <img src="image/4.png" width=90%>
 </div>
+<div STYLE="page-break-after: always;"></div>
+
 ##### (4) 圆的输入和编辑：
 
 1.输入：点击上方工具栏的圆，则可绘制圆。鼠标点击确定圆心，释放确定半径
@@ -899,6 +945,8 @@ public:
 <div>
     <img src="image/6.png" width=90%>
 </div>
+<div STYLE="page-break-after: always;"></div>
+
 ##### (6) 多边形的输入和编辑：
 
 1.输入：点击上方工具栏多边形，则可绘制多边形。鼠标点击确定各个顶点，点击右键或靠近起始点会自动贴合。
@@ -910,6 +958,10 @@ public:
 <div>
     <img src="image/11.png" width=90%>
 </div>
+<div STYLE="page-break-after: always;"></div>
+
+<div STYLE="page-break-after: always;"></div>
+
 ##### (7) 填充:
 
 点击工具栏的“油漆桶”即可使用填充功能。会对4-连通区域的同颜色点填充
@@ -917,20 +969,21 @@ public:
 <div>
     <img src="image/12.png" width=90%>
 </div>
+##### (8) 撤销：点击左侧工具栏撤销按钮，即可撤销
 
-##### (8) 直线裁剪：
+<div>
+    <img src="image/7.png" width=90%>
+</div>
+
+<div STYLE="page-break-after: always;"></div>
+
+##### (9) 直线裁剪：
 
 在直线输入/编辑状态时，点击工具栏“裁剪”图标即可绘制裁剪框，再次点击“裁剪”图标即可对直线裁剪。
 
 <div>
     <img src="image/13.png" width=90%>
     <img src="image/14.png" width=90%>
-</div>
-
-##### (9) 撤销：点击左侧工具栏撤销按钮，即可撤销
-
-<div>
-    <img src="image/7.png" width=90%>
 </div>
 ## <div STYLE="page-break-after: always;"></div>
 
@@ -958,6 +1011,8 @@ public:
 <div>
     <img src="image/15.png" width=90%>
 </div>
+## <div STYLE="page-break-after: always;"></div>
+
 ##### (14)画笔和笔刷：点击笔或者笔刷，即可自由绘图
 
 <div>
@@ -969,8 +1024,7 @@ public:
 <div>
     <img src="image/about.png" width=90%>
 </div>
-
-##### 
+## <div STYLE="page-break-after: always;"></div>
 
 ## 4.总结
 
