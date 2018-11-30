@@ -279,10 +279,38 @@ void EllipseController::drawQuarterEllipse(QPainter *painter, int x0, int y0, in
     QPoint temPt3(x0-rotateStartX,y0+rotateStartY);
     QPoint temPt4(x0-rotateStartX2,y0-rotateStartY2);
 
+
+
+
+    if(fabs(rotateAngle)>1e-6){
+
+        QPen savePen;
+        savePen.setStyle(Qt::SolidLine);
+        savePen.setWidth(1);
+        savePen.setColor(Qt::black);
+
+        QPen debugPen;
+        debugPen.setWidth(2);
+        debugPen.setColor(Qt::black);
+        painter->setPen(debugPen);
+
+        painter->drawPoint(temPt1);
+        painter->drawPoint(temPt2);
+        painter->drawPoint(temPt3);
+        painter->drawPoint(temPt4);
+
+        painter->setPen(savePen);
+
+        return ;
+    }
+
     painter->drawPoint(temPt1);
     painter->drawPoint(temPt2);
     painter->drawPoint(temPt3);
     painter->drawPoint(temPt4);
+
+
+
 }
 
 void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &end)

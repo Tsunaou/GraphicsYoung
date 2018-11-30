@@ -6,11 +6,13 @@
 
 [TOC]
 
+<div STYLE="page-break-after: always;"></div>
+
 ## 1.综述
 
 | 系统名     | 语言和框架     | IDE        | 编译器      |
 | ---------- | -------------- | ---------- | ----------- |
-| YoungPaint | C++和Qt 5.11.2 | Qt Creator | MinGW 5.3.0 |
+| PaintYoung | C++和Qt 5.11.2 | Qt Creator | MinGW 5.3.0 |
 
 截止11月底，我项目目前能完成的功能是：
 
@@ -56,15 +58,13 @@
 ### 二、扩展功能：
 
 1. 画布的创建，多画布切换
-
 2. 颜色的选择
-
 3. 增加了画笔和笔刷的功能
-
 4. 清屏和撤销的功能
+5. 打开图片编辑的功能
 
 
-将项目打包成了一个.exe文件，放在161220096_系统工程\Demo\YoungPaint里供助教测试，虽然在很多人电脑里测试都可以运行，但是程序依赖是否都有这个还不得而知，权当给助教一个参考。
+将项目打包成了一个.exe文件，放在161220096_系统工程\Demo\YoungPaint里供助教测试。
 
 <div>
     <img src="image/1.png">
@@ -165,7 +165,7 @@ void LineController::MyDrawLineDDA(QPainter *painter, QPoint &start, QPoint &end
 
 ### (2).圆算法 —— 中点圆算法
 
-#### **(a)基本原理**
+#### (a)基本原理
 
 避免平方根运算，直接采用像素与圆距离的平方作为判决依据。通过检验两候选像素中点与圆周边界的相对位置关系(圆周边界的内或外)来选择像素。
 
@@ -173,7 +173,7 @@ void LineController::MyDrawLineDDA(QPainter *painter, QPoint &start, QPoint &end
 
 适应性强：易应用于其它圆锥曲线。误差可控：对于整数圆半径，生成与Bresenham算法相同的像素位置。且所确定像素位置误差限制在半个像素以内。
 
-#### **(c)理论绘制过程**
+#### (c)理论绘制过程
 
 根据圆的对称性，只绘制了八分之一圆，其余部分通过对称性即可得到坐标。使用经过改良的中点圆算法，使用递推，减少了计算量，并且避免了浮点运算
 
@@ -397,7 +397,7 @@ $$
    - 由于椭圆的中点椭圆算法只能实现对称轴垂直或者平行坐标轴的椭圆，因此在不引入其他算法的情况下，椭圆的旋转我定义了一个“偏向角$\alpha$”来付诸实现。
      - $\alpha$的初始值为0，为了方便叙述，假设椭圆中心为$(0,0)$，对旋转点$(x_m,y_m)$，为向量$(0,1)$与$(x_m,y_m,)$的夹角，而实际处理时为了方便，当夹角超过$\pi/2$时，对$\alpha$取负
      - 从而每次旋转时，只是对椭圆的旋转角做出了改变，但是实际上椭圆Ellipse类的对象中椭圆的关键信息并没有改变，只是每次绘制时，对椭圆的每个顶点都旋转$\alpha$角，这样就实现了旋转。与此同时，编辑的时候对编辑点也通过$\alpha$转化为未旋转前椭圆的编辑，这样让旋转后的椭圆也能够编辑
-     - 但是此方法有一个缺陷，就是椭圆的旋转由于是对点的旋转实现的，因此椭圆会变得稀疏，或者说变成不连续的椭圆。这个目前还在想办法解决。
+     - 但是此方法有一个缺陷，就是椭圆的旋转由于是对点的旋转实现的，因此椭圆会变得稀疏，或者说变成不连续的椭圆。我解决这个的办法是每次绘图时画2个像素增加椭圆边界的宽度。
 4. 多边形：多边形的旋转点定义与椭圆类似，但是也有区别
    - 由于多边形的绘制是对各个端点连线，因此每次都对图形旋转$\alpha$的差值，但是旋转时保持旋转中心不动
 
@@ -579,7 +579,7 @@ while(!stack->empty()){
     if(y<=0 || y>=pix->height()-2) continue;    //超限
     if(img->pixelColor(x,y) != backcolor) continue;   //边界
     if(processed[x][y] == true) continue;      //上色过了
-    processed[x][y] = true;
+    processed[x][y] = true;	//标记，代表处理过了
     painter->drawPoint(x,y);
     if(!processed[x][y+1]){
         stack->push(QPoint(x,y+1));
@@ -776,7 +776,55 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 
 ##### 3.2.1 系统结构和类关系图
 
+<div>
+    <img src="image/structure/system.png"/>
+</div>
 
+为了实现对图形的编辑，我定义了FigureController类和Figure类，并由这两个类继承衍生出具体图形和其控制器。Figure用于图元的存储，FigureController用于图元的编辑等一系列操作。
+
+<div>
+    <img src="image/structure/figure.png" width=49%/>
+    <img src="image/structure/controller.png" width=49%/>
+</div>
+
+这里给出FigureController的定义,用了许多虚函数，这样利于在Canvas中统一操作，优化代码结构
+
+```c++
+class FigureController
+{
+public:
+    FigureController();
+    //抽象函数
+    virtual void mousePressEvent(QPainter* painter, QMouseEvent *e, QPen pen) =0;
+    virtual void mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen) =0;
+    virtual void mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen) =0;
+    virtual bool isOperationing(QMouseEvent *e,QPoint &start,QPoint &end)=0;    //判断是否有在对图形进行绘制操作
+    virtual void setStartPoint(Point point) =0; //设置起始点
+    virtual void setEndPoint(Point point) =0;   //设置终点
+    virtual void moveToPoint(Point point) =0;   //平移
+    virtual void rotateToPoint(Point point) =0; //旋转
+    virtual void setState(DRAW_STATE *state) =0;    //设置状态
+    virtual void drawHandle(QPainter* painter, QPen pen) =0;    //描绘辅助信息
+    virtual void clearState() =0;   //情况状态
+    virtual void getStartAndEnd(QPoint &start,QPoint &end) =0;
+    virtual void setBigger(QPainter* painter, QMouseEvent *e, QPen pen) =0;   //放大
+    virtual void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen) =0;  //缩小
+    //非抽象函数
+    double getRotaryAngle(Point center,Point a,Point b); //得到夹角（返回值是弧度）
+    bool clockWise(Point center,Point a,Point b);    //判断是否顺时针
+    double getLength(QPoint &start,QPoint &end);    //得到两点间距离
+    void drawOutlineToDebug(QPainter* painter,QPoint &start,QPoint &end);   //描绘轮廓
+    void drawOutlineToDebug(QPainter* painter,QPoint a,QPoint b,QPoint c,QPoint d);   //描绘轮廓
+    void printCtrlDebugMessage(QString msg){
+        qDebug()<<msg<<endl;
+    }
+
+//protected:
+    QPainter *painter;  //画板
+    QPen pen;           //画笔
+    DRAW_STATE *state;  //绘画状态
+};
+```
 
 ##### 3.2.2程序基本流程
 
@@ -815,13 +863,24 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 
 ## <div STYLE="page-break-after: always;"></div>
 
-##### (3) 画直线：点击上方工具栏的直线，则可绘制直线，鼠标点击确定起点，释放确定终点
+##### (3) 直线的输入和编辑：
+
+1.输入：点击上方工具栏的直线，则可绘制直线，鼠标点击确定起点，释放确定终点。
+
+2.编辑：直线有4个可以操纵的点：起始点，终点，中点，四等分点。用鼠标拖动起点和终点可以改变起始点、拖动中点可以对直线平移，拖动四等分点可以对直线进行旋转。
+
+3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
 
 <div>
     <img src="image/4.png" width=90%>
 </div>
+##### (4) 圆的输入和编辑：
 
-##### (4) 画圆：点击上方工具栏的圆，则可绘制圆。鼠标点击确定圆心，释放确定半径
+1.输入：点击上方工具栏的圆，则可绘制圆。鼠标点击确定圆心，释放确定半径
+
+2.编辑：圆有3个可以操纵的点：圆心，半径点，二分之半径点。用鼠标拖动半径点可以改变圆大小、拖动圆心可以对圆平移，拖动二分之半径点可以对圆进行旋转（虽然旋转没什么必要）。
+
+3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
 
 <div>
     <img src="image/5.png" width=90%>
@@ -829,27 +888,59 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 
 ## <div STYLE="page-break-after: always;"></div>
 
-##### (5) 画椭圆：点击上方工具栏的椭圆，则可绘制椭圆。鼠标点击确定中心，释放确定长轴和短轴
+##### (5) 椭圆的输入和编辑：
+
+1.输入：点击上方工具栏的椭圆，则可绘制椭圆。鼠标点击确定中心，释放确定长轴和短轴
+
+2.编辑：椭圆有3个可以操纵的点：中心，外接矩形顶点，旋转点。用鼠标拖动外接矩形顶点可以改变椭圆形状、拖动中心可以对椭圆平移，拖动旋转点可以对椭圆进行旋转（不过由于精度损失，旋转的椭圆轮廓会变粗）。
+
+3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
 
 <div>
     <img src="image/6.png" width=90%>
 </div>
+##### (6) 多边形的输入和编辑：
 
-##### (6) 撤销：点击左侧工具栏撤销按钮，即可撤销
+1.输入：点击上方工具栏多边形，则可绘制多边形。鼠标点击确定各个顶点，点击右键或靠近起始点会自动贴合。
+
+2.编辑：多边形的外界矩形中心，各个顶点，旋转点可编辑。用鼠标拖动各个顶点可以改变多边形形状、拖动外界矩形中心可以对多边形平移，拖动旋转点可以对多边形进行旋转。
+
+3.放缩：点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键
+
+<div>
+    <img src="image/11.png" width=90%>
+</div>
+##### (7) 填充:
+
+点击工具栏的“油漆桶”即可使用填充功能。会对4-连通区域的同颜色点填充
+
+<div>
+    <img src="image/12.png" width=90%>
+</div>
+
+##### (8) 直线裁剪：
+
+在直线输入/编辑状态时，点击工具栏“裁剪”图标即可绘制裁剪框，再次点击“裁剪”图标即可对直线裁剪。
+
+<div>
+    <img src="image/13.png" width=90%>
+    <img src="image/14.png" width=90%>
+</div>
+
+##### (9) 撤销：点击左侧工具栏撤销按钮，即可撤销
 
 <div>
     <img src="image/7.png" width=90%>
 </div>
-
 ## <div STYLE="page-break-after: always;"></div>
 
-##### (7) 清屏：点击左侧工具栏清屏按钮，即可清屏
+##### (10) 清屏：点击左侧工具栏清屏按钮，即可清屏
 
 <div>
     <img src="image/8.png" width=90%>
 </div>
 
-##### (8) 保存：点击左侧工具栏保存按钮，即可保存
+##### (11) 保存：点击左侧工具栏保存按钮，即可保存
 
 <div>
     <img src="image/9.png">
@@ -857,12 +948,29 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 
 ## <div STYLE="page-break-after: always;"></div>
 
-(9) 颜色选择：点击上方工具栏颜色选择按钮，即可选择颜色
+##### (12) 颜色选择：点击上方工具栏颜色选择按钮，即可选择颜色
 
 <div>
     <img src="image/10.png" width=90%>
 </div>
+##### (13)打开文件：点击左侧工具栏打开按钮，即可打开图片
 
+<div>
+    <img src="image/15.png" width=90%>
+</div>
+##### (14)画笔和笔刷：点击笔或者笔刷，即可自由绘图
+
+<div>
+    <img src="image/brush.png" width=90%>
+</div>
+
+##### (15)关于：点击关于,即可查看程序详情，点击链接可以查看详情。
+
+<div>
+    <img src="image/about.png" width=90%>
+</div>
+
+##### 
 
 ## 4.总结
 
@@ -870,11 +978,10 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 
 在9-10月关于图形学的学习中，基于我在课上所学的理论知识，以及课外对于Qt的交互、界面设计的学习，在截止10月底的系统中，我实现了二维图形中直线，圆以及椭圆的输入，并且实现创建多个窗口，画笔颜色的选择，绘画的撤销以及图像的保存功能。
 
-这次实验是我第一次写具有图形交互的的实验，感觉十分有趣。把图形学课上的理论同实践相结合并且不断探索，不断阅读各种文档资料学习新知识的感觉也不错。尤其是双缓冲绘图的实现，起初我为了实现类似画图程序的动态效果而自己实现了一个，后来听同学说这就是双缓冲技术，独立探索出了这样的技巧让我感觉我的确是有在学习东西的，这也让我对于该实验有着更大的兴趣。尽管由于其他原因，10月份的程序不能说尽善尽美，但是基于我对于程序的理解，一遍上着高级程序设计课学习C++各种高级性质，我尽可能把我的知识和设计体现在代码上。
+在11月的学习中，我增加了多边形的输入，增加了直线、圆、椭圆的编辑、平移、旋转、放缩功能，实现了填充和直线的裁剪。完善了图片打开的接口，并且优化了系统结构和UI设计，并增加了一些说明。
 
-<div>
-    <img src="imageSave\pikachu.gif"/>
-</div>
+这次实验是我第一次写具有图形交互的的实验，感觉十分有趣。把图形学课上的理论同实践相结合并且不断探索，不断阅读各种文档资料学习新知识的感觉也不错。尤其是双缓冲绘图的实现，起初我为了实现类似画图程序的动态效果而自己实现了一个，后来听同学说这就是双缓冲技术，独立探索出了这样的技巧让我感觉我的确是有在学习东西的，这也让我对于该实验有着更大的兴趣。尽管由于其他原因，10月份的程序不能说尽善尽美，但是基于我对于程序的理解，一遍上着《高级程序设计》课学习C++各种高级性质，我尽可能把我的知识和设计体现在代码上。11月份中，基于《高级程序设计》课上的知识，对系统的结构进行了优化，定义了一些继承和抽象关系，让程序更加面向对象，也相对更好维护一些。同时，Figure类的定义，对后期保存所有图形并对其进行处理提供了可能。
+
 
 ## 5.参考文献
 
@@ -891,3 +998,5 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
 [5] Qt5.9.4利用QOpenGLWidget类进行opengl绘图 https://blog.csdn.net/cpwwhsu/article/details/79773235
 
 [6] Qt学习之路-简易画板3(双缓冲绘图) https://blog.csdn.net/u012891055/article/details/41727391?utm_source=blogxgwz0
+
+[7]c++实现图像旋转任意角度 https://blog.csdn.net/wonengguwozai/article/details/52049092

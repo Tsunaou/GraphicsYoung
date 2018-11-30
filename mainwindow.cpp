@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initMdiArea();
     initColorSelection();
 
-    ui->actionPen->setChecked(true);
+    //ui->actionPen->setChecked(true);
 
 
 }
@@ -61,7 +61,7 @@ void MainWindow::initColorSelection()
 void MainWindow::setFigureMode(FIGURE_TYPE type)
 {
     if(type==PEN){
-        this->ui->actionPen->setChecked(true);
+        //this->ui->actionPen->setChecked(true);
     }
     this->figureMode = type;
     for(int i=0;i<canvases.size();i++){
@@ -71,14 +71,14 @@ void MainWindow::setFigureMode(FIGURE_TYPE type)
 
 void MainWindow::clearCheckedState()
 {
-    ui->actionPen->setChecked(false);
-    ui->actionBrush->setChecked(false);
-    ui->actionLine->setChecked(false);
-    ui->actionCurve->setChecked(false);
-    ui->actionCycle->setChecked(false);
-    ui->actionEllipse->setChecked(false);
-    ui->actionPolygon->setChecked(false);
-    ui->actionFiller->setChecked(false);
+//    ui->actionPen->setChecked(false);
+//    ui->actionBrush->setChecked(false);
+//    ui->actionLine->setChecked(false);
+//    ui->actionCurve->setChecked(false);
+//    ui->actionCycle->setChecked(false);
+//    ui->actionEllipse->setChecked(false);
+//    ui->actionPolygon->setChecked(false);
+//    ui->actionFiller->setChecked(false);
 }
 
 void MainWindow::setCutState(CUTTER mode)
@@ -139,21 +139,21 @@ void MainWindow::on_actionLine_triggered()
 {
     clearCheckedState();
     this->setFigureMode(LINE);
-    ui->actionLine->setChecked(true);
+    //ui->actionLine->setChecked(true);
 }
 
 void MainWindow::on_actionCycle_triggered()
 {
     clearCheckedState();
     this->setFigureMode(CYCLE);
-    ui->actionCycle->setChecked(true);
+    //ui->actionCycle->setChecked(true);
 }
 
 void MainWindow::on_actionCurve_triggered()
 {
     clearCheckedState();
     this->setFigureMode(LINE); //TODO
-    ui->actionCurve->setChecked(true);
+    //ui->actionCurve->setChecked(true);
 
 }
 
@@ -161,21 +161,21 @@ void MainWindow::on_actionEllipse_triggered()
 {
     clearCheckedState();
     this->setFigureMode(ELLIPSE);
-    ui->actionEllipse->setChecked(true);
+    //ui->actionEllipse->setChecked(true);
 }
 
 void MainWindow::on_actionPen_triggered()
 {
     clearCheckedState();
     this->setFigureMode(PEN);
-    ui->actionPen->setChecked(true);
+    //ui->actionPen->setChecked(true);
 }
 
 void MainWindow::on_actionBrush_triggered()
 {
     clearCheckedState();
     this->setFigureMode(BRUSH);
-    ui->actionBrush->setChecked(true);
+    //ui->actionBrush->setChecked(true);
 }
 
 void MainWindow::on_actionBigger_triggered()
@@ -194,14 +194,14 @@ void MainWindow::on_actionPolygon_triggered()
 {
     clearCheckedState();
     this->setFigureMode(POLYGON);
-    ui->actionPolygon->setChecked(true);
+    //ui->actionPolygon->setChecked(true);
 }
 
 void MainWindow::on_actionFiller_triggered()
 {
     clearCheckedState();
     this->setFigureMode(FILLER);
-    ui->actionFiller->setChecked(true);
+    //ui->actionFiller->setChecked(true);
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -240,7 +240,7 @@ void MainWindow::on_actionAbout_triggered()
                "除此之外，还基于梁友栋算法实现了直线的裁剪。"
                "程序还处于迭代中，欢迎使用。<br/>"
                "有任何疑问可以发送邮件<a href=\"mailto:895254752@qq.com\">895254752@qq.com</a><br/>"
-               "更多详情，可以到我的github pages上查看<a href=\"http://www.runoob.com/\" target=\"_blank\"><b>Tsuna的个人主页</b></a>"
+               "更多详情，可以到我的github pages上查看<a href=\"https://tsunaou.github.io/GraphicsYoung.html\" target=\"_blank\"><b>Tsuna的个人主页</b></a>"
                "<hr/>"
                "<p style=\"text-align: right\">欧阳鸿荣 2018.11.30</p></p>"
               ));

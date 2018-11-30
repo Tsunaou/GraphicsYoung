@@ -182,7 +182,7 @@
   </action>
   <action name="actionLine">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
@@ -200,7 +200,7 @@
   </action>
   <action name="actionCycle">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
@@ -218,7 +218,7 @@
   </action>
   <action name="actionCurve">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
@@ -236,7 +236,7 @@
   </action>
   <action name="actionEllipse">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
@@ -296,7 +296,7 @@
   </action>
   <action name="actionPen">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
@@ -314,7 +314,7 @@
   </action>
   <action name="actionBrush">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
@@ -362,7 +362,7 @@
   </action>
   <action name="actionPolygon">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
@@ -377,7 +377,7 @@
   </action>
   <action name="actionFiller">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="image.qrc">
