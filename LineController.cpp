@@ -83,7 +83,7 @@ bool LineController::cutLineLiangBsrsky(QPoint cutStart, QPoint cutEnd, QPainter
             return false;
         }
     }
-
+    qDebug()<<"梁友栋"<<endl;
     curLine->setStartPoint(Point(x1+int(u1*dx+0.5), y1+int(u1*dy+0.5)));
     curLine->setEndPoint(Point(x1+int(u2*dx+0.5), y1+int(u2*dy+0.5)));
     MyDrawLineDDA(painter,curLine->startPoint.point,curLine->endPoint.point);
