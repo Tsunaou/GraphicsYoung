@@ -34,7 +34,7 @@ int MainWindow::getCurCanvasNum()//返回当前画布序号
 
 void MainWindow::initMdiArea()
 {
-    setCentralWidget(ui->mdiArea);
+    //setCentralWidget(ui->mdiArea);
     ui->mdiArea->setViewMode(QMdiArea::TabbedView); //设置视口模式：tabBar模式
     ui->mdiArea->setTabPosition(QTabWidget::North); //设置tabBar的位置
     ui->mdiArea->setTabShape(QTabWidget::Rounded); //设置tab形状

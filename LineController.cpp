@@ -235,6 +235,8 @@ void LineController::mouseReleaseEvent(QPainter *painter, QMouseEvent *e, QPen p
 
 void LineController::MyDrawLineBresenham(QPainter *painter, QPoint &start, QPoint &end)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     //首先先在这里实现我的直线算法
     qDebug()<<"MyDrawLine Bresenham"<<endl;
 
@@ -266,6 +268,8 @@ void LineController::MyDrawLineBresenham(QPainter *painter, QPoint &start, QPoin
 
 void LineController::MyDrawLineDDA(QPainter *painter, QPoint &start, QPoint &end)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     //首先先在这里实现我的直线算法
     qDebug()<<"MyDrawLine DDA"<<endl;
     qDebug()<< "before"<<endl;

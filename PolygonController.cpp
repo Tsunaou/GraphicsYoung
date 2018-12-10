@@ -248,6 +248,8 @@ void PolygonController::setState(DRAW_STATE *state)
 
 void PolygonController::drawHandle(QPainter *painter, QPen pen)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     for(Point i : this->curPolyon->vertex){
         i.DrawCyclePoint(painter,pen);
     }
@@ -313,6 +315,8 @@ void PolygonController::changeNextPoints(Point point)
 
 void PolygonController::drawPolygon(QPainter* painter)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     if(this->setPolygon != POLYGON_ROTATE){
         this->curPolyon->getRectangle();
         this->drawOutlineToDebug(painter,curPolyon->centerPoint.getQPoint(),curPolyon->LeftUp.getQPoint());

@@ -42,6 +42,8 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     //setMouseTracking(true);
     this->processed = nullptr;
 
+    //窗体设置
+
 }
 
 void Canvas_GL::mousePressEvent(QMouseEvent *e)
@@ -102,7 +104,7 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
         reVec.push_back(tmp);
         update();
         pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
-
+        return;
     }
     //
     painter->end();
@@ -292,7 +294,13 @@ bool Canvas_GL::openImage(const QString &fileName)
     int height = loadedImage.height();
     setMaximumSize(width,height);            //设置绘制区窗体的最大尺寸（这里因为一开始放大后失真， 因此就限制了大小）
     setMinimumSize(width,height);            //设置绘制区窗体的最小尺寸
+//    this->resize(width,height);
+//    this->resizeGL(width,height);
+//    qDebug()<<"height:"<<height<<endl;
+//    qDebug()<<"width:"<<width<<endl;
     this->pix = &imageOpen;
+//    this->resize(width,height);
+//    this->resizeGL(width,height);
     update();
     return true;
 }
@@ -339,10 +347,15 @@ void Canvas_GL::recallImage()
 
 void Canvas_GL::clearStates()
 {
+printDebugMessage("执行clearStates;");
     this->drawState = UNDO;
+printDebugMessage("执行lineController.clearState();");
     this->lineController.clearState();
+printDebugMessage("执行cycleController.clearState();");
     this->cycleController.clearState();
+printDebugMessage("执行ellipseController.clearState();");
     this->ellipseController.clearState();
+printDebugMessage("执行polygonController.clearState();");
     this->polygonController.clearState();
 }
 
@@ -354,7 +367,9 @@ void Canvas_GL::setMode(FIGURE_TYPE type)
     }
     else{
         //只坐到上面，图像上会留下辅助点，因为还是得处理下QAQ
+printDebugMessage("执行figureController.getStartAndEnd();");
         figureController[figureMode]->getStartAndEnd(startPos,endPos);
+printDebugMessage("drawBeforeNewState");
         drawBeforeNewState();
         //切换前应该要注意清空信息
         clearStates();
@@ -470,13 +485,19 @@ void Canvas_GL::fillColor(QImage *img, QColor backcolor, QPainter *painter, int 
         int x = p.x();
         int y = p.y();
 
-        if(x<=0 || x>=pix->width()-2) continue;     //超限
-        if(y<=0 || y>=pix->height()-2) continue;    //超限
-        if(img->pixelColor(x,y) != backcolor) continue;   //边界
+        if((x<=0) || (x>=(pix->width()-3))) continue;     //超限
+        if((y<=0) || (y>=(pix->height()-3))) continue;    //超限
+        try{
+            if(img->pixelColor(x,y) != backcolor) continue;   //边界
+        }catch(QString){
+            qDebug()<<"异常处理"<<endl;
+        }
         if(processed[x][y] == true) continue;      //上色过了
         //qDebug()<<"print a"<<x<<","<<y<<")"<<endl;
         processed[x][y] = true;
-        painter->drawPoint(x,y);
+        if(painter->isActive()) {//保证在Painter有效的时候才进行
+            painter->drawPoint(x,y);
+        }
         if(!processed[x][y+1]){
             stack->push(QPoint(x,y+1));
         }
@@ -537,13 +558,17 @@ void Canvas_GL::drawBeforeNewState()
     painter->begin(pix);
     painter->setPen(pen);
     switch(figureMode){
-        case LINE: lineController.MyDrawLineDDA(painter,startPos,endPos);break;
-        case CYCLE:cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
-        case ELLIPSE:
+        case LINE: printDebugMessage("MyDrawLineDDA");
+        lineController.MyDrawLineDDA(painter,startPos,endPos);break;
+        case CYCLE:printDebugMessage("MyDrawCycleMidpoint");
+        cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
+        case ELLIPSE:printDebugMessage("MyDrawEllipse");
                     ellipseController.MyDrawEllipse(painter,startPos,endPos);
                     ellipseController.clearRotateAngle(); //清空现场
                     break;
-        case POLYGON:polygonController.drawUpPolygon(painter);break;
+        case POLYGON:printDebugMessage("drawUpPolygon");
+                    polygonController.drawUpPolygon(painter);break;
+
     default:
         break;
     }
@@ -594,7 +619,7 @@ void Canvas_GL::setColor(QColor c)
 {
     //drawBeforeNewState();
     setMode(this->figureMode);
-    this->drawBeforeNewState();
+    //this->drawBeforeNewState(); Maybe bug here
     color = c;
     pen.setColor(color);
 }

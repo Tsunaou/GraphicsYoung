@@ -247,6 +247,8 @@ void EllipseController::setState(DRAW_STATE *state)
 
 void EllipseController::drawHandle(QPainter *painter, QPen pen)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     this->curEllipse->getRectangle();
     lineDrawer.MyDrawLineDDA(painter,curEllipse->centerPoint.getQPoint(),curEllipse->rotatePoint.getQPoint());
     curEllipse->startPoint.DrawWarnPoint(painter,pen);
@@ -264,6 +266,8 @@ void EllipseController::drawHandle(QPainter *painter, QPen pen)
 
 void EllipseController::drawQuarterEllipse(QPainter *painter, int x0, int y0, int x, int y)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
 
     int rotateStartX = (x)*cos(rotateAngle) + (y)*sin(rotateAngle)  + 0.5;
     int rotateStartY = -(x)*sin(rotateAngle) + (y)*cos(rotateAngle) + 0.5;
@@ -315,8 +319,8 @@ void EllipseController::drawQuarterEllipse(QPainter *painter, int x0, int y0, in
 
 void EllipseController::MyDrawEllipse(QPainter *painter, QPoint &start, QPoint &end)
 {
-    //用一个虚线框来解决
-//    drawOutlineToDebug(painter,start,end);
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     //绘制一个点
     if(start == end){
         painter->drawPoint(start);

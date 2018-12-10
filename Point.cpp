@@ -36,10 +36,14 @@ void Point::setPoint(int x, int y)
 
 void Point::DrawCyclePoint(QPainter *painter,QPen &pen)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     QPen debugPen;
     debugPen.setWidth(1);
     debugPen.setColor(Qt::blue);
     painter->setPen(debugPen);
+
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
 
     for(int i=x-ridus;i<x+ridus;i++){
         for(int j=y-ridus;j<y+ridus;j++){
@@ -56,10 +60,14 @@ void Point::DrawCyclePoint(QPainter *painter,QPen &pen)
 
 void Point::DrawWarnPoint(QPainter *painter, QPen &pen)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     QPen debugPen;
     debugPen.setWidth(1);
     debugPen.setColor(Qt::red);
     painter->setPen(debugPen);
+
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
 
     for(int i=x-ridus;i<x+ridus;i++){
         for(int j=y-ridus;j<y+ridus;j++){

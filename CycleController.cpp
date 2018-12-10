@@ -230,6 +230,7 @@ void CycleController::setState(DRAW_STATE *state)
 
 void CycleController::drawHandle(QPainter *painter, QPen pen)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
     cycle->startPoint.DrawWarnPoint(painter,pen);
     cycle->endPoint.DrawCyclePoint(painter,pen);
     //cycle->centerPoint.DrawCyclePoint(painter,pen);
@@ -239,8 +240,10 @@ void CycleController::drawHandle(QPainter *painter, QPen pen)
 
 void CycleController::MyDrawCycleBresenham(QPainter *painter, QPoint &start, QPoint &end)//
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     //首先先在这里实现我的画圆算法
-    qDebug()<<"MyDrawCycle "<<endl;
+    qDebug()<<"MyDrawCycleBresenham "<<endl;
     int x0 = start.x();
     int y0 = start.y();
     double R = this->getLength(start,end);
@@ -262,8 +265,10 @@ void CycleController::MyDrawCycleBresenham(QPainter *painter, QPoint &start, QPo
 
 void CycleController::MyDrawCycleMidpoint(QPainter *painter, QPoint &start, QPoint &end)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     //首先先在这里实现我的画圆算法
-    qDebug()<<"MyDrawCycle "<<endl;
+    qDebug()<<"MyDrawCycleMidpoint "<<endl;
 
     int x0 = start.x();
     int y0 = start.y();
@@ -299,6 +304,8 @@ void CycleController::MyDrawCycleMidpoint(QPainter *painter, QPoint &start, QPoi
 
 void CycleController::drawEighthCycle(QPainter *painter, int x0, int y0, int x, int y)
 {
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
     QPoint temPt1(x0+x,y0+y);
     QPoint temPt2(x0+y,y0+x);
     QPoint temPt3(x0+x,y0-y);
