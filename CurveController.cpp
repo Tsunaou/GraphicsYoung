@@ -3,14 +3,14 @@
 CurveController::CurveController()
 {
     t = 0;
-    Point a(100,100);
-    Point a2(150,150);
-    Point b(200,300);
-    Point b2(250,350);
-    Point c(300,390);
-    Point c2(350,300);
-    Point d(400,200);
-    Point d2(440,100);
+    PointD a(100,100);
+    PointD a2(150,150);
+    PointD b(200,300);
+    PointD b2(250,350);
+    PointD c(300,390);
+    PointD c2(350,300);
+    PointD d(400,200);
+    PointD d2(440,100);
     ctrlPoints.push_back(a);
     ctrlPoints.push_back(a2);
 
@@ -27,8 +27,9 @@ CurveController::CurveController()
 void CurveController::drawCurve(QPainter *painter, QPen pen)
 {
     if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
-    for(Point v : ctrlPoints){
-        v.DrawCyclePoint(painter,pen);
+    for(PointD v : ctrlPoints){
+        Point t(v.getX(),v.getY());
+        t.DrawCyclePoint(painter,pen);
     }
     for(int i=0;i<ctrlPoints.size()-1;i++){
         painter->drawLine(ctrlPoints[i].getX(),ctrlPoints[i].getY(),
@@ -44,18 +45,18 @@ void CurveController::drawBezier(QPainter *painter, QPen pen)
     }
 }
 
-void CurveController::drawnode(QVector<Point> &nodes,QPainter *painter, QPen pen)
+void CurveController::drawnode(QVector<PointD> &nodes,QPainter *painter, QPen pen)
 {
     qDebug()<<"drawnode 0:"<<t<<endl;
     if(nodes.empty()){
         return;
     }
-    QVector<Point> _nodes; //复制一个数组_nodes
+    QVector<PointD> _nodes; //复制一个数组_nodes
     for(int i=0;i<nodes.size();i++){
         _nodes.push_back(nodes[i]);
     }
 //    qDebug()<<"drawnode 1:"<<t<<endl;
-    QVector<Point> nextNodes;
+    QVector<PointD> nextNodes;
 //    qDebug()<<"drawnode 1:"<<t<<"_nodes.length="<<_nodes.length()<<endl;
     for(int i=0;i<_nodes.size();i++){
         if(_nodes.length() == 1){
@@ -84,13 +85,13 @@ void CurveController::drawnode(QVector<Point> &nodes,QPainter *painter, QPen pen
     }
 }
 
-Point CurveController::getBezierPoint(Point a, Point b,double t)
+PointD CurveController::getBezierPoint(PointD a, PointD b,double t)
 {
 //    qDebug()<<"getBezierPoint:"<<t<<endl;
-    int x = 0;
-    int y = 0;
+    double x = 0;
+    double y = 0;
     int n = 1;
-    QVector<Point> res;
+    QVector<PointD> res;
     res.push_back(a);
     res.push_back(b);
     for(int index=0;index<res.length();index++){
@@ -103,7 +104,7 @@ Point CurveController::getBezierPoint(Point a, Point b,double t)
         }
     }
 
-    return Point(x,y);
+    return PointD(x,y);
 }
 
 int CurveController::fact(int n)
@@ -114,3 +115,13 @@ int CurveController::fact(int n)
         return n*fact(n-1);
     }
 };
+
+double PointD::getY() const
+{
+    return y;
+}
+
+double PointD::getX() const
+{
+    return x;
+}

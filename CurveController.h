@@ -4,6 +4,11 @@
 #include "FigureController.h"
 
 class PointD{
+public:
+    PointD(){
+        this->x=0.0;
+        this->y=0.0;
+    }
     PointD(double x,double y){
         this->x=x;
         this->y=y;
@@ -22,12 +27,12 @@ public:
     CurveController();
     void drawCurve(QPainter* painter, QPen pen);
     void drawBezier(QPainter *painter, QPen pen);
-    void drawnode(QVector<Point>& nodes,QPainter *painter, QPen pen);
-    Point getBezierPoint(Point a,Point b,double t);
+    void drawnode(QVector<PointD>& nodes,QPainter *painter, QPen pen);
+    PointD getBezierPoint(PointD a,PointD b,double t);
     int fact(int n);
 private:
-    QVector<Point> ctrlPoints;
-    QVector<Point> bezierNodes;
+    QVector<PointD> ctrlPoints;
+    QVector<PointD> bezierNodes;
     double t;
 };
 
