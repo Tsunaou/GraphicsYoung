@@ -9,6 +9,7 @@
 #include "CycleController.h"
 #include "EllipseController.h"
 #include "PolygonController.h"
+#include "CurveController.h"
 #include "Point.h"
 
 #include <QWidget>
@@ -62,6 +63,8 @@ public:
         qDebug()<<msg<<endl;
     }
     bool isDrawingFigure();     //判断是否在绘画图形状态
+
+    void drawCurve();   //画曲线，测试
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
@@ -97,6 +100,7 @@ private:
     CycleController cycleController;    //控制圆的行为
     EllipseController ellipseController;//控制椭圆的行为
     PolygonController polygonController; //控制多边形行为
+    CurveController curveController;    //控制曲线的行为
     QVector<FigureController*> figureController; //图形控制器集合
 
     FIGURE_TYPE figureMode;     //当前画图系统模式

@@ -155,6 +155,10 @@ void MainWindow::on_actionCurve_triggered()
     this->setFigureMode(LINE); //TODO
     //ui->actionCurve->setChecked(true);
 
+    //曲线测试
+//    int index = this->getCurCanvasNum();
+//    this->canvases[index]->drawCurve();
+
 }
 
 void MainWindow::on_actionEllipse_triggered()

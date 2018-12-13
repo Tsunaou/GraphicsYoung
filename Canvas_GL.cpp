@@ -328,6 +328,7 @@ void Canvas_GL::recallImage()
 {
     qDebug()<<"Recall"<<endl;
     clearStates();
+    qDebug()<<"reVec.size ="<<reVec.size()<<endl;
     if(reVec.size()<=1){
         qDebug()<<"It the initial state of the image."<<endl;
         QPixmap *clearPix =new QPixmap(size());
@@ -340,22 +341,23 @@ void Canvas_GL::recallImage()
         pix = reVec[reVec.size()-1];
         pixToMove = pix;
         reVec.pop_back();
-        figureVec.pop_back();//这里可能会有bug
+        //figureVec.pop_back();//这里可能会有bug//果真出bug
+        qDebug()<<"reVec.size>1"<<endl;
         update();
     }
 }
 
 void Canvas_GL::clearStates()
 {
-printDebugMessage("执行clearStates;");
+//printDebugMessage("执行clearStates;");
     this->drawState = UNDO;
-printDebugMessage("执行lineController.clearState();");
+//printDebugMessage("执行lineController.clearState();");
     this->lineController.clearState();
-printDebugMessage("执行cycleController.clearState();");
+//printDebugMessage("执行cycleController.clearState();");
     this->cycleController.clearState();
-printDebugMessage("执行ellipseController.clearState();");
+//printDebugMessage("执行ellipseController.clearState();");
     this->ellipseController.clearState();
-printDebugMessage("执行polygonController.clearState();");
+//printDebugMessage("执行polygonController.clearState();");
     this->polygonController.clearState();
 }
 
@@ -590,6 +592,18 @@ bool Canvas_GL::isDrawingFigure()
     }else{
         return false;
     }
+}
+
+void Canvas_GL::drawCurve()
+{
+    QPainter *painter = new QPainter();
+    painter->begin(pix);
+    painter->setPen(pen);
+
+    curveController.drawCurve(painter,pen);
+
+    painter->end();
+    delete painter;
 }
 
 
