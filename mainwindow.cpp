@@ -156,8 +156,8 @@ void MainWindow::on_actionCurve_triggered()
     //ui->actionCurve->setChecked(true);
 
     //曲线测试
-//    int index = this->getCurCanvasNum();
-//    this->canvases[index]->drawCurve();
+    int index = this->getCurCanvasNum();
+    this->canvases[index]->drawCurve();
 
 }
 

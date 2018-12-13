@@ -604,6 +604,12 @@ void Canvas_GL::drawCurve()
 
     painter->end();
     delete painter;
+
+    //为撤销做准备
+    QPixmap* tmp = this->getPixCopy();
+    reVec.push_back(tmp);
+    update();
+    pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
 }
 
 
