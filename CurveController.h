@@ -2,38 +2,47 @@
 #define CURVECONTROLLER_H
 
 #include "FigureController.h"
+#include "Curve.h"
 
-class PointD{
-public:
-    PointD(){
-        this->x=0.0;
-        this->y=0.0;
-    }
-    PointD(double x,double y){
-        this->x=x;
-        this->y=y;
-    }
-    double x;
-    double y;
 
-public:
-    double getX() const;
-    double getY() const;
-};
-
-class CurveController
+class CurveController: public FigureController
 {
 public:
     CurveController();
+    //继承的抽象方法
+    bool isOperationing(QMouseEvent *e,QPoint &start,QPoint &end);    //判断是否有在对图形进行绘制操作
+    void mousePressEvent(QPainter* painter, QMouseEvent *e, QPen pen);
+    void mouseMoveEvent(QPainter* painter, QMouseEvent *e, QPen pen);
+    void mouseReleaseEvent(QPainter* painter,QMouseEvent *e,  QPen pen);
+    void setStartPoint(Point point);
+    void setEndPoint(Point point);
+    void moveToPoint(Point point);
+    void rotateToPoint(Point point);
+    void setState(DRAW_STATE *state);
+    void drawHandle(QPainter* painter, QPen pen);
+    void clearState();
+    void getStartAndEnd(QPoint &start,QPoint &end);
+    void setBigger(QPainter* painter, QMouseEvent *e, QPen pen);   //放大
+    void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen);  //缩小
+    //本类独特方法
     void drawCurve(QPainter* painter, QPen pen);
     void drawBezier(QPainter *painter, QPen pen);
     void drawnode(QVector<PointD>& nodes,QPainter *painter, QPen pen);
     PointD getBezierPoint(PointD a,PointD b,double t);
-    int fact(int n);
+    int fact(int n);    //阶乘hansu
+    void initTestPoints();
+    bool changeingVertexs(QMouseEvent *e);
+    bool closeSettingPoints();
+    bool getIsSettingPoints();
 private:
     QVector<PointD> ctrlPoints;
     QVector<PointD> bezierNodes;
     double t;
+
+    SETCURVE setCurve;  //绘画状态
+    Curve * curve;  //当前聚焦的曲线
+
+    bool isSettingPoints;
 };
 
 #endif // CURVECONTROLLER_H

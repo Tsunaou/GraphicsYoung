@@ -53,4 +53,26 @@ public:
     QPoint point;   //点
 };
 
+class PointD{
+public:
+    PointD(){
+        this->x=0.0;
+        this->y=0.0;
+    }
+    PointD(double x,double y){
+        this->x=x;
+        this->y=y;
+    }
+    PointD(Point p){
+        this->x = p.getX();
+        this->y = p.getY();
+    }
+    double x;
+    double y;
+
+public:
+    double getX() const;
+    double getY() const;
+};
+
 #endif // POINT_H

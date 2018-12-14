@@ -62,6 +62,8 @@ private slots:
 
     void on_action_3D_triggered();
 
+    void on_actionDrawCurve_triggered();
+
 private:
     Ui::MainWindow *ui;
     QToolButton *colorBtn;      //颜色选择按钮

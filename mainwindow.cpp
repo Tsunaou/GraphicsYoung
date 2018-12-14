@@ -152,12 +152,12 @@ void MainWindow::on_actionCycle_triggered()
 void MainWindow::on_actionCurve_triggered()
 {
     clearCheckedState();
-    this->setFigureMode(LINE); //TODO
+    this->setFigureMode(CURVE); //TODO
     //ui->actionCurve->setChecked(true);
 
     //曲线测试
-    int index = this->getCurCanvasNum();
-    this->canvases[index]->drawCurve();
+//    int index = this->getCurCanvasNum();
+//    this->canvases[index]->drawCurve();
 
 }
 
@@ -258,4 +258,10 @@ void MainWindow::on_action_3D_triggered()
     ui->mdiArea->setActiveSubWindow(w);
     w->setWindowTitle(tr("画布%1").arg(ui->mdiArea->subWindowList().size()));
     w->show();
+}
+
+void MainWindow::on_actionDrawCurve_triggered()
+{
+    int index = this->getCurCanvasNum();
+    this->canvases[index]->drawCurve();
 }

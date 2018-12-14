@@ -105,6 +105,7 @@
    <addaction name="actionBigger"/>
    <addaction name="actionSmaller"/>
    <addaction name="actionFiller"/>
+   <addaction name="actionDrawCurve"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
@@ -420,6 +421,11 @@
    </property>
    <property name="toolTip">
     <string>打开3D文件</string>
+   </property>
+  </action>
+  <action name="actionDrawCurve">
+   <property name="text">
+    <string>绘制曲线</string>
    </property>
   </action>
  </widget>

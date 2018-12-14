@@ -31,12 +31,14 @@ Canvas_GL::Canvas_GL(QWidget *parent) : QOpenGLWidget(parent)
     this->cycleController.setState(&this->drawState);
     this->ellipseController.setState(&this->drawState);
     this->polygonController.setState(&this->drawState);
+    this->curveController.setState(&this->drawState);
     //用统一的接口来约束行为（测试中，目前效果还行。。）
     figureController.push_back(&lineController);
     figureController.push_back(&lineController);
     figureController.push_back(&cycleController);
     figureController.push_back(&ellipseController);
     figureController.push_back(&polygonController);
+    figureController.push_back(&curveController);
 
     //鼠标跟踪
     //setMouseTracking(true);
@@ -57,14 +59,19 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     }
 
     if(this->drawState == UNDO){ //上次绘画状态结束，pixToMove更新到最新状态,双缓冲结束（此时可以认为是首次Press）
+        printDebugMessage("mousePressEvent1");
         pixToMove = getPixCopy();
+        printDebugMessage("mousePressEvent1.2");
     }
     else{
         if(figureController[figureMode]->isOperationing(e,startPos,endPos)){ //绘画状态中，双缓冲准备
+            printDebugMessage("isOperationing");
             *pix = *pixToMove;
             setCursor(Qt::PointingHandCursor);//设置鼠标样式
+            printDebugMessage("mousePressEvent1.2");
         }else{
             //对保存上次绘画状态的图像在图中,此时startPos和endPos存储上次图像的信息
+            printDebugMessage("drawBeforeNewState");
             setCursor(Qt::ArrowCursor);//设置鼠标样式
             drawBeforeNewState();
         }
@@ -72,10 +79,13 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
 
     //Refactor Begin---------------------------------------------------------------------------------------------------------------------------------------
     QPainter *painter = new QPainter();
+    printDebugMessage("mousePressEvent1.3");
     painter->begin(pix);
     painter->setPen(pen);
+    printDebugMessage("mousePressEvent1.4");
     if(isDrawingFigure()){
         figureController[figureMode]->mousePressEvent(painter,e,pen);
+        printDebugMessage("mousePressEvent1.5");
         painter->end();
         printDebugMessage("mouseMoveEvent painter end");
         delete painter;
@@ -116,9 +126,12 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
     startPos = e->pos();
 }
 
-
 void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 {
+//    if(this->figureMode == CURVE && curveController.getIsSettingPoints()){
+//        return;
+//    }
+
     qDebug()<<"mouseMoveEvent"<<endl;
     QPoint endPos = e->pos();
 
@@ -175,6 +188,10 @@ void Canvas_GL::mouseMoveEvent(QMouseEvent *e)
 
 void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
 {
+//    if(this->figureMode == CURVE && curveController.getIsSettingPoints()){
+//        return;
+//    }
+
     qDebug()<<"mouseReleaseEvent"<<endl;
     setCursor(Qt::ArrowCursor);//设置鼠标样式
 
@@ -185,6 +202,7 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
     if(this->figureMode!=PEN && this->figureMode !=BRUSH){
         *pix = *pixToMove;
     }
+
     QPainter *painter = new QPainter();
     painter->begin(pix);
     painter->setPen(pen);
@@ -215,7 +233,7 @@ void Canvas_GL::mouseReleaseEvent(QMouseEvent *e)
     }
     //Refactor---------------------------------------------------------------------------------------------------------------------------------------
 
-    //不是LINE,CYCLE,ELLIPSE才会执行下列语句
+    //不是图形才会执行下列语句
     printDebugMessage("Pen here release");
     lineController.MyDrawLineDDA(painter,startPos,endPos);
     painter->end();
@@ -321,6 +339,8 @@ void Canvas_GL::clearImage()
     this->cycleController.clearState();
     this->ellipseController.clearState();
     this->polygonController.clearState();
+    this->curveController.clearState();
+    clearStates();
     update();
 }
 
@@ -349,16 +369,12 @@ void Canvas_GL::recallImage()
 
 void Canvas_GL::clearStates()
 {
-//printDebugMessage("执行clearStates;");
     this->drawState = UNDO;
-//printDebugMessage("执行lineController.clearState();");
     this->lineController.clearState();
-//printDebugMessage("执行cycleController.clearState();");
     this->cycleController.clearState();
-//printDebugMessage("执行ellipseController.clearState();");
     this->ellipseController.clearState();
-//printDebugMessage("执行polygonController.clearState();");
     this->polygonController.clearState();
+    this->curveController.clearState();
 }
 
 void Canvas_GL::setMode(FIGURE_TYPE type)
@@ -369,9 +385,7 @@ void Canvas_GL::setMode(FIGURE_TYPE type)
     }
     else{
         //只坐到上面，图像上会留下辅助点，因为还是得处理下QAQ
-printDebugMessage("执行figureController.getStartAndEnd();");
         figureController[figureMode]->getStartAndEnd(startPos,endPos);
-printDebugMessage("drawBeforeNewState");
         drawBeforeNewState();
         //切换前应该要注意清空信息
         clearStates();
@@ -410,6 +424,7 @@ void Canvas_GL::setCutMode(CUTTER mode)
                 this->cycleController.clearState();
                 this->ellipseController.clearState();
                 this->polygonController.clearState();
+                this->curveController.clearState();
             }
             painter->end();
             delete painter;
@@ -516,7 +531,6 @@ void Canvas_GL::fillColor(QImage *img, QColor backcolor, QPainter *painter, int 
     stack->clear();
 }
 
-
 QPixmap *Canvas_GL::getPixCopy()
 {
     QPixmap *newPix = new QPixmap(size());	//创建一个新的QPixmap对象
@@ -560,16 +574,20 @@ void Canvas_GL::drawBeforeNewState()
     painter->begin(pix);
     painter->setPen(pen);
     switch(figureMode){
-        case LINE: printDebugMessage("MyDrawLineDDA");
-        lineController.MyDrawLineDDA(painter,startPos,endPos);break;
-        case CYCLE:printDebugMessage("MyDrawCycleMidpoint");
-        cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
-        case ELLIPSE:printDebugMessage("MyDrawEllipse");
+        case LINE:
+                    lineController.MyDrawLineDDA(painter,startPos,endPos);break;
+        case CYCLE:
+                    cycleController.MyDrawCycleMidpoint(painter,startPos,endPos);break;
+        case ELLIPSE:
                     ellipseController.MyDrawEllipse(painter,startPos,endPos);
-                    ellipseController.clearRotateAngle(); //清空现场
-                    break;
-        case POLYGON:printDebugMessage("drawUpPolygon");
+                    ellipseController.clearRotateAngle(); break;//清空现场
+        case POLYGON:
                     polygonController.drawUpPolygon(painter);break;
+        case CURVE:
+                    //QMessageBox::warning(this,tr("drawBeforeNewState"),QString::fromLocal8Bit("drawBeforeNewState Curve To"));
+                    curveController.drawBezier(painter,pen);
+                    curveController.clearState();
+                    break;
 
     default:
         break;
@@ -583,11 +601,9 @@ void Canvas_GL::drawBeforeNewState()
     pixToMove = getPixCopy();//结束绘画状态，准备下次绘画
 }
 
-
-
 bool Canvas_GL::isDrawingFigure()
 {
-    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE || this->figureMode == POLYGON){
+    if(this->figureMode == LINE || this->figureMode == CYCLE || this->figureMode == ELLIPSE || this->figureMode == POLYGON || this->figureMode == CURVE){
         return true;
     }else{
         return false;
@@ -601,7 +617,7 @@ void Canvas_GL::drawCurve()
     painter->setPen(pen);
 
     curveController.drawCurve(painter,pen);
-
+    curveController.closeSettingPoints();
     painter->end();
     delete painter;
 
