@@ -249,3 +249,13 @@ void MainWindow::on_actionAbout_triggered()
                "<p style=\"text-align: right\">欧阳鸿荣 2018.11.30</p></p>"
               ));
 }
+
+void MainWindow::on_action_3D_triggered()
+{
+    Cavans_3DGL *cv = new Cavans_3DGL(this);
+
+    QMdiSubWindow *w = ui->mdiArea->addSubWindow(cv);
+    ui->mdiArea->setActiveSubWindow(w);
+    w->setWindowTitle(tr("画布%1").arg(ui->mdiArea->subWindowList().size()));
+    w->show();
+}

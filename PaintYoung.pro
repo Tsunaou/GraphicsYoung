@@ -45,7 +45,8 @@ SOURCES += \
     Point.cpp \
     Polygon.cpp \
     PolygonController.cpp \
-    CurveController.cpp
+    CurveController.cpp \
+    Cavans_3DGL.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -63,7 +64,8 @@ HEADERS += \
     Point.h \
     Polygon.h \
     PolygonController.h \
-    CurveController.h
+    CurveController.h \
+    Cavans_3DGL.h
 
 FORMS += \
         mainwindow.ui

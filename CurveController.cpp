@@ -3,14 +3,14 @@
 CurveController::CurveController()
 {
     t = 0;
-    PointD a(100,100);
-    PointD a2(150,150);
-    PointD b(200,300);
-    PointD b2(250,350);
-    PointD c(300,390);
-    PointD c2(350,300);
-    PointD d(400,200);
-    PointD d2(440,100);
+    PointD a(2*100,2*100);
+    PointD a2(2*150,2*150);
+    PointD b(2*200,2*300);
+    PointD b2(2*250,2*350);
+    PointD c(2*300,2*390);
+    PointD c2(2*350,2*300);
+    PointD d(2*400,2*200);
+    PointD d2(2*440,2*100);
     ctrlPoints.push_back(a);
     ctrlPoints.push_back(a2);
 

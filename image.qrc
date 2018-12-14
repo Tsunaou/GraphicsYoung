@@ -17,5 +17,6 @@
         <file>icon/polygon.png</file>
         <file>icon/fill.png</file>
         <file>icon/cutter.png</file>
+        <file>icon/3D.png</file>
     </qresource>
 </RCC>

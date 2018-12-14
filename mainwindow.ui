@@ -40,6 +40,7 @@
      <string>文件(&amp;F)</string>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="action_3D"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
    </widget>
@@ -118,6 +119,7 @@
    </attribute>
    <addaction name="actionNew"/>
    <addaction name="actionOpen"/>
+   <addaction name="action_3D"/>
    <addaction name="actionSave"/>
    <addaction name="actionClear"/>
    <addaction name="actionRecall"/>
@@ -406,6 +408,18 @@
    </property>
    <property name="toolTip">
     <string>关于本程序</string>
+   </property>
+  </action>
+  <action name="action_3D">
+   <property name="icon">
+    <iconset resource="image.qrc">
+     <normaloff>:/icon/icon/3D.png</normaloff>:/icon/icon/3D.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开3D文件</string>
+   </property>
+   <property name="toolTip">
+    <string>打开3D文件</string>
    </property>
   </action>
  </widget>
