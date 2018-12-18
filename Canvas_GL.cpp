@@ -52,6 +52,12 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
 {
     qDebug()<<"mousePressEvent"<<endl;
     showDrawingStates();
+
+    //解决曲线时闪烁问题（应该还要加一个setting points的判断 TODO）
+//    if(this->figureMode == CURVE && this->drawState == DRAWING){
+//        *pixToMove = *pix;
+//    }
+
     //裁剪2018/11/29
     if(this->cutMode == CUTTING){
         this->cutStart = e->pos();
@@ -76,6 +82,8 @@ void Canvas_GL::mousePressEvent(QMouseEvent *e)
             drawBeforeNewState();
         }
     }
+
+
 
     //Refactor Begin---------------------------------------------------------------------------------------------------------------------------------------
     QPainter *painter = new QPainter();
@@ -569,6 +577,16 @@ void Canvas_GL::drawBeforeNewState()
     if(this->figureMode == PEN || this->figureMode == BRUSH || this->figureMode == FILLER){
         return;
     }
+
+//    if(this->figureMode == CURVE){
+//        if(reVec.size()>=2){
+//            *pixToMove = *reVec[reVec.size()-2];
+//        }else if(reVec.size() == 1){
+//            *pixToMove = *reVec[0];
+//        }
+//        //QMessageBox::warning(this,tr("drawBeforeNewState"),tr("pixToMove 复原"));
+//    }
+
     *pix = *pixToMove;
     QPainter *painter = new QPainter();
     painter->begin(pix);

@@ -8,6 +8,9 @@ Cavans_3DGL::Cavans_3DGL(QWidget *parent) : QOpenGLWidget(parent)
     nFace = 0;
     this->getOffFiles();
     angle = 0;
+    offsetX = 0;
+    offsetY = 0;
+    offsetZ = -4;
     this->setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -25,7 +28,7 @@ void Cavans_3DGL::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, -4.0);
+    glTranslatef(offsetX, offsetY, offsetZ);
     glRotatef(angle, 0.0, 1.0, 0.0);
     gluLookAt(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     //绘制各个要素
@@ -90,6 +93,29 @@ void Cavans_3DGL::getOffFiles()
                    //cout<<x<<" " << y <<" " << z <<endl;
                }
 
+
+               //单位化
+
+               float max = 0.0;
+               for(int i=0;i<vecs.size();i++){
+                   if(vecs[i].x()>max)
+                       max = vecs[i].x();
+                   if(vecs[i].y()>max)
+                       max = vecs[i].y();
+                   if(vecs[i].z()>max)
+                       max = vecs[i].z();
+               }
+
+               for(int i=0;i<vecs.size();i++){
+                   float xi = vecs[i].x()/max;
+                   float yi = vecs[i].y()/max;
+                   float zi = vecs[i].z()/max;
+                   vecs[i].setX(xi);
+                   vecs[i].setY(yi);
+                   vecs[i].setZ(zi);
+               }
+
+
                //第一行特殊处理
                textStream >> nFace;
                //qDebug()<<nFace<<endl;
@@ -126,11 +152,18 @@ void Cavans_3DGL::getOffFiles()
 
 void Cavans_3DGL::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key()==Qt::Key_Left)
-        angle+=5;
-    else if(event->key()==Qt::Key_Right)
-        angle-=5;
-    else if(event->key()==Qt::Key_S){
+    switch(event->key()){
+        case Qt::Key_Left:  angle+=5;break;
+        case Qt::Key_Right: angle-=5;break;
+        case Qt::Key_Up:    offsetZ+=0.5;break;
+        case Qt::Key_Down:  offsetZ-=0.5;break;
+        case Qt::Key_3:     offsetX+=0.5;break;
+        case Qt::Key_1:     offsetX-=0.5;break;
+        case Qt::Key_5:     offsetY+=0.5;break;
+        case Qt::Key_2:     offsetY-=0.5;break;
+    default:break;
+    }
+    if(event->key()==Qt::Key_S){
         this->numVertices = 0;
         this->numFaces = 0;
         this->numEdges = 0;

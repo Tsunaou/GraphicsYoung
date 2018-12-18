@@ -42,8 +42,8 @@ bool CurveController::isOperationing(QMouseEvent *e, QPoint &start, QPoint &end)
     delete p;
     isSettingPoints = true;
     curve = nullptr;
-    //可能有bug
-        this->clearState();
+//    //可能有bug
+//        this->clearState();
     //
     return false;
 }
@@ -113,7 +113,7 @@ void CurveController::mouseReleaseEvent(QPainter *painter, QMouseEvent *e, QPen 
 
 void CurveController::setStartPoint(Point point)
 {
-    this->drawHandle(painter,pen);
+
 }
 
 void CurveController::setEndPoint(Point point)
@@ -203,6 +203,7 @@ void CurveController::drawCurve(QPainter *painter, QPen pen)
 
 void CurveController::drawBezier(QPainter *painter, QPen pen)
 {
+    this->bezierNodes.clear();
     for(t=0;t<1;t=t+0.01){
         drawnode(ctrlPoints,painter,pen);
     }
@@ -211,7 +212,7 @@ void CurveController::drawBezier(QPainter *painter, QPen pen)
 
 void CurveController::drawnode(QVector<PointD> &nodes,QPainter *painter, QPen pen)
 {
-    qDebug()<<"drawnode 0:"<<t<<endl;
+    //qDebug()<<"drawnode 0:"<<t<<endl;
     if(nodes.empty()){
         return;
     }

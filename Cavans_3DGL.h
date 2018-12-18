@@ -34,6 +34,9 @@ public:
     QVector<QVector3D> vecs;
     QVector<QVector<int>> faces;
     float angle; //旋转角度
+    float offsetX;  //z轴观察距离
+    float offsetY;  //z轴观察距离
+    float offsetZ;  //z轴观察距离
 };
 
 #endif // CAVANS_3DGL_H
