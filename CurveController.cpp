@@ -101,14 +101,33 @@ void CurveController::mousePressEvent(QPainter *painter, QMouseEvent *e, QPen pe
 
 void CurveController::mouseMoveEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
-    printCtrlDebugMessage("CurveController::mouseMoveEvent");
-    this->drawHandle(painter,pen);
+    qDebug()<<"CurveController::mouseMoveEvent"<<endl;
+    this->painter = painter;
+    Point curPoint(e->pos().x(),e->pos().y());
+    if (curve == nullptr)
+        return;
+    switch(setCurve){
+        case CURVE_NEXT: ; break;
+        case CURVE_CHANGE: this->changeVertexs(curPoint); break;
+        case CURVE_MOVE: this->moveToPoint(curPoint);break;
+        case CURVE_ROTATE: this->rotateToPoint(curPoint);break;
+        default:
+            qDebug()<<"Error setCurve"<<endl;
+    }
 }
 
 void CurveController::mouseReleaseEvent(QPainter *painter, QMouseEvent *e, QPen pen)
 {
     printCtrlDebugMessage("CurveController::mouseReleaseEvent");
-    this->drawHandle(painter,pen);
+    if(isSettingPoints){
+        drawHandle(painter,pen);
+    }else {
+        this->painter = painter;
+        drawCurve(painter,pen);
+        drawHandle(painter,pen);
+    }
+
+
 }
 
 void CurveController::setStartPoint(Point point)
@@ -207,6 +226,20 @@ void CurveController::drawBezier(QPainter *painter, QPen pen)
     for(t=0;t<1;t=t+0.01){
         drawnode(ctrlPoints,painter,pen);
     }
+    //辅助矩形
+    if(this->curve != nullptr){
+        if(this->setCurve != POLYGON_ROTATE){
+            this->curve->getRectangle();
+            this->drawOutlineToDebug(painter,curve->centerPoint.getQPoint(),curve->LeftUp.getQPoint());
+        }else{
+            this->curve->getRectangleRotating();
+            this->drawOutlineToDebug(painter,   curve->LeftUp.getQPoint(),
+                                                curve->RightUp.getQPoint(),
+                                                curve->RightDown.getQPoint(),
+                                                curve->LeftDown.getQPoint());
+        }
+    }
+
     this->isSettingPoints = false;
 }
 
@@ -303,8 +336,20 @@ void CurveController::initTestPoints()
 
 bool CurveController::changeingVertexs(QMouseEvent *e)
 {
-    return false;
-}
+    for(int i=0;i<curve->vertex.size();i++){
+        if(curve->vertex[i].distanceToPoint(e->pos())<= JUDGE_RIDUS){
+            this->indexChange = i;
+            printCtrlDebugMessage("当前操作的顶点是");
+            qDebug()<<i<<"号顶点"<<endl;
+            return true;
+        }
+        if(curve->startPoint.distanceToPoint(e->pos())<= JUDGE_RIDUS){
+            this->indexChange = 0;
+            printCtrlDebugMessage("当前操作的顶点是0号顶点");
+            return true;
+        }
+    }
+    return false;}
 
 bool CurveController::closeSettingPoints()
 {
@@ -314,6 +359,17 @@ bool CurveController::closeSettingPoints()
 bool CurveController::getIsSettingPoints()
 {
     return this->isSettingPoints;
+}
+
+void CurveController::changeVertexs(Point point)
+{
+    this->t = 0;
+    this->bezierNodes.clear();
+    this->curve->changePoint(indexChange,point);
+
+    //顺序不知道为啥会影响粗细。。
+    drawCurve(painter,pen);
+    drawHandle(painter,pen);
 }
 
 

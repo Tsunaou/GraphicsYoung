@@ -34,6 +34,7 @@ public:
     bool changeingVertexs(QMouseEvent *e);
     bool closeSettingPoints();
     bool getIsSettingPoints();
+    void changeVertexs(Point point);    //改变控制点位置
 private:
     QVector<PointD> ctrlPoints;
     QVector<PointD> bezierNodes;
@@ -43,6 +44,7 @@ private:
     Curve * curve;  //当前聚焦的曲线
 
     bool isSettingPoints;
+    int indexChange; //当前正在操作的曲线的控制顶点
 };
 
 #endif // CURVECONTROLLER_H
