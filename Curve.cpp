@@ -3,6 +3,9 @@
 Curve::Curve()
 {
     vertex.clear();
+    //For test
+    xCenter = 0;
+    yCenter = 0;
 }
 
 void Curve::setNextPoint(Point p)

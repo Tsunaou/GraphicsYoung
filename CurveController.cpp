@@ -142,12 +142,52 @@ void CurveController::setEndPoint(Point point)
 
 void CurveController::moveToPoint(Point point)
 {
-
+    int offsetX = point.getX() - curve->centerPoint.getX();
+    int offsetY = point.getY() - curve->centerPoint.getY();
+    for(int i=0;i<this->curve->vertex.size();i++){
+        this->curve->vertex[i].addX(offsetX);
+        this->curve->vertex[i].addY(offsetY);
+    }
+    curve->getRectangle();
+    drawCurve(painter,pen);
+    drawHandle(painter,pen);
 }
 
 void CurveController::rotateToPoint(Point point)
 {
+    //先得到与先前旋转点的夹角，用一般方法把所有的点都转了
+    double RotaryAngle = getRotaryAngle(curve->centerPoint,curve->rotatePoint,point);   //旋转角
+    bool wiseFlag = clockWise(curve->centerPoint,curve->rotatePoint,point);             //是否顺时针
+    if(wiseFlag)
+        qDebug()<<"顺时针"<<endl;
+    else
+        qDebug()<<"逆时针"<<endl;
 
+    if(wiseFlag){//顺时针转
+        RotaryAngle *= -1;
+    }
+    //基准点
+    int rx0 = curve->centerPoint.getX();
+    int ry0 = curve->centerPoint.getY();
+    //对每个点进行处理(这里有BUG，但是不知道为什么会有)
+    for(int i=0;i<this->curve->vertex.size();i++){
+        int x = this->curve->vertex[i].getX();
+        int y = this->curve->vertex[i].getY();
+        int rotateStartX = (x - rx0)*cos(RotaryAngle) + (y - ry0)*sin(RotaryAngle) + rx0 ;
+        int rotateStartY = -(x - rx0)*sin(RotaryAngle) + (y - ry0)*cos(RotaryAngle) + ry0 ;
+        this->curve->vertex[i].setPoint(rotateStartX,rotateStartY);
+    }
+    //对旋转点处理（用内置的旋转角）
+    Point up(this->curve->centerPoint.getX(),0); //表示竖直向上的点
+    qreal newAngel = getRotaryAngle(this->curve->centerPoint,up,point);//与竖直的夹角
+    if(point.getX()<up.getX()){
+        newAngel *= -1;
+    }
+    this->curve->rotateAngle = newAngel;
+    //绘制旋转后图形
+    this->curve->getRectangleRotating();
+    drawCurve(painter,pen);
+    drawHandle(painter,pen);
 }
 
 void CurveController::setState(DRAW_STATE *state)
