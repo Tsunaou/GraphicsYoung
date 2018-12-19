@@ -238,12 +238,24 @@ void CurveController::getStartAndEnd(QPoint &start, QPoint &end)
 
 void CurveController::setBigger(QPainter *painter, QMouseEvent *e, QPen pen)
 {
-
+    for(int i=0;i<this->curve->vertex.size();i++){
+        this->curve->vertex[i].mulX(ZOOM_IN);
+        this->curve->vertex[i].mulY(ZOOM_IN);
+    }
+    curve->getRectangle();
+    drawCurve(painter,pen);
+    drawHandle(painter,pen);
 }
 
 void CurveController::setSmaller(QPainter *painter, QMouseEvent *e, QPen pen)
 {
-
+    for(int i=0;i<this->curve->vertex.size();i++){
+        this->curve->vertex[i].mulX(ZOOM_OUT);
+        this->curve->vertex[i].mulY(ZOOM_OUT);
+    }
+    curve->getRectangle();
+    drawCurve(painter,pen);
+    drawHandle(painter,pen);
 }
 
 void CurveController::drawCurve(QPainter *painter, QPen pen)
@@ -268,10 +280,12 @@ void CurveController::drawBezier(QPainter *painter, QPen pen)
     }
     //辅助矩形
     if(this->curve != nullptr){
-        if(this->setCurve != POLYGON_ROTATE){
+        if(this->setCurve != CURVE_ROTATE){
+            printCtrlDebugMessage("this->curve->getRectangle();");
             this->curve->getRectangle();
             this->drawOutlineToDebug(painter,curve->centerPoint.getQPoint(),curve->LeftUp.getQPoint());
         }else{
+            printCtrlDebugMessage("this->curve->getRectangleRotating();");
             this->curve->getRectangleRotating();
             this->drawOutlineToDebug(painter,   curve->LeftUp.getQPoint(),
                                                 curve->RightUp.getQPoint(),

@@ -51,6 +51,7 @@ void Polygon::changePoint(int index, Point p)
 
 void Polygon::getRectangle()
 {
+
     int maxX = vertex.first().getX();
     int minX = vertex.first().getX();
     int maxY = vertex.first().getY();
