@@ -628,8 +628,41 @@ bool Canvas_GL::isDrawingFigure()
     }
 }
 
+void Canvas_GL::animeDraw(){
+    QPainter *painter = new QPainter();
+    Sleep(10);
+    *pix = *pixToMove;
+    painter->begin(pix);
+    painter->setPen(pen);
+
+    printDebugMessage("drawCurve 点击");
+
+    curveController.drawFirstMovingCurve(painter,pen);
+    curveController.drawHandle(painter,pen);
+    painter->end();
+    delete painter;
+    repaint();
+}
+
 void Canvas_GL::drawCurve()
 {
+    //没有曲线，就不能画
+    if(curveController.isNullCurve()){
+        return;
+    }
+
+    //不能再次绘制
+    if(curveController.getIsSettingPoints()==false){
+        return;
+    }
+
+    //动画版本
+    for(double i=0;i<1;i+=0.01){
+        animeDraw();
+    }
+    curveController.closeSettingPoints();
+
+    //无动画版本
     QPainter *painter = new QPainter();
     *pix = *pixToMove;
     painter->begin(pix);
@@ -671,7 +704,7 @@ void Canvas_GL::resizeGL(int width, int height){
 void Canvas_GL::setColor(QColor c)
 {
     //drawBeforeNewState();
-    setMode(this->figureMode);
+    //setMode(this->figureMode);//(颜色bug在12/19)
     //this->drawBeforeNewState(); Maybe bug here
     color = c;
     pen.setColor(color);

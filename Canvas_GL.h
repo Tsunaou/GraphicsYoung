@@ -65,6 +65,7 @@ public:
     bool isDrawingFigure();     //判断是否在绘画图形状态
 
     void drawCurve();   //画曲线，测试
+    void animeDraw();
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;

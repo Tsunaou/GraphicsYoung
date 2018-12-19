@@ -15,6 +15,8 @@ public:
     void setPoint(int x,int y);
     void DrawCyclePoint(QPainter *painter,QPen &pen);
     void DrawWarnPoint(QPainter *painter,QPen &pen);
+    void DrawMovingPoint(QPainter *painter,QPen &pen);
+    void DrawColorPoint(QPainter *painter,QPen &pen);
     double distanceToPoint(int x,int y);
     double distanceToPoint(QPoint p);
     void printPointCoodinate(){

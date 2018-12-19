@@ -80,6 +80,57 @@ void Point::DrawWarnPoint(QPainter *painter, QPen &pen)
     painter->setPen(pen);
 }
 
+void Point::DrawMovingPoint(QPainter *painter, QPen &pen)
+{
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
+    QPen debugPen;
+    debugPen.setWidth(1);
+    debugPen.setColor(Qt::gray);
+    painter->setPen(debugPen);
+
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
+    int ridusReg = ridus;
+    ridus--;
+
+    for(int i=x-ridus;i<x+ridus;i++){
+        for(int j=y-ridus;j<y+ridus;j++){
+            if(distanceToPoint(i,j)<=ridus){
+                painter->drawPoint(i,j);
+            }
+        }
+    }
+
+    ridus = ridusReg;
+
+    painter->setPen(pen);
+}
+
+void Point::DrawColorPoint(QPainter *painter, QPen &pen)
+{
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
+    QPen debugPen;
+    debugPen.setWidth(1);
+    debugPen.setColor(pen.color());
+    painter->setPen(debugPen);
+
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
+
+    for(int i=x-ridus;i<x+ridus;i++){
+        for(int j=y-ridus;j<y+ridus;j++){
+            if(distanceToPoint(i,j)<=ridus){
+                painter->drawPoint(i,j);
+            }
+        }
+    }
+
+
+    painter->setPen(pen);
+}
+
 double Point::distanceToPoint(int x, int y)
 {
     return sqrt((this->x-x)*

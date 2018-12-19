@@ -26,6 +26,7 @@ public:
     void setSmaller(QPainter* painter, QMouseEvent *e, QPen pen);  //缩小
     //本类独特方法
     void drawCurve(QPainter* painter, QPen pen);
+    void drawFirstMovingCurve(QPainter* painter, QPen pen);
     void drawBezier(QPainter *painter, QPen pen);
     void drawnode(QVector<PointD>& nodes,QPainter *painter, QPen pen);
     PointD getBezierPoint(PointD a,PointD b,double t);
@@ -35,15 +36,18 @@ public:
     bool closeSettingPoints();
     bool getIsSettingPoints();
     void changeVertexs(Point point);    //改变控制点位置
+    bool isNullCurve();
 private:
     QVector<PointD> ctrlPoints;
     QVector<PointD> bezierNodes;
     double t;
 
+
     SETCURVE setCurve;  //绘画状态
     Curve * curve;  //当前聚焦的曲线
 
-    bool isSettingPoints;
+    bool isSettingPoints;   //正在设置控制点
+    bool isFirstDrawing;    //首次绘制，用于动态
     int indexChange; //当前正在操作的曲线的控制顶点
 };
 

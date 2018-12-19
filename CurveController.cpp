@@ -7,6 +7,7 @@ CurveController::CurveController()
     this->setCurve = CURVE_NULL;
 
     this->isSettingPoints = true;
+    this->isFirstDrawing = false;
     t = 0;  //参数
 
     initTestPoints();
@@ -205,7 +206,7 @@ void CurveController::drawHandle(QPainter *painter, QPen pen)
     QPen debugPen;
     debugPen.setStyle(Qt::DashLine);
     debugPen.setWidth(1);
-    debugPen.setColor(Qt::black);
+    debugPen.setColor(pen.color());
     painter->setPen(debugPen);
 
     for(int i=0;i<curve->vertex.size()-1;i++){
@@ -226,6 +227,7 @@ void CurveController::clearState()
     this->setCurve = CURVE_NULL;
 
     this->isSettingPoints = true;
+    this->isFirstDrawing = false;
     t = 0;  //参数
     this->ctrlPoints.clear();
     this->bezierNodes.clear();
@@ -233,7 +235,7 @@ void CurveController::clearState()
 
 void CurveController::getStartAndEnd(QPoint &start, QPoint &end)
 {
-
+    //已经失去这个函数本身的意义了
 }
 
 void CurveController::setBigger(QPainter *painter, QMouseEvent *e, QPen pen)
@@ -261,6 +263,7 @@ void CurveController::setSmaller(QPainter *painter, QMouseEvent *e, QPen pen)
 void CurveController::drawCurve(QPainter *painter, QPen pen)
 {
     if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+    this->painter = painter;
     //清空控制点数组
     ctrlPoints.clear();
     //转化为浮点数组
@@ -270,10 +273,50 @@ void CurveController::drawCurve(QPainter *painter, QPen pen)
     }
 
     drawBezier(painter,pen);
+    this->isSettingPoints = false;
+}
+
+void CurveController::drawFirstMovingCurve(QPainter *painter, QPen pen)
+{
+    if(this->curve == nullptr){
+        return;
+    }
+
+    //绘制后不可再次绘制
+    if(isSettingPoints == false){
+        return;
+    }
+
+    if(!painter->isActive()) {return;}//保证在Painter有效的时候才进行
+
+    this->painter = painter;
+
+    //只有第一次画才会进入
+    if(isFirstDrawing==false){
+        this->isFirstDrawing = true;
+        this->t=0;
+        //清空控制点数组
+        ctrlPoints.clear();
+        //转化为浮点数组
+        for(Point v : curve->vertex){
+            ctrlPoints.push_back(PointD(v.getX(),v.getY()));
+            v.DrawCyclePoint(painter,pen);
+        }
+        this->bezierNodes.clear();
+    }
+
+    //drawBezier
+    drawnode(ctrlPoints,painter,pen);
+    qDebug()<<"moving t="<<t;
+    if(t<1){
+        t = t+0.01;
+    }
 }
 
 void CurveController::drawBezier(QPainter *painter, QPen pen)
 {
+    ///BUG mayber!!!!
+    this->isSettingPoints=false;
     this->bezierNodes.clear();
     for(t=0;t<1;t=t+0.01){
         drawnode(ctrlPoints,painter,pen);
@@ -294,12 +337,10 @@ void CurveController::drawBezier(QPainter *painter, QPen pen)
         }
     }
 
-    this->isSettingPoints = false;
 }
 
 void CurveController::drawnode(QVector<PointD> &nodes,QPainter *painter, QPen pen)
 {
-    //qDebug()<<"drawnode 0:"<<t<<endl;
     if(nodes.empty()){
         return;
     }
@@ -307,39 +348,55 @@ void CurveController::drawnode(QVector<PointD> &nodes,QPainter *painter, QPen pe
     for(int i=0;i<nodes.size();i++){
         _nodes.push_back(nodes[i]);
     }
-//    qDebug()<<"drawnode 1:"<<t<<endl;
     QVector<PointD> nextNodes;
-//    qDebug()<<"drawnode 1:"<<t<<"_nodes.length="<<_nodes.length()<<endl;
     for(int i=0;i<_nodes.size();i++){
+        int startX = _nodes[i].getX();
+        int startY = _nodes[i].getY();
+
+        //绘制动态
+        if(this->isFirstDrawing && this->isSettingPoints && this->curve->vertex.size()<MAX_ANIME_POINTS){
+
+            Point movePoint(startX,startY);
+            if(_nodes.size()==1){
+                movePoint.DrawColorPoint(painter,pen);
+            }else{
+                movePoint.DrawMovingPoint(painter,pen);
+            }
+        }
+
         if(_nodes.length() == 1){
             bezierNodes.push_back(_nodes[i]);
-//            qDebug()<<"drawnode 1:"<<t<<"bezierNodes.length="<<bezierNodes.length()<<endl;
             if(bezierNodes.size()>1){
                 for(int j=1;j<bezierNodes.size();j++){
-                    int startX = bezierNodes[j-1].getX();
-                    int startY = bezierNodes[j-1].getY();
+                    startX = bezierNodes[j-1].getX();
+                    startY = bezierNodes[j-1].getY();
                     int x = bezierNodes[j].getX();
                     int y = bezierNodes[j].getY();
-//                    qDebug()<<"drawnode drawLine:"<<t<<endl;
                     painter->drawLine(startX,startY,x,y);
 
                 }
             }
         }
+
+        //绘制动态
+        if(i>0 && this->isFirstDrawing && this->isSettingPoints && this->curve->vertex.size()<MAX_ANIME_POINTS){
+            printCtrlDebugMessage("draw moving");
+            int targetX = _nodes[i-1].getX();
+            int targetY = _nodes[i-1].getY();
+            painter->drawLine(targetX,targetY,startX,startY);
+        }
     }
-//    qDebug()<<"drawnode 2:"<<t<<endl;
+
     if(_nodes.size()>=0){
         for(int i=0;i<_nodes.length()-1;i++){
             nextNodes.push_back(getBezierPoint(_nodes[i],_nodes[i+1],t));
         }
-//        qDebug()<<"drawnode 3:"<<t<<endl;
         drawnode(nextNodes,painter,pen);
     }
 }
 
 PointD CurveController::getBezierPoint(PointD a, PointD b,double t)
 {
-//    qDebug()<<"getBezierPoint:"<<t<<endl;
     double x = 0;
     double y = 0;
     int n = 1;
@@ -424,6 +481,11 @@ void CurveController::changeVertexs(Point point)
     //顺序不知道为啥会影响粗细。。
     drawCurve(painter,pen);
     drawHandle(painter,pen);
+}
+
+bool CurveController::isNullCurve()
+{
+    return (this->curve==nullptr);
 }
 
 

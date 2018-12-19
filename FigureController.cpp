@@ -104,14 +104,12 @@ double FigureController::getLength(QPoint &start, QPoint &end)
 
 void FigureController::drawOutlineToDebug(QPainter *painter, QPoint &start, QPoint &end)
 {
+    QPen savePen = painter->pen();
+
     QPen debugPen;
     debugPen.setStyle(Qt::DashLine);
     debugPen.setWidth(1);
     debugPen.setColor(Qt::black);
-    QPen savePen;
-    savePen.setStyle(Qt::SolidLine);
-    savePen.setWidth(1);
-    savePen.setColor(Qt::black);
 
     painter->setPen(debugPen);
 
@@ -135,14 +133,12 @@ void FigureController::drawOutlineToDebug(QPainter *painter, QPoint &start, QPoi
 
 void FigureController::drawOutlineToDebug(QPainter *painter, QPoint a, QPoint b, QPoint c, QPoint d)
 {
+    QPen savePen = painter->pen();
+
     QPen debugPen;
     debugPen.setStyle(Qt::DashLine);
     debugPen.setWidth(1);
     debugPen.setColor(Qt::black);
-    QPen savePen;
-    savePen.setStyle(Qt::SolidLine);
-    savePen.setWidth(1);
-    savePen.setColor(Qt::black);
 
     painter->setPen(debugPen);
 
