@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>161220096_系统使用说明书</title><link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; white-space: normal; padding-bottom: 70px; overflow-x: visible; }
+.first-line-indent #write div, .first-line-indent #write li, .first-line-indent #write p { text-indent: 2em; }
+.first-line-indent #write div :not(p):not(div), .first-line-indent #write div.md-htmlblock-container, .first-line-indent #write p *, .first-line-indent pre { text-indent: 0px; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write > blockquote:first-child, #write > div:first-child, #write > figure:first-child, #write > ol:first-child, #write > p:first-child, #write > pre:first-child, #write > ul:first-child { margin-top: 30px; }
+#write li > figure:first-child { margin-top: -20px; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 2; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
+  #write { margin-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 1cm; padding-right: 1cm; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0px; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > img:only-child { display: block; margin: auto; }
+p > .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="mermaid"] svg, [lang="flow"] svg { max-width: 100%; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+
+
+:root { --side-bar-bg-color: #fafafa; --control-text-color: #777; }
+@font-face { font-family: "Open Sans"; font-style: normal; font-weight: normal; src: local("Open Sans Regular"), url("./github/400.woff") format("woff"); }
+@font-face { font-family: "Open Sans"; font-style: italic; font-weight: normal; src: local("Open Sans Italic"), url("./github/400i.woff") format("woff"); }
+@font-face { font-family: "Open Sans"; font-style: normal; font-weight: bold; src: local("Open Sans Bold"), url("./github/700.woff") format("woff"); }
+@font-face { font-family: "Open Sans"; font-style: italic; font-weight: bold; src: local("Open Sans Bold Italic"), url("./github/700i.woff") format("woff"); }
+html { font-size: 16px; }
+body { font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(51, 51, 51); line-height: 1.6; }
+#write { max-width: 860px; margin: 0px auto; padding: 20px 30px 100px; }
+#write > ul:first-child, #write > ol:first-child { margin-top: 30px; }
+body > :first-child { margin-top: 0px !important; }
+body > :last-child { margin-bottom: 0px !important; }
+a { color: rgb(65, 131, 196); }
+h1, h2, h3, h4, h5, h6 { position: relative; margin-top: 1rem; margin-bottom: 1rem; font-weight: bold; line-height: 1.4; cursor: text; }
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor { text-decoration: none; }
+h1 tt, h1 code { font-size: inherit; }
+h2 tt, h2 code { font-size: inherit; }
+h3 tt, h3 code { font-size: inherit; }
+h4 tt, h4 code { font-size: inherit; }
+h5 tt, h5 code { font-size: inherit; }
+h6 tt, h6 code { font-size: inherit; }
+h1 { padding-bottom: 0.3em; font-size: 2.25em; line-height: 1.2; border-bottom: 1px solid rgb(238, 238, 238); }
+h2 { padding-bottom: 0.3em; font-size: 1.75em; line-height: 1.225; border-bottom: 1px solid rgb(238, 238, 238); }
+h3 { font-size: 1.5em; line-height: 1.43; }
+h4 { font-size: 1.25em; }
+h5 { font-size: 1em; }
+h6 { font-size: 1em; color: rgb(119, 119, 119); }
+p, blockquote, ul, ol, dl, table { margin: 0.8em 0px; }
+li > ol, li > ul { margin: 0px; }
+hr { height: 2px; padding: 0px; margin: 16px 0px; background-color: rgb(231, 231, 231); border: 0px none; overflow: hidden; box-sizing: content-box; }
+body > h2:first-child { margin-top: 0px; padding-top: 0px; }
+body > h1:first-child { margin-top: 0px; padding-top: 0px; }
+body > h1:first-child + h2 { margin-top: 0px; padding-top: 0px; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child { margin-top: 0px; padding-top: 0px; }
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 { margin-top: 0px; padding-top: 0px; }
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p { margin-top: 0px; }
+li p.first { display: inline-block; }
+ul, ol { padding-left: 30px; }
+ul:first-child, ol:first-child { margin-top: 0px; }
+ul:last-child, ol:last-child { margin-bottom: 0px; }
+blockquote { border-left: 4px solid rgb(223, 226, 229); padding: 0px 15px; color: rgb(119, 119, 119); }
+blockquote blockquote { padding-right: 0px; }
+table { padding: 0px; word-break: initial; }
+table tr { border-top: 1px solid rgb(223, 226, 229); margin: 0px; padding: 0px; }
+table tr:nth-child(2n), thead { background-color: rgb(248, 248, 248); }
+table tr th { font-weight: bold; border-width: 1px 1px 0px; border-top-style: solid; border-right-style: solid; border-left-style: solid; border-top-color: rgb(223, 226, 229); border-right-color: rgb(223, 226, 229); border-left-color: rgb(223, 226, 229); border-image: initial; border-bottom-style: initial; border-bottom-color: initial; text-align: left; margin: 0px; padding: 6px 13px; }
+table tr td { border: 1px solid rgb(223, 226, 229); text-align: left; margin: 0px; padding: 6px 13px; }
+table tr th:first-child, table tr td:first-child { margin-top: 0px; }
+table tr th:last-child, table tr td:last-child { margin-bottom: 0px; }
+.CodeMirror-lines { padding-left: 4px; }
+.code-tooltip { box-shadow: rgba(0, 28, 36, 0.3) 0px 1px 1px 0px; border-top: 1px solid rgb(238, 242, 242); }
+.md-fences, code, tt { border: 1px solid rgb(231, 234, 237); background-color: rgb(248, 248, 248); border-radius: 3px; padding: 2px 4px 0px; font-size: 0.9em; }
+code { background-color: rgb(243, 244, 244); padding: 0px 4px 2px; }
+.md-fences { margin-bottom: 15px; margin-top: 15px; padding: 8px 1em 6px; }
+.md-task-list-item > input { margin-left: -1.3em; }
+@media screen and (min-width: 914px) {
+}
+@media print {
+  html { font-size: 13px; }
+  table, pre { break-inside: avoid; }
+  pre { word-wrap: break-word; }
+}
+.md-fences { background-color: rgb(248, 248, 248); }
+#write pre.md-meta-block { padding: 1rem; font-size: 85%; line-height: 1.45; background-color: rgb(247, 247, 247); border: 0px; border-radius: 3px; color: rgb(119, 119, 119); margin-top: 0px !important; }
+.mathjax-block > .code-tooltip { bottom: 0.375rem; }
+.md-mathjax-midline { background: rgb(250, 250, 250); }
+#write > h3.md-focus::before { left: -1.5625rem; top: 0.375rem; }
+#write > h4.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+#write > h5.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+#write > h6.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+.md-image > .md-meta { border-radius: 3px; padding: 2px 0px 0px 4px; font-size: 0.9em; color: inherit; }
+.md-tag { color: rgb(167, 167, 167); opacity: 1; }
+.md-toc { margin-top: 20px; padding-bottom: 20px; }
+.sidebar-tabs { border-bottom: none; }
+#typora-quick-open { border: 1px solid rgb(221, 221, 221); background-color: rgb(248, 248, 248); }
+#typora-quick-open-item { background-color: rgb(250, 250, 250); border-color: rgb(254, 254, 254) rgb(229, 229, 229) rgb(229, 229, 229) rgb(238, 238, 238); border-style: solid; border-width: 1px; }
+.on-focus-mode blockquote { border-left-color: rgba(85, 85, 85, 0.12); }
+header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Arial, sans-serif; }
+.file-node-content:hover .file-node-icon, .file-node-content:hover .file-node-open-state { visibility: visible; }
+.mac-seamless-mode #typora-sidebar { background-color: var(--side-bar-bg-color); }
+.md-lang { color: rgb(180, 101, 77); }
+.html-for-mac .context-menu { --item-hover-bg-color: #E6F0FE; }
+
+
+
+
+
+ .typora-export p, .typora-export .footnote-line {white-space: normal;} 
+</style>
+</head>
+<body class='typora-export os-windows' >
+<div  id='write'  class = 'is-node'><h1><a name='header-n1498' class='md-header-anchor '></a>《计算机图形学》系统使用说明书</h1><p><strong>欧阳鸿荣 161220096</strong></p><p>（南京大学 计算机科学与技术系 南京 210093）</p><p>【摘要】：本绘图系统模拟了Windows下的绘图工具，实现了直线、曲线、圆、椭圆和多边形的输入，编辑和平移、旋转缩放等变换功能，同时实现了直线的裁剪、任意区域的填充以及二维图形的存储功能，能够将绘制出来的图形保存为图像。并且支持三维模型的显示，能够载入并显示一个OFF格式的三维模型。2D图像的操作主要通过鼠标，3D图像的操作主要通过键盘，交互方便，界面清新简洁。</p><div class='md-toc' mdtype='toc'><p class="md-toc-content"><span class="md-toc-item md-toc-h1" data-ref="n1498"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1498">《计算机图形学》系统使用说明书</a></span><span class="md-toc-item md-toc-h2" data-ref="n1505"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1505">1.综述</a></span><span class="md-toc-item md-toc-h3" data-ref="n1506"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1506">1.1 基本功能：</a></span><span class="md-toc-item md-toc-h3" data-ref="n1592"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1592">1.2 扩展功能：</a></span><span class="md-toc-item md-toc-h3" data-ref="n1604"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1604">1.3 演示</a></span><span class="md-toc-item md-toc-h2" data-ref="n1612"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1612"></a></span><span class="md-toc-item md-toc-h2" data-ref="n1613"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1613">2.开发环境与编译说明</a></span><span class="md-toc-item md-toc-h2" data-ref="n1629"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1629"></a></span><span class="md-toc-item md-toc-h2" data-ref="n1630"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1630">3.程序运行说明</a></span><span class="md-toc-item md-toc-h2" data-ref="n1632"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1632">4.程序使用说明</a></span><span class="md-toc-item md-toc-h4" data-ref="n1634"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1634">4.1 打开画面：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1637"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1637">4.2 创建新画布：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1641"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1641">4.3 直线的输入和编辑：</a></span><span class="md-toc-item md-toc-h5" data-ref="n1642"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1642"><strong>4.3.1.直线的输入：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1647"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1647"><strong>4.3.2 直线的编辑：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1652"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1652"><strong>4.3.3 直线的变换：</strong></a></span><span class="md-toc-item md-toc-h4" data-ref="n1667"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1667">4.4 曲线的输入和编辑</a></span><span class="md-toc-item md-toc-h5" data-ref="n1668"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1668"><strong>4.4.1 曲线的输入：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1680"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1680"><strong>4.4.2 曲线的编辑：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1685"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1685"><strong>4.4.3 曲线的变换：</strong></a></span><span class="md-toc-item md-toc-h4" data-ref="n1697"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1697">4.5 圆的输入和编辑：</a></span><span class="md-toc-item md-toc-h5" data-ref="n1698"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1698"><strong>4.5.1 圆的输入：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1703"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1703"><strong>4.5.2 圆的编辑：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1708"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1708"><strong>4.5.3 圆的变换：</strong></a></span><span class="md-toc-item md-toc-h4" data-ref="n1714"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1714">4.6 椭圆的输入和编辑：</a></span><span class="md-toc-item md-toc-h5" data-ref="n1805"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1805"><strong>4.6.1 椭圆的输入：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1810"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1810"><strong>4.6.2 椭圆的编辑：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1817"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1817"><strong>4.6.3 椭圆的变换：</strong></a></span><span class="md-toc-item md-toc-h4" data-ref="n1719"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1719">4.7 多边形的输入和编辑：</a></span><span class="md-toc-item md-toc-h5" data-ref="n1881"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1881"><strong>4.7.1 多边形的输入：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1886"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1886"><strong>4.7.2 多边形的编辑：</strong></a></span><span class="md-toc-item md-toc-h5" data-ref="n1891"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1891"><strong>4.7.3 多边形的变换：</strong></a></span><span class="md-toc-item md-toc-h4" data-ref="n1724"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1724">4.8 填充:</a></span><span class="md-toc-item md-toc-h4" data-ref="n1728"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1728">4.9 保存：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1732"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1732">4.10 3D图形的显示：</a></span><span class="md-toc-item md-toc-h5" data-ref="n1733"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1733">4.10.1 打开OFF文件</a></span><span class="md-toc-item md-toc-h5" data-ref="n1945"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1945">4.10.2 调整查看3D模型方式</a></span><span class="md-toc-item md-toc-h4" data-ref="n1734"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1734">4.11 撤销：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1738"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1738">4.12 清屏：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1742"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1742">4.13 颜色选择：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1746"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1746">4.14 打开文件：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1750"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1750">4.15 画笔和笔刷：</a></span><span class="md-toc-item md-toc-h4" data-ref="n1754"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1754">4.16关于：</a></span><span class="md-toc-item md-toc-h2" data-ref="n1760"><a class="md-toc-inner" style="cursor: pointer;" href="#header-n1760">5.致谢</a></span></p></div><div style="page-break-after: always;"></div><h2><a name='header-n1505' class='md-header-anchor '></a>1.综述</h2><h3><a name='header-n1506' class='md-header-anchor '></a>1.1 基本功能：</h3><ol start='' ><li><h5><a name='header-n1509' class='md-header-anchor '></a>二维图形的输入功能：</h5><ul><li><p>直线、曲线、圆、椭圆、多边形的输入实现</p><ul><li>类画图软件，用鼠标交互</li><li>直线实现了<strong>Bresenham和DDA算法</strong></li><li>曲线实现了<strong>贝塞尔曲线</strong></li><li>圆实现了<strong>Bresenham和中点圆算法</strong></li><li>椭圆实现了<strong>中点椭圆算法</strong></li></ul></li><li><p>填充区域的输入</p><ul><li>实现了类似油漆桶的功能，使用的是<strong>洪泛填充算法</strong></li><li><strong>鼠标点击区域</strong>，洪泛填充与区域颜色相同的区域</li></ul></li></ul></li><li><h5><a name='header-n1532' class='md-header-anchor '></a>二维图形的编辑功能：</h5><ul><li><p>直线、曲线、圆，椭圆，多边形的编辑</p><ul><li>直线能编辑起点、终点</li><li>曲线能编辑贝赛尔曲线的各个控制点</li><li>圆能编辑半径</li><li>椭圆能编辑长轴a和短轴b的长度</li><li>多边形能编辑任意顶点</li><li><strong>鼠标点击拖动交互编辑</strong>，更加自由</li></ul></li></ul></li><li><h5><a name='header-n1550' class='md-header-anchor '></a>二维图形的裁剪功能</h5><ul><li><p>实现直线的裁剪</p><ul><li>使用<strong>梁友栋算法</strong>对直线进行裁剪</li></ul></li><li><p>裁剪窗口可用鼠标点击拖动输入</p></li><li><p><strong>裁剪后的图形仍然可以编辑</strong></p></li></ul></li><li><h5><a name='header-n1562' class='md-header-anchor '></a>二维图形的变换功能</h5><ul><li><p>直线、曲线、圆、椭圆、多边形的平移</p></li><li><p>直线、曲线、圆、椭圆、多边形的旋转</p><ul><li><p><strong>任意角度旋转</strong></p></li><li><p>直线、圆的旋转实现了<strong>精度控制</strong></p><ul><li>旋转次数不多的情况下，长度/半径误差在1以内</li></ul></li></ul></li><li><p>直线、曲线、圆、椭圆、多边形的缩放</p></li><li><p><strong>对变换后的图形仍然可以编辑</strong></p></li></ul></li><li><h5><a name='header-n1581' class='md-header-anchor '></a>二维图形的存储功能</h5><ul><li>可以将绘制出来的图形保存为图像</li></ul></li><li><h5><a name='header-n1586' class='md-header-anchor '></a>三维模型的显示功能</h5><ul><li>可以载入并显示一个OFF格式的三维模型</li><li>载入后可以通过键盘<strong>控制观察的视角和三维模型的旋转</strong></li></ul></li></ol><h3><a name='header-n1592' class='md-header-anchor '></a>1.2 扩展功能：</h3><ol start='' ><li>画布的创建，多画布切换</li><li>颜色的选择</li><li>增加了画笔和笔刷的功能</li><li>清屏和撤销的功能</li><li>打开图片编辑的功能</li></ol><h3><a name='header-n1604' class='md-header-anchor '></a>1.3 演示</h3><ul><li>将项目打包成了一个.exe文件，放在本报告的该目录下供助教测试。</li><li>关于直线、圆等动态演示，可以通过该目录下的markdown或者html文件进行阅读，也可以在我的github个人主页查看 <a href='https://tsunaou.github.io/GraphicsYoung.html' target='_blank' class='url'>https://tsunaou.github.io/GraphicsYoung.html</a></li></ul><div>
+    <img src="imageReport/technical/png/1.png" onerror="this.style.display = 'none';">
+</div><h2><a name='header-n1612' class='md-header-anchor '></a><div STYLE="page-break-after: always;"></div></h2><h2><a name='header-n1613' class='md-header-anchor '></a>2.开发环境与编译说明</h2><figure><table><thead><tr><th>系统名</th><th>语言和框架</th><th>IDE</th><th>编译器</th></tr></thead><tbody><tr><td>PaintYoung</td><td>C++和Qt 5.11.2</td><td>Qt Creator</td><td>MinGW 5.3.0</td></tr></tbody></table></figure><p>本绘图系统名为YoungPaint，基于C++和Qt 5.11.2，于Qt Creator上开发，编译环境为MinGW 5.3.0。</p><p>编译开发的构建配置如下图：</p><div>
+    <img src="imageReport/manual/png/build2.png" onerror="this.style.display = 'none';">
+    <img src="imageReport/manual/png/build.png" width="80%" onerror="this.style.display = 'none';">
+</div><h2><a name='header-n1629' class='md-header-anchor '></a><div STYLE="page-break-after: always;"></div></h2><h2><a name='header-n1630' class='md-header-anchor '></a>3.程序运行说明</h2><p>程序通过deployqt工具打包，并且通过Enigma Virtual Box工具集成在了161220096_可执行文件.exe文件中，可以直接点击运行使用。使用时如果有未响应事件，再次点击运行即可。</p><h2><a name='header-n1632' class='md-header-anchor '></a>4.程序使用说明</h2><p>为了更好地展现使用效果，我采用GIF图的形式。但是PDF不能显示GIF，因此还麻烦助教能够打开我提供的markdown版本或者html版本查看更为详细的使用说明。如有不便，十分抱歉。</p><h4><a name='header-n1634' class='md-header-anchor '></a>4.1 打开画面：</h4><div>
+    <img src="imageReport/manual/png/open.png" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1637' class='md-header-anchor '></a>4.2 创建新画布：</h4><ul><li>点击左侧工具栏的创建新画布，则可以创建画布，并且可以创建多个画布</li></ul><div>
+    <img src="imageReport/manual/gif/new.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1641' class='md-header-anchor '></a>4.3 直线的输入和编辑：</h4><h5><a name='header-n1642' class='md-header-anchor '></a><strong>4.3.1.直线的输入：</strong></h5><ul><li>点击上方工具栏的直线，则可绘制直线，鼠标点击确定起点，释放确定终点。</li></ul><div>
+    <img src="imageReport/manual/gif/line1.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1647' class='md-header-anchor '></a><strong>4.3.2 直线的编辑：</strong></h5><ul><li>直线有4个可以操纵的点：起始点，终点，中点，四等分点。</li><li>用鼠标拖动起点和终点可以改变起始点</li></ul><div>
+    <img src="imageReport/manual/gif/line2.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1652' class='md-header-anchor '></a><strong>4.3.3 直线的变换：</strong></h5><ul><li>拖动中点可以对直线平移，拖动四等分点可以对直线进行旋转。</li><li>点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键。</li></ul><div>
+    <img src="imageReport/manual/gif/line3.gif" onerror="this.style.display = 'none';">
+</div><p><strong>4.3.4 直线的裁剪：</strong></p><ul><li>在直线输入/编辑状态时，点击工具栏“裁剪”图标即可绘制裁剪框，再次点击“裁剪”图标即可对直线裁剪。</li><li>裁剪后直线可以再次编辑</li></ul><div>
+    <img src="imageReport/manual/gif/line4.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1667' class='md-header-anchor '></a>4.4 曲线的输入和编辑</h4><h5><a name='header-n1668' class='md-header-anchor '></a><strong>4.4.1 曲线的输入：</strong></h5><ul><li><p>点击上方工具栏的曲线，则可绘制曲线。曲线的绘制分为两个步骤</p><ul><li>首先，点击曲线图标后，鼠标点击确定控制点</li><li>当确定好所有控制点后，点击工具栏的绘制曲线按钮，则可以进行曲线绘制</li></ul></li><li><p>曲线的绘制过程中，若控制点数目较少时，会显示会绘制点的动画。</p></li></ul><div>
+    <img src="imageReport/manual/gif/curve1.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1680' class='md-header-anchor '></a><strong>4.4.2 曲线的编辑：</strong></h5><ul><li>对于绘制完毕的曲线，可以用鼠标点击并拖动各个控制点。由于贝塞尔曲线的性质，牵一发而动全身。一个控制点的改变会引起整条曲线形状的变化。</li></ul><div>
+    <img src="imageReport/manual/gif/curve2.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1685' class='md-header-anchor '></a><strong>4.4.3 曲线的变换：</strong></h5><ul><li>拖动曲线的中心点可以对曲线平移</li><li>拖动曲线的旋转点可以对旋转点进行旋转。</li><li>点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键。</li><li>旋转后的曲线依然可以继续编辑</li></ul><div>
+    <img src="imageReport/manual/gif/curve3.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1697' class='md-header-anchor '></a>4.5 圆的输入和编辑：</h4><h5><a name='header-n1698' class='md-header-anchor '></a><strong>4.5.1 圆的输入：</strong></h5><ul><li>点击上方工具栏的圆，则可绘制圆。鼠标点击确定圆心，释放确定半径</li></ul><div>
+<img src="imageReport/manual/gif/cycle1.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1703' class='md-header-anchor '></a><strong>4.5.2 圆的编辑：</strong></h5><ul><li>圆有3个可以操纵的点：圆心，半径点，二分之半径点。</li><li>用鼠标拖动半径点可以改变圆大小</li></ul><div>
+<img src="imageReport/manual/gif/cycle2.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1708' class='md-header-anchor '></a><strong>4.5.3 圆的变换：</strong></h5><ul><li>拖动圆心可以对圆平移</li><li>拖动二分之半径点可以对圆进行旋转（虽然旋转没什么必要）。</li><li>点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键</li><li>旋转后的圆依然可以继续编辑</li></ul><div>
+<img src="imageReport/manual/gif/cycle3.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1714' class='md-header-anchor '></a>4.6 椭圆的输入和编辑：</h4><h5><a name='header-n1805' class='md-header-anchor '></a><strong>4.6.1 椭圆的输入：</strong></h5><ul><li>点击上方工具栏的椭圆，则可绘制椭圆。鼠标点击确定中心，释放确定长轴和短轴</li></ul><div>
+	<img src="imageReport/manual/gif/ellipse1.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1810' class='md-header-anchor '></a><strong>4.6.2 椭圆的编辑：</strong></h5><ul><li>椭圆有3个可以操纵的点：中心，外接矩形顶点，旋转点。</li><li>用鼠标拖动外接矩形顶点可以改变椭圆形状</li></ul><div>
+	<img src="imageReport/manual/gif/ellipse2.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1817' class='md-header-anchor '></a><strong>4.6.3 椭圆的变换：</strong></h5><ul><li>拖动中心可以对椭圆平移</li><li>拖动旋转点可以对椭圆进行旋转（不过由于精度损失，旋转的椭圆轮廓会变粗）。</li><li>点击工具栏放大/缩小即可对直线进行放缩，也可以用ctrl + + 和ctrl + -快捷键</li><li>旋转后的椭圆依然可以继续编辑</li></ul><div>
+	<img src="imageReport/manual/gif/ellipse3.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1719' class='md-header-anchor '></a>4.7 多边形的输入和编辑：</h4><h5><a name='header-n1881' class='md-header-anchor '></a><strong>4.7.1 多边形的输入：</strong></h5><ul><li>点击上方工具栏多边形，则可绘制多边形。鼠标点击确定各个顶点，点击右键或靠近起始点会自动贴合。</li></ul><div>
+	<img src="imageReport/manual/gif/ellipse1.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1886' class='md-header-anchor '></a><strong>4.7.2 多边形的编辑：</strong></h5><ul><li>多边形的外界矩形中心，各个顶点，旋转点可编辑。</li><li>用鼠标拖动各个顶点可以改变多边形形状</li></ul><div>
+	<img src="imageReport/manual/gif/ellipse2.gif" onerror="this.style.display = 'none';">
+</div><h5><a name='header-n1891' class='md-header-anchor '></a><strong>4.7.3 多边形的变换：</strong></h5><ul><li>拖动外界矩形中心可以对多边形平移</li><li>拖动旋转点可以对多边形进行旋转。</li><li>点击工具栏放大/缩小即可对多边形进行放缩，也可以用ctrl + + 和ctrl + -快捷键</li><li>旋转后的多边形依然可以继续编辑</li></ul><div>
+	<img src="imageReport/manual/gif/ellipse3.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1724' class='md-header-anchor '></a>4.8 填充:</h4><ul><li>点击工具栏的“油漆桶”即可使用填充功能。会对4-连通区域的同颜色点填充</li></ul><div>
+    <img src="imageReport/manual/gif/filler.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1728' class='md-header-anchor '></a>4.9 保存：</h4><ul><li>点击左侧工具栏保存按钮，即可保存</li></ul><div>
+    <img src="imageReport/manual/gif/save.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1732' class='md-header-anchor '></a>4.10 3D图形的显示：</h4><h5><a name='header-n1733' class='md-header-anchor '></a>4.10.1 打开OFF文件</h5><ul><li>点击左侧工具栏的创建新3D画布，则可以创建3D画布</li><li>创建画布时，可以通过文件选择器打开OFF格式的文件进行显示</li></ul><h5><a name='header-n1945' class='md-header-anchor '></a>4.10.2 调整查看3D模型方式</h5><ul><li><p>打开OFF文件后，由于读取时对坐标做了标准化，因此图形会在视窗中央</p></li><li><p>此时可以通过方向键和小键盘的1235键（可看做另一个方向键）进行视角和旋转</p><ul><li>方向键左右键可以对3D图形进行旋转</li><li>方向键上下键可以对3D图形进行前后平移（改变观察的Z坐标）</li><li>小键盘1和3键可以对3D图形进行左右平移（改变观察的X坐标）</li><li>小键盘2和5键可以对3D图形进行上下平移（改变观察的Y坐标）</li></ul></li></ul><div>
+    <img src="imageReport/manual/gif/apple.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1734' class='md-header-anchor '></a>4.11 撤销：</h4><ul><li>点击左侧工具栏撤销按钮，即可撤销</li></ul><div>
+    <img src="imageReport/manual/gif/back.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1738' class='md-header-anchor '></a>4.12 清屏：</h4><ul><li>点击左侧工具栏清屏按钮，即可清屏</li></ul><div>
+    <img src="imageReport/manual/gif/clean.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1742' class='md-header-anchor '></a>4.13 颜色选择：</h4><ul><li>点击上方工具栏颜色选择按钮，即可选择颜色</li></ul><div>
+    <img src="imageReport/manual/gif/color.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1746' class='md-header-anchor '></a>4.14 打开文件：</h4><ul><li>点击左侧工具栏打开按钮，即可打开图片</li></ul><div>
+    <img src="imageReport/manual/gif/open.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1750' class='md-header-anchor '></a>4.15 画笔和笔刷：</h4><ul><li>点击笔或者笔刷，即可自由绘图</li></ul><div>
+    <img src="imageReport/manual/gif/pen.gif" onerror="this.style.display = 'none';">
+</div><h4><a name='header-n1754' class='md-header-anchor '></a>4.16关于：</h4><ul><li>点击关于,即可查看程序详情，点击链接可以查看详情。</li></ul><div>
+    <img src="imageReport/manual/png/about.png" onerror="this.style.display = 'none';">
+</div><h2><a name='header-n1760' class='md-header-anchor '></a>5.致谢</h2><p>感谢孙正兴老师和张岩老师的辛勤教学，感谢各位助教在百忙之中解答我的各种疑惑，感谢我的舍友和系友们在关于大作业的各种问题给我的指导和帮助。</p><p>&nbsp;</p></div>
+</body>
+</html>
