@@ -18,5 +18,6 @@
         <file>icon/fill.png</file>
         <file>icon/cutter.png</file>
         <file>icon/3D.png</file>
+        <file>icon/drawCurce.png</file>
     </qresource>
 </RCC>

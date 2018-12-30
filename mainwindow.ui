@@ -112,6 +112,9 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonFollowStyle</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>LeftToolBarArea</enum>
    </attribute>
@@ -426,6 +429,20 @@
   <action name="actionDrawCurve">
    <property name="text">
     <string>绘制曲线</string>
+   </property>
+   <property name="iconText">
+    <string>绘制曲线</string>
+   </property>
+   <property name="toolTip">
+    <string>绘制曲线</string>
+   </property>
+  </action>
+  <action name="actionText">
+   <property name="text">
+    <string>绘制曲线：</string>
+   </property>
+   <property name="toolTip">
+    <string>actionText</string>
    </property>
   </action>
  </widget>
