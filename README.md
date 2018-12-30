@@ -79,11 +79,9 @@
 - 将项目打包成了一个.exe文件，放在本报告的该目录下供助教测试。
 - 关于直线、圆等动态演示，可以通过该目录下的markdown或者html文件进行阅读，也可以在我的github个人主页查看 <https://tsunaou.github.io/GraphicsYoung.html>
 
-
-
-![img](H:\Graphics\PaintYoung\imageReport\technical\png\1.png) 
-
-
+<div>
+    <img src="imageReport/technical/png/1.png">
+</div>
 
 ## <div STYLE="page-break-after: always;"></div>
 
