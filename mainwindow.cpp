@@ -239,14 +239,15 @@ void MainWindow::on_actionAbout_triggered()
     QMessageBox::about(this, tr("关于 YoungPaint"),
             tr("<p>"
                "<b>YoungPaint</b>是是一个画图程序，是南京大学计算机科学与技术系《图形学》课程的大作业"
-               "该程序使用C++和Qt框架开发，目前的版本实现了直线、圆、椭圆、多边形的输入和编辑、平移、放缩等功能，"
+               "该程序使用C++和Qt框架开发，目前的版本实现了直线、曲线、圆、椭圆、多边形的输入和编辑、平移、放缩等功能，"
                "同时也有一般的画笔和笔刷，可以选择颜色，也可以填充一块区域的颜色。"
                "除此之外，还基于梁友栋算法实现了直线的裁剪。"
+               "同时，程序也支持off格式3D图形的打开和旋转，并且可以调整观察视角。"
                "程序还处于迭代中，欢迎使用。<br/>"
                "有任何疑问可以发送邮件<a href=\"mailto:895254752@qq.com\">895254752@qq.com</a><br/>"
                "更多详情，可以到我的github pages上查看<a href=\"https://tsunaou.github.io/GraphicsYoung.html\" target=\"_blank\"><b>Tsuna的个人主页</b></a>"
                "<hr/>"
-               "<p style=\"text-align: right\">欧阳鸿荣 2018.11.30</p></p>"
+               "<p style=\"text-align: right\">欧阳鸿荣 2018.12.30</p></p>"
               ));
 }
 
